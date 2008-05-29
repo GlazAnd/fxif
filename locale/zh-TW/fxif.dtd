@@ -1,0 +1,24 @@
+<!ENTITY EXIFData "EXIF 資訊:">
+<!ENTITY Copy "複製">
+<!ENTITY CameraMake "製造廠商:">
+<!ENTITY CameraModel "相機型號:">
+<!ENTITY ImageDate "拍攝時間:">
+<!ENTITY ImageOrientation "方位:">
+<!ENTITY ImageBW "黑白照:">
+<!ENTITY FlashUsed "閃光燈:">
+<!ENTITY FocalLength "鏡頭焦長:">
+<!ENTITY DigitalZoom "數位變焦:">
+<!ENTITY CCDWidth "CCD 寬度:">
+<!ENTITY ExposureTime "曝光時間:">
+<!ENTITY Aperture "光圈值:">
+<!ENTITY FocusDist "焦點距離:">
+<!ENTITY ISOequiv "ISO 感光值:">
+<!ENTITY ExposureBias "曝光傾向:">
+<!ENTITY WhiteBalance "白平衡:">
+<!ENTITY LightSource "光源:">
+<!ENTITY MeteringMode "測光模式:">
+<!ENTITY ExposureProgram "曝光:">
+<!ENTITY ExposureMode "曝光模式:">
+<!ENTITY GPSLat "GPS 緯度:">
+<!ENTITY GPSLon "GPS 經度:">
+<!ENTITY Comment "註解:">

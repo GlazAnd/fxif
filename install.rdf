@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<RDF:RDF xmlns:em="http://www.mozilla.org/2004/em-rdf#"
+         xmlns:NC="http://home.netscape.com/NC-rdf#"
+         xmlns:RDF="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <RDF:Description RDF:about="urn:mozilla:install-manifest"
+                   em:id="{11483926-db67-4190-91b1-ef20fcec5f33}"
+                   em:name="FxIF"
+                   em:version="0.2.3"
+                   em:creator="Ted Mielczarek"
+                   em:description="View EXIF data in image properties"
+                   em:homepageURL="http://ted.mielczarek.org/code/mozilla/fxif/"
+                   em:iconURL="chrome://fxif/content/fxif1.gif">
+    <em:contributor>Matthias Wandel (JHead developer)</em:contributor>
+    <em:contributor>MatrixIsAllOver (eXtenZilla.it - it-IT localization)</em:contributor>
+    <em:contributor>Cola99 (Traditional Chinese zh-TW localization)</em:contributor>
+    <em:contributor>Cédric Corazza (frenchmozilla.sf.net - fr-FR localization)</em:contributor>
+    <em:contributor>Armin C. Schneider (German localization)</em:contributor>
+    <em:contributor>Chris Beaven (FxIF icon)</em:contributor>
+    <em:contributor>Tomáš Marek (Czech localization)</em:contributor>
+    <em:contributor>Takanori (takanory.net) - Japanese localization</em:contributor>
+    <em:contributor>gsling (Simplified Chinese zh-CN localization)</em:contributor>
+    <em:targetApplication RDF:resource="rdf:#$QPBnF1"/>
+    <em:targetApplication RDF:resource="rdf:#$RPBnF1"/>
+    <!-- SeaMonkey -->
+    <em:targetApplication>
+      <Description>
+        <em:id>{92650c4d-4b8e-4d2a-b7eb-24ecf4f6b63a}</em:id>
+        <em:minVersion>1.0</em:minVersion>
+        <em:maxVersion>2.0a1</em:maxVersion>
+      </Description>
+    </em:targetApplication>
+    <em:file RDF:resource="urn:mozilla:extension:file:fxif.jar"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="rdf:#$QPBnF1"
+                   em:id="{ec8030f7-c20a-464f-9b0e-13a3a9e97384}"
+                   em:minVersion="0.10"
+                   em:maxVersion="3.0a8" />
+  <RDF:Description RDF:about="urn:mozilla:extension:file:fxif.jar"
+                   em:package="content/">
+    <em:locale>locale/en-US/</em:locale>
+    <em:locale>locale/it-IT/</em:locale>
+    <em:locale>locale/zh-TW/</em:locale>
+    <em:locale>locale/fr-FR/</em:locale>
+    <em:locale>locale/de-DE/</em:locale>
+    <em:locale>locale/cs-CZ/</em:locale>
+    <em:locale>locale/ja-JP/</em:locale>
+  </RDF:Description>
+  <RDF:Description RDF:about="rdf:#$RPBnF1"
+                   em:id="{86c18b42-e466-45a9-ae7a-9b95ba6f5640}"
+                   em:minVersion="1.7"
+                   em:maxVersion="1.8" />
+</RDF:RDF>
