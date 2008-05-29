@@ -41,6 +41,7 @@
     <em:locale>locale/en-US/</em:locale>
     <em:locale>locale/it-IT/</em:locale>
     <em:locale>locale/zh-TW/</em:locale>
+    <em:locale>locale/zh-CN/</em:locale>
     <em:locale>locale/fr-FR/</em:locale>
     <em:locale>locale/de-DE/</em:locale>
     <em:locale>locale/cs-CZ/</em:locale>

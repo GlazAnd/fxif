@@ -1,0 +1,13 @@
+content	fxif	content/
+locale	fxif	en-US	locale/en-US/
+locale	fxif	it-IT	locale/it-IT/
+locale	fxif	zh-TW	locale/zh-TW/
+locale	fxif	zh-CN	locale/zh-TW/
+locale	fxif	fr-FR	locale/fr-FR/
+locale	fxif	de-DE	locale/de-DE/
+locale	fxif	cs-CZ	locale/cs-CZ/
+locale	fxif	ja-JP	locale/ja-JP/
+locale	fxif	pl-PL	locale/pl-PL/
+overlay	chrome://browser/content/metaData.xul	chrome://fxif/content/fxifOverlay.xul   application={ec8030f7-c20a-464f-9b0e-13a3a9e97384}
+overlay	chrome://navigator/content/metadata.xul	chrome://fxif/content/fxifOverlay.xul   application=seamonkey@applications.mozilla.org
+
