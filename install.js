@@ -16,7 +16,7 @@ var instFlags = PROFILE_CHROME;
 
 var err = addFile(APP_PACKAGE, APP_VERSION, "chrome/" + APP_JAR_FILE, chromef, null);
 
-if(err >= SUCCESS) { 
+if(err >= SUCCESS) {
 	var jar = getFolder(chromef, APP_JAR_FILE);
 	registerChrome(CONTENT | instFlags, jar, APP_CONTENT_FOLDER);
 	registerChrome(LOCALE | instFlags, jar, "locale/en-US/");
@@ -27,16 +27,17 @@ if(err >= SUCCESS) {
 	registerChrome(LOCALE | instFlags, jar, "locale/de-DE/");
 	registerChrome(LOCALE | instFlags, jar, "locale/ja-JP/");
 	registerChrome(LOCALE | instFlags, jar, "locale/zh-CN/");
+	registerChrome(LOCALE | instFlags, jar, "locale/pl-PL/");
 	err = performInstall();
 	if(err >= SUCCESS) {
 		alert(APP_NAME + " " + APP_VERSION + " has been succesfully installed.\n"
 			+APP_SUCCESS_MESSAGE
 			+"Please restart your browser before continuing.");
-	} else { 
+	} else {
 		alert("Install failed. Error code:" + err);
 		cancelInstall(err);
 	}
-} else { 
+} else {
 	alert("Failed to create " +APP_JAR_FILE +"\n"
 		+"You probably don't have appropriate permissions \n"
 		+"(write access to Profile/chrome directory). \n"

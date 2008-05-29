@@ -19,6 +19,7 @@
     <em:contributor>Tomáš Marek (Czech localization)</em:contributor>
     <em:contributor>Takanori (takanory.net) - Japanese localization</em:contributor>
     <em:contributor>gsling (Simplified Chinese zh-CN localization)</em:contributor>
+    <em:contributor>t0m3k (CyberFoto.pl - pl-PL localization)</em:contributor>
     <em:targetApplication RDF:resource="rdf:#$QPBnF1"/>
     <em:targetApplication RDF:resource="rdf:#$RPBnF1"/>
     <!-- SeaMonkey -->
@@ -34,7 +35,7 @@
   <RDF:Description RDF:about="rdf:#$QPBnF1"
                    em:id="{ec8030f7-c20a-464f-9b0e-13a3a9e97384}"
                    em:minVersion="0.10"
-                   em:maxVersion="3.0a8" />
+                   em:maxVersion="3.0.*" />
   <RDF:Description RDF:about="urn:mozilla:extension:file:fxif.jar"
                    em:package="content/">
     <em:locale>locale/en-US/</em:locale>
@@ -44,6 +45,7 @@
     <em:locale>locale/de-DE/</em:locale>
     <em:locale>locale/cs-CZ/</em:locale>
     <em:locale>locale/ja-JP/</em:locale>
+    <em:locale>locale/pl-PL/</em:locale>
   </RDF:Description>
   <RDF:Description RDF:about="rdf:#$RPBnF1"
                    em:id="{86c18b42-e466-45a9-ae7a-9b95ba6f5640}"
