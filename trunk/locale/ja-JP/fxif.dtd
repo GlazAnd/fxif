@@ -1,0 +1,24 @@
+<!ENTITY EXIFData "EXIF データ:">
+<!ENTITY Copy "コピー">
+<!ENTITY CameraMake "メーカー名:">
+<!ENTITY CameraModel "モデル名:">
+<!ENTITY ImageDate "撮影日時:">
+<!ENTITY ImageOrientation "画像方向:">
+<!ENTITY ImageBW "白黒画像:">
+<!ENTITY FlashUsed "フラッシュ使用:">
+<!ENTITY FocalLength "レンズの焦点距離:">
+<!ENTITY DigitalZoom "デジタルズーム比率:">
+<!ENTITY CCDWidth "CCDの幅:">
+<!ENTITY ExposureTime "露出時間:">
+<!ENTITY Aperture "絞り値:">
+<!ENTITY FocusDist "フォーカス距離:">
+<!ENTITY ISOequiv "ISO 感度:">
+<!ENTITY ExposureBias "露出補正値:">
+<!ENTITY WhiteBalance "ホワイトバランス:">
+<!ENTITY LightSource "光源:">
+<!ENTITY MeteringMode "測光方式:">
+<!ENTITY ExposureProgram "露出プログラム:">
+<!ENTITY ExposureMode "露出モード:">
+<!ENTITY GPSLat "GPS 緯度:">
+<!ENTITY GPSLon "GPS 経度:">
+<!ENTITY Comment "コメント:">

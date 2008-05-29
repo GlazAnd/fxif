@@ -1,0 +1,24 @@
+<!ENTITY EXIFData "Dati EXIF:">
+<!ENTITY Copy "Copia">
+<!ENTITY CameraMake "Marca fotocamera:">
+<!ENTITY CameraModel "Modello fotocamera:">
+<!ENTITY ImageDate "Data e ora della foto:">
+<!ENTITY ImageOrientation "Orientamento:">
+<!ENTITY ImageBW "Bianco e nero:">
+<!ENTITY FlashUsed "Uso del flash:">
+<!ENTITY FocalLength "Apertura obiettivo:">
+<!ENTITY DigitalZoom "Zoom digitale:">
+<!ENTITY CCDWidth "Larghezza CCD:">
+<!ENTITY ExposureTime "Tempo di esposizione:">
+<!ENTITY Aperture "Apertura:">
+<!ENTITY FocusDist "Distanza di messa a fuoco:">
+<!ENTITY ISOequiv "Equivalente ISO:">
+<!ENTITY ExposureBias "Polarizzazione di esposizione:">
+<!ENTITY WhiteBalance "Bilanciamento di bianco:">
+<!ENTITY LightSource "Fonte di luce:">
+<!ENTITY MeteringMode "Metodo di misurazione:">
+<!ENTITY ExposureProgram "Esposizione:">
+<!ENTITY ExposureMode "Metodo di esposizione:">
+<!ENTITY GPSLat "Latitudine GPS:">
+<!ENTITY GPSLon "Longitudine GPS:">
+<!ENTITY Comment "Commento:">

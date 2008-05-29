@@ -1,0 +1,25 @@
+<!ENTITY EXIFData "EXIF Data:">
+<!ENTITY Copy "Kopírovat">
+<!ENTITY CameraMake "Značka:">
+<!ENTITY CameraModel "Model:">
+<!ENTITY ImageDate "Datum pořízení:">
+<!ENTITY ImageOrientation "Orientace:">
+<!ENTITY ImageBW "Černobílý:">
+<!ENTITY FlashUsed "Blesk:">
+<!ENTITY FocalLength "Ohnisk. vzdálenost:">
+<!ENTITY DigitalZoom "Digitální zoom:">
+<!ENTITY CCDWidth "Šířka CCD:">
+<!ENTITY ExposureTime "Čas expozice:">
+<!ENTITY Aperture "Clona:">
+<!ENTITY FocusDist "Vzdálenost ostření:">
+<!ENTITY ISOequiv "Citlivost ISO:">
+<!ENTITY ExposureBias "Expoziční kompenzace:">
+<!ENTITY WhiteBalance "Vyvážení bílé:">
+<!ENTITY LightSource "Zdroj světla:">
+<!ENTITY MeteringMode "Režim měření:">
+<!ENTITY ExposureProgram "Program expozice:">
+<!ENTITY ExposureMode "Režim expozice:">
+<!ENTITY GPSLat "Zeměp. šířka (GPS):">
+<!ENTITY GPSLon "Zeměp. délka (GPS):">
+<!ENTITY Comment "Komentář:">
+
