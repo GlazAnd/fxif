@@ -45,7 +45,7 @@
     <script type="application/x-javascript" src="chrome://fxif/content/exif.js"/>
     <stringbundle src="chrome://fxif/locale/fxif.properties" id="bundle_fxif"/>
     <vbox id="exif-sec">
-      <hbox>
+      <hbox align="end">
       <label value="&EXIFData;"/>
       <separator flex="1"/>
       <button label="&Copy;" onclick="copyEXIFToClipboard()"/>
@@ -162,6 +162,11 @@
 	    <separator orient="vertical"/>
 	    <label value="&GPSLon;"/>
 	    <textbox id="image-gpslon-text" readonly="true"/>
+	  </row>
+	  <row id="image-gpsalt">
+	    <separator orient="vertical"/>
+	    <label value="&GPSAlt;"/>
+	    <textbox id="image-gpsalt-text" readonly="true"/>
 	  </row>
 	  <row id="image-comment">
 	    <separator orient="vertical"/>

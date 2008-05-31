@@ -5,7 +5,7 @@
   <RDF:Description RDF:about="urn:mozilla:install-manifest"
                    em:id="{11483926-db67-4190-91b1-ef20fcec5f33}"
                    em:name="FxIF"
-                   em:version="0.2.3"
+                   em:version="0.2.4"
                    em:creator="Ted Mielczarek"
                    em:description="View EXIF data in image properties"
                    em:homepageURL="http://ted.mielczarek.org/code/mozilla/fxif/"
@@ -20,22 +20,12 @@
     <em:contributor>Takanori (takanory.net) - Japanese localization</em:contributor>
     <em:contributor>gsling (Simplified Chinese zh-CN localization)</em:contributor>
     <em:contributor>t0m3k (CyberFoto.pl - pl-PL localization)</em:contributor>
+    <em:contributor>Christian Eyrich - GPS bits</em:contributor>
     <em:targetApplication RDF:resource="rdf:#$QPBnF1"/>
     <em:targetApplication RDF:resource="rdf:#$RPBnF1"/>
-    <!-- SeaMonkey -->
-    <em:targetApplication>
-      <Description>
-        <em:id>{92650c4d-4b8e-4d2a-b7eb-24ecf4f6b63a}</em:id>
-        <em:minVersion>1.0</em:minVersion>
-        <em:maxVersion>2.0a1</em:maxVersion>
-      </Description>
-    </em:targetApplication>
+    <em:targetApplication RDF:resource="rdf:#$SPBnF1"/>
     <em:file RDF:resource="urn:mozilla:extension:file:fxif.jar"/>
   </RDF:Description>
-  <RDF:Description RDF:about="rdf:#$QPBnF1"
-                   em:id="{ec8030f7-c20a-464f-9b0e-13a3a9e97384}"
-                   em:minVersion="0.10"
-                   em:maxVersion="3.0.*" />
   <RDF:Description RDF:about="urn:mozilla:extension:file:fxif.jar"
                    em:package="content/">
     <em:locale>locale/en-US/</em:locale>
@@ -48,8 +38,19 @@
     <em:locale>locale/ja-JP/</em:locale>
     <em:locale>locale/pl-PL/</em:locale>
   </RDF:Description>
+  <!-- Firefox -->
+  <RDF:Description RDF:about="rdf:#$QPBnF1"
+                   em:id="{ec8030f7-c20a-464f-9b0e-13a3a9e97384}"
+                   em:minVersion="0.10"
+                   em:maxVersion="3.0.*" />
+  <!-- Mozilla -->
   <RDF:Description RDF:about="rdf:#$RPBnF1"
                    em:id="{86c18b42-e466-45a9-ae7a-9b95ba6f5640}"
                    em:minVersion="1.7"
                    em:maxVersion="1.8" />
+  <!-- SeaMonkey -->
+  <RDF:Description RDF:about="rdf:#$SPBnF1"
+                   em:id="{92650c4d-4b8e-4d2a-b7eb-24ecf4f6b63a}"
+                   em:minVersion="1.0"
+                   em:maxVersion="2.0.*" />
 </RDF:RDF>

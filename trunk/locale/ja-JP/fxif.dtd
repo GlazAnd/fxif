@@ -21,4 +21,5 @@
 <!ENTITY ExposureMode "露出モード:">
 <!ENTITY GPSLat "GPS 緯度:">
 <!ENTITY GPSLon "GPS 経度:">
+<!ENTITY GPSAlt "GPS 高度:">
 <!ENTITY Comment "コメント:">

@@ -21,5 +21,6 @@
 <!ENTITY ExposureMode "Režim expozice:">
 <!ENTITY GPSLat "Zeměp. šířka (GPS):">
 <!ENTITY GPSLon "Zeměp. délka (GPS):">
+<!ENTITY GPSAlt "Zeměp. výška (GPS):">
 <!ENTITY Comment "Komentář:">
 
