@@ -64,8 +64,10 @@ const TAG_FOCALLENGTH_35MM   = 0xa405;
 
 const TAG_GPS_LAT_REF    = 1;
 const TAG_GPS_LAT        = 2;
-const TAG_GPS_LONG_REF   = 3;
-const TAG_GPS_LONG       = 4;
+const TAG_GPS_LON_REF    = 3;
+const TAG_GPS_LON        = 4;
+const TAG_GPS_ALT_REF    = 5;
+const TAG_GPS_ALT        = 6;
 
 var BytesPerFormat = [0,1,1,2,4,8,1,1,2,4,8,4,8];
 
@@ -146,13 +148,12 @@ function ConvertAnyFormat(data, format, offset, numbytes, swapbytes)
     return value;
 }
 
-// maybe someday...
-/*
 function readGPSDir(exifObj, data, dirstart, swapbytes)
 {
   var numEntries = read16(data, dirstart, swapbytes);
-  var gpsLatHemisphere, gpsLonHemisphere;
-  var gpsLat, gpsLon;
+  var gpsLatHemisphere = 'E', gpsLonHemisphere = 'N', gpsAltReference = 0;
+  var gpsLat, gpsLon, gpsAlt;
+  var vals = new Array();
 
   for(var i=0; i<numEntries; i++) {
     var entry = dir_entry_addr(dirstart, i);
@@ -177,18 +178,65 @@ function readGPSDir(exifObj, data, dirstart, swapbytes)
 
     switch(tag) {
     case TAG_GPS_LAT_REF:
+      gpsLatHemisphere = val;
       break;
 
     case TAG_GPS_LON_REF:
+      gpsLonHemisphere = val;
+      break;
+
+    case TAG_GPS_ALT_REF:
+      gpsAltReference = val;
       break;
 
     case TAG_GPS_LAT:
     case TAG_GPS_LON:
+      // data is saved as three 64bit rationals -> 24 bytes
+      // so we've to do another two ConvertAnyFormat() ourself
+      // e.g. 0x0b / 0x01, 0x07 / 0x01, 0x011c4d / 0x0c92
+      // but can also be only 0x31 / 0x01, 0x3d8ba / 0x2710, 0x0 / 0x01
+      var gpsval = val * 3600;
+      gpsval += ConvertAnyFormat(data, format, valueoffset+8, nbytes, swapbytes) * 60;
+      gpsval += ConvertAnyFormat(data, format, valueoffset+16, nbytes, swapbytes);
+      vals[tag] = gpsval;
       break;
+
+    case TAG_GPS_ALT:
+      vals[tag] = val;
+      break;
+
+		default:
+			break;
     }
   }
+
+  // now output all existing values
+  if (vals[TAG_GPS_LAT] != undefined) {
+    var gpsArr = dd2dms(vals[TAG_GPS_LAT],gpsArr);
+    gpsArr.push(gpsLatHemisphere);
+    exifObj.GPSLat = gFXIFbundle.getFormattedString("latlon", gpsArr);
+  }
+  if (vals[TAG_GPS_LON] != undefined) {
+    var gpsArr = dd2dms(vals[TAG_GPS_LON],gpsArr);
+    gpsArr.push(gpsLonHemisphere);
+    exifObj.GPSLon = gFXIFbundle.getFormattedString("latlon", gpsArr);
+  }
+  if (vals[TAG_GPS_ALT] != undefined) {
+    exifObj.GPSAlt = gFXIFbundle.getFormattedString("meters", [vals[TAG_GPS_ALT] * (gpsAltReference ? -1.0 : 1.0)]);
+  }
 }
-*/
+
+function dd2dms(gpsval, gpsArr)
+{
+  // a bit unconventional calculation to get input border cases
+  // like 0x31 / 0x01, 0x0a / 0x01, 0x3c / 0x01 to 49°11'0" instead of 49°10'60"
+  var gpsDeg	= Math.floor(gpsval / 3600);
+  gpsval -= gpsDeg * 3600.0;
+  var gpsMin = Math.floor(gpsval / 60);
+  // round to 2 digits after the comma
+  var gpsSec = Math.round((gpsval - gpsMin * 60.0) * 100) / 100;
+  return Array(gpsDeg,gpsMin,gpsSec);
+}
 
 function readExifDir(exifObj, data, dirstart, swapbytes)
 {
@@ -551,8 +599,7 @@ function readExifDir(exifObj, data, dirstart, swapbytes)
       break;
 
     case TAG_GPSINFO:
-      // maybe someday...
-      //readGPSDir(exifObj, data, val, swapbytes);
+      readGPSDir(exifObj, data, val, swapbytes);
       break;
 
     default:
@@ -729,6 +776,7 @@ function showEXIFDataFor(url)
     setInfo("image-exposuremode", ed.ExposureMode);
     setInfo("image-gpslat", ed.GPSLat);
     setInfo("image-gpslon", ed.GPSLon);
+    setInfo("image-gpsalt", ed.GPSAlt);
     setInfo("image-comment", ed.UserComment);
   }
   else {

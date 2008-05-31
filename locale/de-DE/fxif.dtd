@@ -21,4 +21,5 @@
 <!ENTITY ExposureMode "Belichtungsmodus:">
 <!ENTITY GPSLat "GPS-Breitengrad:">
 <!ENTITY GPSLon "GPS-Längengrad:">
+<!ENTITY GPSAlt "GPS-Höhe:">
 <!ENTITY Comment "Kommentar:">

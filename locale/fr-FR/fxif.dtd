@@ -21,4 +21,5 @@
 <!ENTITY ExposureMode "Mode d'exposition :">
 <!ENTITY GPSLat "Latitude GPS :">
 <!ENTITY GPSLon "Longitude GPS :">
+<!ENTITY GPSAlt "Altitude GPS :">
 <!ENTITY Comment "Commentaire :">

@@ -21,4 +21,5 @@
 <!ENTITY ExposureMode "Tryb ekspozycji:">
 <!ENTITY GPSLat "Szerokość geograficzna:">
 <!ENTITY GPSLon "Długość geograficzna:">
+<!ENTITY GPSLon "Wysokość:">
 <!ENTITY Comment "Komentarz:">
