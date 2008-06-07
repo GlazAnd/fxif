@@ -72,6 +72,7 @@ const TAG_GPS_ALT        = 6;
 var BytesPerFormat = [0,1,1,2,4,8,1,1,2,4,8,4,8];
 
 var gFXIFbundle;
+var prefInstance = null;
 
 function read32(data, offset, swapbytes)
 {
@@ -210,32 +211,49 @@ function readGPSDir(exifObj, data, dirstart, swapbytes)
     }
   }
 
+  var degFormat = "dms";
+  var degFormatter = dd2dms;
+  try {
+    if (!getPreferences().getBoolPref("gpsInDMSFormat"))
+    {
+      degFormat = "dd";
+      degFormatter = dd2dd;
+    }
+  } catch(e){}
   // now output all existing values
   if (vals[TAG_GPS_LAT] != undefined) {
-    var gpsArr = dd2dms(vals[TAG_GPS_LAT],gpsArr);
+    var gpsArr = degFormatter(vals[TAG_GPS_LAT]);
     gpsArr.push(gpsLatHemisphere);
-    exifObj.GPSLat = gFXIFbundle.getFormattedString("latlon", gpsArr);
+    exifObj.GPSLat = gFXIFbundle.getFormattedString("latlon"+degFormat, gpsArr);
   }
   if (vals[TAG_GPS_LON] != undefined) {
-    var gpsArr = dd2dms(vals[TAG_GPS_LON],gpsArr);
+    var gpsArr = degFormatter(vals[TAG_GPS_LON]);
     gpsArr.push(gpsLonHemisphere);
-    exifObj.GPSLon = gFXIFbundle.getFormattedString("latlon", gpsArr);
+    exifObj.GPSLon = gFXIFbundle.getFormattedString("latlon"+degFormat, gpsArr);
   }
   if (vals[TAG_GPS_ALT] != undefined) {
     exifObj.GPSAlt = gFXIFbundle.getFormattedString("meters", [vals[TAG_GPS_ALT] * (gpsAltReference ? -1.0 : 1.0)]);
   }
 }
 
-function dd2dms(gpsval, gpsArr)
+function dd2dms(gpsval)
 {
   // a bit unconventional calculation to get input border cases
   // like 0x31 / 0x01, 0x0a / 0x01, 0x3c / 0x01 to 49°11'0" instead of 49°10'60"
-  var gpsDeg	= Math.floor(gpsval / 3600);
+  var gpsDeg = Math.floor(gpsval / 3600);
   gpsval -= gpsDeg * 3600.0;
   var gpsMin = Math.floor(gpsval / 60);
   // round to 2 digits after the comma
   var gpsSec = Math.round((gpsval - gpsMin * 60.0) * 100) / 100;
-  return Array(gpsDeg,gpsMin,gpsSec);
+  return new Array(gpsDeg, gpsMin, gpsSec);
+}
+
+function dd2dd(gpsval)
+{
+  // round to 6 digits after the comma
+  var gpsArr = new Array();
+  gpsArr.push(Math.round((gpsval / 3600) * 1000000) / 1000000);
+  return gpsArr;
 }
 
 function readExifDir(exifObj, data, dirstart, swapbytes)
@@ -281,7 +299,7 @@ function readExifDir(exifObj, data, dirstart, swapbytes)
     case TAG_DATETIME_DIGITIZED:
     case TAG_DATETIME:
       if(!exifObj.Date)
-	exifObj.Date = val;
+        exifObj.Date = val;
       break;
 
     case TAG_USERCOMMENT:
@@ -299,7 +317,7 @@ function readExifDir(exifObj, data, dirstart, swapbytes)
     case TAG_APERTURE:
     case TAG_MAXAPERTURE:
       if(!exifObj.ApertureFNumber) {
-	exifObj.ApertureFNumber = "f/" + (parseFloat(val) * Math.log(2) * 0.5).toFixed(1);
+        exifObj.ApertureFNumber = "f/" + (parseFloat(val) * Math.log(2) * 0.5).toFixed(1);
       }
       break;
 
@@ -309,10 +327,10 @@ function readExifDir(exifObj, data, dirstart, swapbytes)
 
     case TAG_SUBJECT_DISTANCE:
       if(val < 0) {
-	exifObj.Distance = gFXIFbundle.getString("infinite");
+        exifObj.Distance = gFXIFbundle.getString("infinite");
       }
       else {
-	exifObj.Distance = gFXIFbundle.getFormattedString("meters", [val]);
+        exifObj.Distance = gFXIFbundle.getFormattedString("meters", [val]);
       }
       break;
 
@@ -320,112 +338,111 @@ function readExifDir(exifObj, data, dirstart, swapbytes)
       var et = "";
       val = parseFloat(val);
       if (val < 0.010) {
-	et = gFXIFbundle.getFormattedString("seconds", [val.toFixed(4)]);
+        et = gFXIFbundle.getFormattedString("seconds", [val.toFixed(4)]);
       }else {
-	et = gFXIFbundle.getFormattedString("seconds", [val.toFixed(3)]);
+        et = gFXIFbundle.getFormattedString("seconds", [val.toFixed(3)]);
       }
       if (val <= 0.5){
-	et += " (1/" + Math.floor(0.5 + 1/val).toFixed(0) + ")";
+        et += " (1/" + Math.floor(0.5 + 1/val).toFixed(0) + ")";
       }
       exifObj.ExposureTime = et;
       break;
 
     case TAG_SHUTTERSPEED:
       if(!exifObj.ExposureTime) {
-	exifObj.ExposureTime = gFXIFbundle.getFormattedString("seconds", [(1.0 / Math.exp(parseFloat(val) * Math.log(2))).toFixed(4)]);
+        exifObj.ExposureTime = gFXIFbundle.getFormattedString("seconds", [(1.0 / Math.exp(parseFloat(val) * Math.log(2))).toFixed(4)]);
       }
       break;
 
     case TAG_FLASH:
       if(val >= 0) {
-	var fu;
-	if(val & 1) {
-	  fu = gFXIFbundle.getString("yes");
+        var fu;
+        if(val & 1) {
+          fu = gFXIFbundle.getString("yes");
 
-	  switch(val) {
-	  case 0x5:
-	    fu += " (" + gFXIFbundle.getString("nostrobe") + ")";
-	    break;
-	  case 0x7:
-	    fu += " (" + gFXIFbundle.getString("strobe") + ")";
-	    break;
-	  case 0x9:
-	    fu += " (" + gFXIFbundle.getString("manual") + ")";
-	    break;
-	  case 0xd:
-	    fu += " (" + gFXIFbundle.getString("manual") + ", " 
-	      + gFXIFbundle.getString("noreturnlight") + ")";
-	    break;
-	  case 0xf:
-	    fu += " (" + gFXIFbundle.getString("manual") + ", " 
-	      + gFXIFbundle.getString("returnlight") + ")";
-	    break;
-	  case 0x19:
-	    fu += " (" + gFXIFbundle.getString("auto") + ")";
-	    break;
-	  case 0x1d:
-	    fu += " (" + gFXIFbundle.getString("auto") + ", " 
-	      + gFXIFbundle.getString("noreturnlight") + ")";
-	    break;
-	  case 0x1f:
-	    fu += " (" + gFXIFbundle.getString("manual") + ", " 
-	      + gFXIFbundle.getString("returnlight") + ")";
-	    break;
-	  case 0x41:
-	    fu += " (" + gFXIFbundle.getString("redeye") + ")";
-	    break;
-	  case 0x45:
-	    fu += " (" + gFXIFbundle.getString("redeye")
-	      + gFXIFbundle.getString("noreturnlight") + ")";
-	    break;
-	  case 0x47:
-	    fu += " (" + gFXIFbundle.getString("redeye")
-	      + gFXIFbundle.getString("returnlight") + ")";
-	    break;
-	  case 0x49:
-	    fu += " (" + gFXIFbundle.getString("manual") + ", "
-	      + gFXIFbundle.getString("redeye") + ")";
-	    break;
-	  case 0x4d:
-	    fu += " (" + gFXIFbundle.getString("manual")  + ", "
-	      + gFXIFbundle.getString("redeye") + ", "
-	      + gFXIFbundle.getString("noreturnlight") + ")";
-	    break;
-	  case 0x4f:
-	    fu += " (" + gFXIFbundle.getString("redeye")  + ", "
-	      + gFXIFbundle.getString("redeye") + ", "
-	      + gFXIFbundle.getString("returnlight") + ")";
-	    break;
-	  case 0x59:
-	    fu += " (" + gFXIFbundle.getString("auto") + ", "
-	      + gFXIFbundle.getString("redeye") + ")";
-	    break;
-	  case 0x5d:
-	    fu += " (" + gFXIFbundle.getString("auto")  + ", "
-	      + gFXIFbundle.getString("redeye") + ", "
-	      + gFXIFbundle.getString("noreturnlight") + ")";
-	    brak;
-	  case 0x5f:
-	    fu += " (" + gFXIFbundle.getString("auto")  + ", "
-	      + gFXIFbundle.getString("redeye") + ", "
-	      + gFXIFbundle.getString("returnlight") + ")";
-	    break;
-	  }
-	}
-	else {
-	  fu = gFXIFbundle.getString("no");
-	  switch (val) {
-	  case 0x18: fu += " (" + gFXIFbundle.getString("auto") + ")"; break;
-	  }
-	}
-	exifObj.FlashUsed = fu;
+          switch(val) {
+            case 0x5:
+              fu += " (" + gFXIFbundle.getString("nostrobe") + ")";
+              break;
+            case 0x7:
+              fu += " (" + gFXIFbundle.getString("strobe") + ")";
+              break;
+            case 0x9:
+              fu += " (" + gFXIFbundle.getString("manual") + ")";
+              break;
+            case 0xd:
+              fu += " (" + gFXIFbundle.getString("manual") + ", " 
+                + gFXIFbundle.getString("noreturnlight") + ")";
+              break;
+            case 0xf:
+              fu += " (" + gFXIFbundle.getString("manual") + ", " 
+                + gFXIFbundle.getString("returnlight") + ")";
+              break;
+            case 0x19:
+              fu += " (" + gFXIFbundle.getString("auto") + ")";
+              break;
+            case 0x1d:
+              fu += " (" + gFXIFbundle.getString("auto") + ", " 
+                + gFXIFbundle.getString("noreturnlight") + ")";
+              break;
+            case 0x1f:
+              fu += " (" + gFXIFbundle.getString("manual") + ", " 
+                + gFXIFbundle.getString("returnlight") + ")";
+              break;
+            case 0x41:
+              fu += " (" + gFXIFbundle.getString("redeye") + ")";
+              break;
+            case 0x45:
+              fu += " (" + gFXIFbundle.getString("redeye")
+                + gFXIFbundle.getString("noreturnlight") + ")";
+              break;
+            case 0x47:
+              fu += " (" + gFXIFbundle.getString("redeye")
+                + gFXIFbundle.getString("returnlight") + ")";
+              break;
+            case 0x49:
+              fu += " (" + gFXIFbundle.getString("manual") + ", "
+                + gFXIFbundle.getString("redeye") + ")";
+              break;
+            case 0x4d:
+              fu += " (" + gFXIFbundle.getString("manual")  + ", "
+                + gFXIFbundle.getString("redeye") + ", "
+                + gFXIFbundle.getString("noreturnlight") + ")";
+              break;
+            case 0x4f:
+              fu += " (" + gFXIFbundle.getString("redeye")  + ", "
+                + gFXIFbundle.getString("redeye") + ", "
+                + gFXIFbundle.getString("returnlight") + ")";
+              break;
+            case 0x59:
+              fu += " (" + gFXIFbundle.getString("auto") + ", "
+                + gFXIFbundle.getString("redeye") + ")";
+              break;
+            case 0x5d:
+              fu += " (" + gFXIFbundle.getString("auto")  + ", "
+                + gFXIFbundle.getString("redeye") + ", "
+                + gFXIFbundle.getString("noreturnlight") + ")";
+              brak;
+            case 0x5f:
+              fu += " (" + gFXIFbundle.getString("auto")  + ", "
+                + gFXIFbundle.getString("redeye") + ", "
+                + gFXIFbundle.getString("returnlight") + ")";
+              break;
+          }
+        }
+        else {
+          fu = gFXIFbundle.getString("no");
+          switch (val) {
+            case 0x18: fu += " (" + gFXIFbundle.getString("auto") + ")"; break;
+          }
+        }
+        exifObj.FlashUsed = fu;
       }
-      
       break;
 
     case TAG_ORIENTATION:
       if(!exifObj.Orientation && val > 1) {
-	exifObj.Orientation = gFXIFbundle.getString("orientation" + val);
+        exifObj.Orientation = gFXIFbundle.getString("orientation" + val);
       }
       break;
 
@@ -443,23 +460,23 @@ function readExifDir(exifObj, data, dirstart, swapbytes)
 
     case TAG_FOCALPLANEUNITS:
       switch(val) {
-      case 1: exifObj.FocalPlaneUnits = 25.4; break; // inch
-      case 2: 
-	// According to the information I was using, 2 means meters.
-	// But looking at the Cannon powershot's files, inches is the only
-	// sensible value.
-	exifObj.FocalPlaneUnits = 25.4;
-	break;
+        case 1: exifObj.FocalPlaneUnits = 25.4; break; // inch
+        case 2: 
+          // According to the information I was using, 2 means meters.
+          // But looking at the Cannon powershot's files, inches is the only
+          // sensible value.
+          exifObj.FocalPlaneUnits = 25.4;
+          break;
 	
-      case 3: exifObj.FocalPlaneUnits = 10;   break;  // centimeter
-      case 4: exifObj.FocalPlaneUnits = 1;    break;  // millimeter
-      case 5: exifObj.FocalPlaneUnits = .001; break;  // micrometer
+        case 3: exifObj.FocalPlaneUnits = 10;   break;  // centimeter
+        case 4: exifObj.FocalPlaneUnits = 1;    break;  // millimeter
+        case 5: exifObj.FocalPlaneUnits = .001; break;  // micrometer
       }
       break;
 
     case TAG_EXPOSURE_BIAS:
       if(val != 0) {
-	exifObj.ExposureBias = parseFloat(val).toFixed(2);
+        exifObj.ExposureBias = parseFloat(val).toFixed(2);
       }
       break;
 
@@ -796,6 +813,18 @@ function onFxIFLoad()
   else {
     document.getElementById("exif-sec").style.display = "none";
   }
+}
+
+function getPreferences()
+{
+	if (!prefInstance) {
+		try {
+			var prefService = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService);
+			prefInstance = prefService.getBranch("extensions.fxif."); // preferences extensions.fxif node
+		} catch (e) {}
+	}
+
+	return prefInstance;
 }
 
 var originalLoad = window.onLoad;
