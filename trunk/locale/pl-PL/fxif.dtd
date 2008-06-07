@@ -3,6 +3,9 @@
 <!ENTITY CameraMake "Marka aparatu:">
 <!ENTITY CameraModel "Model aparatu:">
 <!ENTITY ImageDate "Data zdjęcia:">
+<!ENTITY Artist "Fotograf:">
+<!ENTITY Copyright "Prawa autorskie:">
+<!ENTITY Description "Opis:">
 <!ENTITY ImageOrientation "Orientacja zdjęcia:">
 <!ENTITY ImageBW "Czarno-Białe:">
 <!ENTITY FlashUsed "Lampa błyskowa:">

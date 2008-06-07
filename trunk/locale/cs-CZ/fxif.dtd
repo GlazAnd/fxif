@@ -3,6 +3,9 @@
 <!ENTITY CameraMake "Značka:">
 <!ENTITY CameraModel "Model:">
 <!ENTITY ImageDate "Datum pořízení:">
+<!ENTITY Artist "Fotograf:">
+<!ENTITY Copyright "Copyright:">
+<!ENTITY Description "Popis:">
 <!ENTITY ImageOrientation "Orientace:">
 <!ENTITY ImageBW "Černobílý:">
 <!ENTITY FlashUsed "Blesk:">

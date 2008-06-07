@@ -3,6 +3,9 @@
 <!ENTITY CameraMake "メーカー名:">
 <!ENTITY CameraModel "モデル名:">
 <!ENTITY ImageDate "撮影日時:">
+<!ENTITY Artist "撮影:">
+<!ENTITY Copyright "著作権:">
+<!ENTITY Description "説明書:">
 <!ENTITY ImageOrientation "画像方向:">
 <!ENTITY ImageBW "白黒画像:">
 <!ENTITY FlashUsed "フラッシュ使用:">
