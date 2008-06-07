@@ -3,6 +3,9 @@
 <!ENTITY CameraMake "Camera Make:">
 <!ENTITY CameraModel "Camera Model:">
 <!ENTITY ImageDate "Image Date:">
+<!ENTITY Artist "Photographer:">
+<!ENTITY Copyright "Copyright:">
+<!ENTITY Description "Description:">
 <!ENTITY ImageOrientation "Orientation:">
 <!ENTITY ImageBW "Black and White:">
 <!ENTITY FlashUsed "Flash Used:">

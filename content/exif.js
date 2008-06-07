@@ -7,6 +7,7 @@
 const SOI_MARKER = 0xFFD8;  // start of image
 const SOS_MARKER = 0xFFDA;  // start of stream
 const EXIF_MARKER = 0xFFE1; // start of EXIF data
+const IPTC_MARKER = 0xFFED; // start of IPTC data
 
 
 const INTEL_BYTE_ORDER = 0x4949;
@@ -26,12 +27,15 @@ const FMT_SINGLE     = 11;
 const FMT_DOUBLE     = 12;
 
 // tags
+const TAG_DESCRIPTION        = 0x010E;
 const TAG_MAKE               = 0x010F;
 const TAG_MODEL              = 0x0110;
 const TAG_ORIENTATION        = 0x0112;
 const TAG_DATETIME           = 0x0132;
+const TAG_ARTIST             = 0x013B;
 const TAG_THUMBNAIL_OFFSET   = 0x0201;
 const TAG_THUMBNAIL_LENGTH   = 0x0202;
+const TAG_COPYRIGHT          = 0x8298;
 const TAG_EXPOSURETIME       = 0x829A;
 const TAG_FNUMBER            = 0x829D;
 const TAG_EXIF_OFFSET        = 0x8769;
@@ -211,11 +215,13 @@ function readGPSDir(exifObj, data, dirstart, swapbytes)
     }
   }
 
+  // use dms format by default
   var degFormat = "dms";
   var degFormatter = dd2dms;
   try {
     if (!getPreferences().getBoolPref("gpsInDMSFormat"))
     {
+      // but dd if the user wants that
       degFormat = "dd";
       degFormatter = dd2dd;
     }
@@ -619,6 +625,18 @@ function readExifDir(exifObj, data, dirstart, swapbytes)
       readGPSDir(exifObj, data, val, swapbytes);
       break;
 
+    case TAG_ARTIST:
+      exifObj.Artist = val;
+      break;
+
+    case TAG_COPYRIGHT:
+      exifObj.Copyright = val;
+      break;
+
+    case TAG_DESCRIPTION:
+      exifObj.Description = val;
+      break;
+
     default:
       ntags--;
     }
@@ -775,6 +793,9 @@ function showEXIFDataFor(url)
     setInfo("camera-make", ed.Make);
     setInfo("camera-model", ed.Model);
     setInfo("image-date", ed.Date);
+    setInfo("image-artist", ed.Artist);
+    setInfo("image-copyright", ed.Copyright);
+    setInfo("image-description", ed.Description);
     setInfo("image-orientation", ed.Orientation);
     setInfo("image-bw", ed.IsColor);
     setInfo("image-flash", ed.FlashUsed);

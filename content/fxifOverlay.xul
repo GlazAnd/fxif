@@ -73,6 +73,21 @@
 	    <label value="&ImageDate;"/>
 	    <textbox id="image-date-text" readonly="true"/>
 	  </row>
+	  <row id="image-artist">
+	    <separator orient="vertical"/>
+	    <label value="&Artist;"/>
+	    <textbox id="image-artist-text" readonly="true"/>
+	  </row>
+	  <row id="image-copyright">
+	    <separator orient="vertical"/>
+	    <label value="&Copyright;"/>
+	    <textbox id="image-copyright-text" readonly="true"/>
+	  </row>
+	  <row id="image-description">
+	    <separator orient="vertical"/>
+	    <label value="&Description;"/>
+	    <textbox id="image-description-text" readonly="true"/>
+	  </row>
 	  <row id="image-orientation"> 
 	    <separator orient="vertical"/>
 	    <label value="&ImageOrientation;"/>

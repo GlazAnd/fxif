@@ -3,6 +3,9 @@
 <!ENTITY CameraMake "製造廠商:">
 <!ENTITY CameraModel "相機型號:">
 <!ENTITY ImageDate "拍攝時間:">
+<!ENTITY Artist "攝影師:">
+<!ENTITY Copyright "專利權:">
+<!ENTITY Description "描述:">
 <!ENTITY ImageOrientation "方位:">
 <!ENTITY ImageBW "黑白照:">
 <!ENTITY FlashUsed "閃光燈:">
