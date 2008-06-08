@@ -3,9 +3,6 @@
 <!ENTITY CameraMake "Marka aparatu:">
 <!ENTITY CameraModel "Model aparatu:">
 <!ENTITY ImageDate "Data zdjęcia:">
-<!ENTITY Artist "Fotograf:">
-<!ENTITY Copyright "Prawa autorskie:">
-<!ENTITY Description "Opis:">
 <!ENTITY ImageOrientation "Orientacja zdjęcia:">
 <!ENTITY ImageBW "Czarno-Białe:">
 <!ENTITY FlashUsed "Lampa błyskowa:">
@@ -25,4 +22,8 @@
 <!ENTITY GPSLat "Szerokość geograficzna:">
 <!ENTITY GPSLon "Długość geograficzna:">
 <!ENTITY GPSLon "Wysokość:">
+<!ENTITY Photographer "Fotograf:">
+<!ENTITY Copyright "Prawa autorskie:">
+<!ENTITY Title "Tytuł:">
+<!ENTITY Caption "Opis:">
 <!ENTITY Comment "Komentarz:">

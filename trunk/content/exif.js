@@ -6,8 +6,11 @@
  */
 const SOI_MARKER = 0xFFD8;  // start of image
 const SOS_MARKER = 0xFFDA;  // start of stream
+const EOI_MARKER = 0xFFD9;  // end of image
 const EXIF_MARKER = 0xFFE1; // start of EXIF data
-const IPTC_MARKER = 0xFFED; // start of IPTC data
+//const BIM_MARKER = '8BIM'; // 8BIM segment marker
+const BIM_MARKER = 0x3842494D; // 8BIM segment marker
+const APP14_MARKER = 0xFFED; // start of IPTC data
 
 
 const INTEL_BYTE_ORDER = 0x4949;
@@ -26,7 +29,7 @@ const FMT_SRATIONAL  = 10;
 const FMT_SINGLE     = 11;
 const FMT_DOUBLE     = 12;
 
-// tags
+// exif tags
 const TAG_DESCRIPTION        = 0x010E;
 const TAG_MAKE               = 0x010F;
 const TAG_MODEL              = 0x0110;
@@ -72,6 +75,12 @@ const TAG_GPS_LON_REF    = 3;
 const TAG_GPS_LON        = 4;
 const TAG_GPS_ALT_REF    = 5;
 const TAG_GPS_ALT        = 6;
+
+// iptc tags
+const TAG_IPTC_BYLINE        = 0x50;
+const TAG_IPTC_HEADLINE      = 0x69;
+const TAG_IPTC_COPYRIGHT     = 0x74;
+const TAG_IPTC_CAPTION       = 0x78;
 
 var BytesPerFormat = [0,1,1,2,4,8,1,1,2,4,8,4,8];
 
@@ -626,15 +635,18 @@ function readExifDir(exifObj, data, dirstart, swapbytes)
       break;
 
     case TAG_ARTIST:
-      exifObj.Artist = val;
+      if(!exifObj.Photographer)
+        exifObj.Photographer = val;
       break;
 
     case TAG_COPYRIGHT:
-      exifObj.Copyright = val;
+      if(!exifObj.Copyright)
+        exifObj.Copyright = val;
       break;
 
     case TAG_DESCRIPTION:
-      exifObj.Description = val;
+      if(!exifObj.Caption)
+        exifObj.Caption = val;
       break;
 
     default:
@@ -645,9 +657,8 @@ function readExifDir(exifObj, data, dirstart, swapbytes)
   return ntags;
 }
 
-function readExifSection(exifData, ifd_ofs, swapbytes)
+function readExifSection(exifObj, exifData, ifd_ofs, swapbytes)
 {
-  var exifObj = {};
   var ntags = readExifDir(exifObj, exifData, ifd_ofs, swapbytes);
 
   if(ntags == 0) {
@@ -678,14 +689,88 @@ function readExifSection(exifData, ifd_ofs, swapbytes)
 
     exifObj.FocalLengthText = fl;
   }
-
-  return exifObj;
 }
 
+/* Reads the actual IPTC/NAA tags.
+   Overwrites information from EXIF tags for textual informations like
+   By, Caption, Headline, Copyright.
+*/
+function readIptcDir(iptcObj, data)
+{
+  var pos = 0;
+
+  while(pos < data.length) {
+    var entryMarker = read16(data, pos, false);
+    var tag = data[pos + 2];
+    // dataLen is really only the data length
+    var dataLen = read16(data, pos + 3, false);
+    if(entryMarker == 0x1C02 &&                // must be the right marker
+       pos + 5 + dataLen <= data.length &&     // and don't read outside the array
+       dataLen > 0) {                          // and only use tags with actual length, no data tags are common
+      var val = bytesToString(data, pos + 5, dataLen);
+      switch(tag) {
+        case TAG_IPTC_BYLINE:
+          if(val.length)
+            iptcObj.Photographer = val;
+          break;
+
+        case TAG_IPTC_CAPTION:
+          if(val.length)
+            iptcObj.Caption = val;
+          break;
+
+        case TAG_IPTC_HEADLINE:
+          if(val.length)
+            iptcObj.Headline = val;
+          break;
+
+        case TAG_IPTC_COPYRIGHT:
+          if(val.length)
+            iptcObj.Copyright = val;
+          break;
+      }
+    }
+
+    pos += 5 + dataLen;
+  }
+}
+
+function readPsSection(iptcObj, psData)
+{
+  var pointer = 0;
+
+  var segmentMarker = read32(psData, pointer, false);
+  pointer += 4;
+	while(segmentMarker == BIM_MARKER &&
+        pointer < psData.length) {
+    // step over 8BIM header
+    var segmentType = read16(psData, pointer, false);
+    pointer += 2;
+    // header is variable length padded to even length
+    // including the length byte
+    var headerLen = psData[pointer];
+    pointer += 1 + headerLen + ((headerLen + 1) % 2);
+
+    // read dir length excluding length field
+    var segmentLen = read32(psData, pointer, false);
+    pointer += 4;
+    if(segmentType == 0x0404)  // IPTC segment
+    {
+      readIptcDir(iptcObj, psData.slice(pointer, pointer + segmentLen));
+      break;
+    }
+
+    // dir is variable length padded to even length
+    // including the length byte
+    pointer += segmentLen + (segmentLen % 2);
+    segmentMarker = read32(psData, pointer, false);
+    pointer += 4;
+  }
+}
 
 function exifData(imgUrl)
 {
-  var exifObj = null;
+  var exifObj = {};
   var istream = null;
 
   try {
@@ -706,51 +791,66 @@ function exifData(imgUrl)
       var ios = Components.classes["@mozilla.org/network/io-service;1"].getService(Components.interfaces.nsIIOService);
       var u = ios.newURI(imgUrl, null, null);
       if(u.schemeIs("file")) {
-	var fileHandler = ios.getProtocolHandler("file").QueryInterface(Components.interfaces.nsIFileProtocolHandler);
-	var f = fileHandler.getFileFromURLSpec(imgUrl);
-	istream = Components.classes["@mozilla.org/network/file-input-stream;1"].createInstance(Components.interfaces.nsIFileInputStream);
-	istream.init(f, 1, 0, false);
+        var fileHandler = ios.getProtocolHandler("file").QueryInterface(Components.interfaces.nsIFileProtocolHandler);
+        var f = fileHandler.getFileFromURLSpec(imgUrl);
+        istream = Components.classes["@mozilla.org/network/file-input-stream;1"].createInstance(Components.interfaces.nsIFileInputStream);
+        istream.init(f, 1, 0, false);
       }
       else {
-	// no input stream and not a local file.  oh well.
-	// might be in the process of loading or just not
-	// cached.
-	return null;
+        // no input stream and not a local file.  oh well.
+        // might be in the process of loading or just not
+        // cached.
+        return null;
       }
     }
 
     var bis = Components.classes["@mozilla.org/binaryinputstream;1"].createInstance(Components.interfaces.nsIBinaryInputStream);
     bis.setInputStream(istream);
     var swapbytes = false;
+    var exifDone = false;
+    var iptcDone = false;
     var marker = bis.read16();
     var len;
     if(marker == SOI_MARKER) {
       marker = bis.read16();
       // reading SOS marker indicates start of image stream
-      while(marker != SOS_MARKER) {
-	// length includes the length bytes
-	len = bis.read16() - 2;
-	if(marker == EXIF_MARKER) { // bingo!
-	  // 6 bytes, 'Exif\0\0'
-	  bis.readBytes(6);
-	  // 8 byte TIFF header
-	  // first two determine byte order
-	  var exifData = bis.readByteArray(len - 6);
-	  var bi = read16(exifData, 0, false);
-	  if(bi == INTEL_BYTE_ORDER) {
-	    swapbytes = true;
-	  }
-	  // next two bytes are always 0x002A
-	  // offset to Image File Directory (includes the previous 8 bytes)
-	  var ifd_ofs = read32(exifData, 4, swapbytes);
-	  exifObj = readExifSection(exifData, ifd_ofs, swapbytes);
-	  break;
-	}
-	else {
-	  // read and discard data...
-	  bis.readBytes(len);
-	}
-	marker = bis.read16();
+      while(marker != SOS_MARKER &&
+            (!exifDone || !iptcDone)) {
+        // length includes the length bytes
+        len = bis.read16() - 2;
+
+        if(marker == EXIF_MARKER) { // bingo!
+          // 6 bytes, 'Exif\0\0'
+          bis.readBytes(6);
+          // 8 byte TIFF header
+          // first two determine byte order
+          var exifData = bis.readByteArray(len - 6);
+          var bi = read16(exifData, 0, false);
+          if(bi == INTEL_BYTE_ORDER) {
+            swapbytes = true;
+          }
+          // next two bytes are always 0x002A
+          // offset to Image File Directory (includes the previous 8 bytes)
+          var ifd_ofs = read32(exifData, 4, swapbytes);
+          readExifSection(exifObj, exifData, ifd_ofs, swapbytes);
+          exifDone = true;
+        }
+        else
+          if(marker == APP14_MARKER) {
+            // 6 bytes, 'Photoshop 3.0\0'
+            var psString = bis.readBytes(14);
+            if(psString == 'Photoshop 3.0\0') {
+              var psData = bis.readByteArray(len - 14);
+              readPsSection(exifObj, psData);
+              iptcDone = true;
+            }
+          }
+          else {
+            // read and discard data...
+            bis.readBytes(len);
+          }
+
+        marker = bis.read16();
       }
     }
     bis.close();
@@ -773,7 +873,7 @@ function copyEXIFToClipboard()
     for(var i=0; i<lbls.length; i++) {
       var val = lbls[i].nextSibling.value;
       if(val) {
-	data += lbls[i].value + " " + val + "\r\n";
+        data += lbls[i].value + " " + val + "\r\n";
       }
     }
 
@@ -793,9 +893,6 @@ function showEXIFDataFor(url)
     setInfo("camera-make", ed.Make);
     setInfo("camera-model", ed.Model);
     setInfo("image-date", ed.Date);
-    setInfo("image-artist", ed.Artist);
-    setInfo("image-copyright", ed.Copyright);
-    setInfo("image-description", ed.Description);
     setInfo("image-orientation", ed.Orientation);
     setInfo("image-bw", ed.IsColor);
     setInfo("image-flash", ed.FlashUsed);
@@ -815,6 +912,10 @@ function showEXIFDataFor(url)
     setInfo("image-gpslat", ed.GPSLat);
     setInfo("image-gpslon", ed.GPSLon);
     setInfo("image-gpsalt", ed.GPSAlt);
+    setInfo("image-photographer", ed.Photographer);
+    setInfo("image-copyright", ed.Copyright);
+    setInfo("image-title", ed.Headline);
+    setInfo("image-caption", ed.Caption);
     setInfo("image-comment", ed.UserComment);
   }
   else {

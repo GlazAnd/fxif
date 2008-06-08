@@ -73,21 +73,6 @@
 	    <label value="&ImageDate;"/>
 	    <textbox id="image-date-text" readonly="true"/>
 	  </row>
-	  <row id="image-artist">
-	    <separator orient="vertical"/>
-	    <label value="&Artist;"/>
-	    <textbox id="image-artist-text" readonly="true"/>
-	  </row>
-	  <row id="image-copyright">
-	    <separator orient="vertical"/>
-	    <label value="&Copyright;"/>
-	    <textbox id="image-copyright-text" readonly="true"/>
-	  </row>
-	  <row id="image-description">
-	    <separator orient="vertical"/>
-	    <label value="&Description;"/>
-	    <textbox id="image-description-text" readonly="true"/>
-	  </row>
 	  <row id="image-orientation"> 
 	    <separator orient="vertical"/>
 	    <label value="&ImageOrientation;"/>
@@ -182,6 +167,26 @@
 	    <separator orient="vertical"/>
 	    <label value="&GPSAlt;"/>
 	    <textbox id="image-gpsalt-text" readonly="true"/>
+	  </row>
+	  <row id="image-photographer">
+	    <separator orient="vertical"/>
+	    <label value="&Photographer;"/>
+	    <textbox id="image-photographer-text" readonly="true"/>
+	  </row>
+	  <row id="image-copyright">
+	    <separator orient="vertical"/>
+	    <label value="&Copyright;"/>
+	    <textbox id="image-copyright-text" multiline="true" readonly="true"/>
+	  </row>
+	  <row id="image-title">
+	    <separator orient="vertical"/>
+	    <label value="&Title;"/>
+	    <textbox id="image-title-text" readonly="true"/>
+	  </row>
+	  <row id="image-caption">
+	    <separator orient="vertical"/>
+	    <label value="&Caption;"/>
+	    <textbox id="image-caption-text" multiline="true" readonly="true"/>
 	  </row>
 	  <row id="image-comment">
 	    <separator orient="vertical"/>

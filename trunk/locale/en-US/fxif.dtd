@@ -3,9 +3,6 @@
 <!ENTITY CameraMake "Camera Make:">
 <!ENTITY CameraModel "Camera Model:">
 <!ENTITY ImageDate "Image Date:">
-<!ENTITY Artist "Photographer:">
-<!ENTITY Copyright "Copyright:">
-<!ENTITY Description "Description:">
 <!ENTITY ImageOrientation "Orientation:">
 <!ENTITY ImageBW "Black and White:">
 <!ENTITY FlashUsed "Flash Used:">
@@ -25,4 +22,8 @@
 <!ENTITY GPSLat "GPS Latitude:">
 <!ENTITY GPSLon "GPS Longitude:">
 <!ENTITY GPSAlt "GPS Altitude:">
+<!ENTITY Photographer "Photographer:">
+<!ENTITY Copyright "Copyright:">
+<!ENTITY Title "Title:">
+<!ENTITY Caption "Caption:">
 <!ENTITY Comment "Comment:">

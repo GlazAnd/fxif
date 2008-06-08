@@ -3,9 +3,6 @@
 <!ENTITY CameraMake "Značka:">
 <!ENTITY CameraModel "Model:">
 <!ENTITY ImageDate "Datum pořízení:">
-<!ENTITY Artist "Fotograf:">
-<!ENTITY Copyright "Copyright:">
-<!ENTITY Description "Popis:">
 <!ENTITY ImageOrientation "Orientace:">
 <!ENTITY ImageBW "Černobílý:">
 <!ENTITY FlashUsed "Blesk:">
@@ -25,5 +22,8 @@
 <!ENTITY GPSLat "Zeměp. šířka (GPS):">
 <!ENTITY GPSLon "Zeměp. délka (GPS):">
 <!ENTITY GPSAlt "Zeměp. výška (GPS):">
+<!ENTITY Photographer "Fotograf:">
+<!ENTITY Copyright "Copyright:">
+<!ENTITY Title "Název:">
+<!ENTITY Caption "Popis:">
 <!ENTITY Comment "Komentář:">
-

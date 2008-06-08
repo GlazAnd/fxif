@@ -3,9 +3,6 @@
 <!ENTITY CameraMake "Marque de l'appareil :">
 <!ENTITY CameraModel "Modèle de l'appareil :">
 <!ENTITY ImageDate "Date et heure de la photo :">
-<!ENTITY Artist "Photographe:">
-<!ENTITY Copyright "Mroits d'auteur:">
-<!ENTITY Description "Description:">
 <!ENTITY ImageOrientation "Orientation :">
 <!ENTITY ImageBW "Noir et blanc :">
 <!ENTITY FlashUsed "Utilisation du flash :">
@@ -25,4 +22,8 @@
 <!ENTITY GPSLat "Latitude GPS :">
 <!ENTITY GPSLon "Longitude GPS :">
 <!ENTITY GPSAlt "Altitude GPS :">
+<!ENTITY Photographer "Photographe:">
+<!ENTITY Copyright "Mroits d'auteur:">
+<!ENTITY Title "Intitulé :">
+<!ENTITY Caption "Description:">
 <!ENTITY Comment "Commentaire :">
