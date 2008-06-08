@@ -3,9 +3,6 @@
 <!ENTITY CameraMake "厂商:">
 <!ENTITY CameraModel "机型:">
 <!ENTITY ImageDate "拍摄时间:">
-<!ENTITY Artist "攝影師:">
-<!ENTITY Copyright "專利權:">
-<!ENTITY Description "描述:">
 <!ENTITY ImageOrientation "方位:">
 <!ENTITY ImageBW "黑白照:">
 <!ENTITY FlashUsed "闪光灯:">
@@ -25,4 +22,8 @@
 <!ENTITY GPSLat "GPS 纬度:">
 <!ENTITY GPSLon "GPS 经度:">
 <!ENTITY GPSAlt "GPS 高度:">
+<!ENTITY Photographer "攝影師:">
+<!ENTITY Copyright "專利權:">
+<!ENTITY Caption "描述:">
+<!ENTITY Title "書名:">
 <!ENTITY Comment "注释:">
