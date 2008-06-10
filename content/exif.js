@@ -2,15 +2,16 @@
  * The majority of this code is lifted from JHead by Matthias Wandel
  *  http://www.sentex.net/~mwandel/jhead/
  *
+ * IPTC and XMP code is by Christian Eyrich <ch.ey@gmx.net>
  * The rest is by Ted Mielczarek <luser_mozilla@perilith.com>
  */
 const SOI_MARKER = 0xFFD8;  // start of image
 const SOS_MARKER = 0xFFDA;  // start of stream
 const EOI_MARKER = 0xFFD9;  // end of image
-const EXIF_MARKER = 0xFFE1; // start of EXIF data
-//const BIM_MARKER = '8BIM'; // 8BIM segment marker
+const APP1_MARKER = 0xFFE1; // start of EXIF data
+const APP13_MARKER = 0xFFED; // start of IPTC-NAA data
 const BIM_MARKER = 0x3842494D; // 8BIM segment marker
-const APP14_MARKER = 0xFFED; // start of IPTC data
+const UTF8_INDICATOR = "\u001B%G"; // indicates usage of UTF8 in IPTC-NAA strings
 
 
 const INTEL_BYTE_ORDER = 0x4949;
@@ -77,6 +78,7 @@ const TAG_GPS_ALT_REF    = 5;
 const TAG_GPS_ALT        = 6;
 
 // iptc tags
+const TAG_IPTC_CODEDCHARSET  = 0x5A;
 const TAG_IPTC_BYLINE        = 0x50;
 const TAG_IPTC_HEADLINE      = 0x69;
 const TAG_IPTC_COPYRIGHT     = 0x74;
@@ -84,8 +86,20 @@ const TAG_IPTC_CAPTION       = 0x78;
 
 var BytesPerFormat = [0,1,1,2,4,8,1,1,2,4,8,4,8];
 
+var Node = {
+  ELEMENT_NODE:1, ATTRIBUTE_NODE:2, TEXT_NODE:3, CDATA_SECTION_NODE:4,
+  ENTITY_REFERENCE_NODE:5, ENTITY_NODE:6, PROCESSING_INSTRUCTION_NODE:7,
+  COMMENT_NODE:8, DOCUMENT_NODE:9, DOCUMENT_TYPE_NODE:10,
+  DOCUMENT_FRAGMENT_NODE:11, NOTATION_NODE:12
+};
+
+
 var gFXIFbundle;
 var prefInstance = null;
+var exifDone = false;
+var iptcDone = false;
+var xmpDone = false;
+
 
 function read32(data, offset, swapbytes)
 {
@@ -122,6 +136,48 @@ function bytesToString(data, offset, num)
   return s;
 }
 
+// Decodes arrays carrying UTF-8 sequences into Unicode strings.
+// Filters out illegal bytes with values between 128 and 191,
+// but doesn't validate sequences.
+// To do this each of the follow up bytes in the three
+// ifs must be tested for (c>>6) == 2 or equivalent.
+function utf8BytesToString(utf8data, offset, num)
+{
+  var s = "";
+  var c = c1 = c2 = 0;
+
+  for(var i=offset; i<offset+num;) {
+    c = utf8data[i];
+    if(c <= 127) {
+      s += String.fromCharCode(c);
+      i++;
+    }
+    else if((c >= 192) && (c <= 223)) {
+      c2 = utf8data[i+1];
+      s += String.fromCharCode(((c&31) << 6) | (c2&63));
+      i += 2;
+    }
+    else if((c >= 224) && (c <= 239)) {
+      c2 = utf8data[i+1];
+      c3 = utf8data[i+2];
+      s += String.fromCharCode(((c&15) << 12) | ((c2&63) << 6) | (c3&63));
+      i += 3;
+    }
+    else if(c >= 240) {
+      c2 = utf8data[i+1];
+      c3 = utf8data[i+2];
+      c4 = utf8data[i+3];
+      s += String.fromCharCode(((c & 7) << 18) | ((c2&63) << 12) | ((c3&63) << 6) | (c4&63));
+      i += 4;
+    }
+    else {
+      i++;
+    }
+  }
+
+  return s;
+}
+
 function ConvertAnyFormat(data, format, offset, numbytes, swapbytes)
 {
     var value = 0;
@@ -141,15 +197,15 @@ function ConvertAnyFormat(data, format, offset, numbytes, swapbytes)
     case FMT_URATIONAL:
     case FMT_SRATIONAL:
       {
-	var Num,Den;
-	Num = read32(data, offset, swapbytes);
-	Den = read32(data, offset+4, swapbytes);
-	if (Den == 0){
-	  value = 0;
-	}else{
-	  value = Num/Den;
-	}
-	break;
+        var Num,Den;
+        Num = read32(data, offset, swapbytes);
+        Den = read32(data, offset+4, swapbytes);
+        if (Den == 0){
+          value = 0;
+        }else{
+          value = Num/Den;
+        }
+        break;
       }
 
     case FMT_SSHORT:    Value = read16(data, offset, swapbytes); break;
@@ -219,8 +275,8 @@ function readGPSDir(exifObj, data, dirstart, swapbytes)
       vals[tag] = val;
       break;
 
-		default:
-			break;
+    default:
+      break;
     }
   }
 
@@ -253,7 +309,7 @@ function readGPSDir(exifObj, data, dirstart, swapbytes)
 
 function dd2dms(gpsval)
 {
-  // a bit unconventional calculation to get input border cases
+  // a bit unconventional calculation to get input edge cases
   // like 0x31 / 0x01, 0x0a / 0x01, 0x3c / 0x01 to 49°11'0" instead of 49°10'60"
   var gpsDeg = Math.floor(gpsval / 3600);
   gpsval -= gpsDeg * 3600.0;
@@ -263,6 +319,12 @@ function dd2dms(gpsval)
   return new Array(gpsDeg, gpsMin, gpsSec);
 }
 
+/* Reads the actual EXIF tags.
+   Also extracts tags for textual informations like
+   By, Caption, Headline, Copyright. 
+   But doesn't overwrite those fields when already populated
+   by IPTC-NAA or IPTC4XMP.
+*/
 function dd2dd(gpsval)
 {
   // round to 6 digits after the comma
@@ -482,7 +544,7 @@ function readExifDir(exifObj, data, dirstart, swapbytes)
           // sensible value.
           exifObj.FocalPlaneUnits = 25.4;
           break;
-	
+
         case 3: exifObj.FocalPlaneUnits = 10;   break;  // centimeter
         case 4: exifObj.FocalPlaneUnits = 1;    break;  // millimeter
         case 5: exifObj.FocalPlaneUnits = .001; break;  // micrometer
@@ -497,106 +559,105 @@ function readExifDir(exifObj, data, dirstart, swapbytes)
 
     case TAG_WHITEBALANCE:
       switch(val) {
-      case 0: 
-	exifObj.WhiteBalance = gFXIFbundle.getString("auto"); 
-	break;
-      case 1:
-	exifObj.WhiteBalance = gFXIFbundle.getString("manual");
-	break;
+        case 0: 
+          exifObj.WhiteBalance = gFXIFbundle.getString("auto"); 
+          break;
+        case 1:
+          exifObj.WhiteBalance = gFXIFbundle.getString("manual");
+          break;
       }
       break;
 
     case TAG_LIGHT_SOURCE:
       switch(val) {
-      case 1:
-	exifObj.LightSource = gFXIFbundle.getString("daylight");
-	break;
-      case 2:
-	exifObj.LightSource = gFXIFbundle.getString("fluorescent");
-	break;
-      case 3:
-	exifObj.LightSource = gFXIFbundle.getString("incandescent");
-	break;
-      case 4:
-	exifObj.LightSource = gFXIFbundle.getString("flash");
-	break;
-      case 9:
-	exifObj.LightSource = gFXIFbundle.getString("fineweather");
-	break;
-      case 11:
-	exifObj.LightSource = gFXIFbundle.getString("shade");
-	break;
-      default:; //Quercus: 17-1-2004 There are many more modes for this, check Exif2.2 specs
-	// If it just says 'unknown' or we don't know it, then
-	// don't bother showing it - it doesn't add any useful information.
+        case 1:
+          exifObj.LightSource = gFXIFbundle.getString("daylight");
+          break;
+        case 2:
+          exifObj.LightSource = gFXIFbundle.getString("fluorescent");
+          break;
+        case 3:
+          exifObj.LightSource = gFXIFbundle.getString("incandescent");
+          break;
+        case 4:
+          exifObj.LightSource = gFXIFbundle.getString("flash");
+          break;
+        case 9:
+          exifObj.LightSource = gFXIFbundle.getString("fineweather");
+          break;
+        case 11:
+          exifObj.LightSource = gFXIFbundle.getString("shade");
+          break;
+        default:; //Quercus: 17-1-2004 There are many more modes for this, check Exif2.2 specs
+        // If it just says 'unknown' or we don't know it, then
+        // don't bother showing it - it doesn't add any useful information.
       }
       break;
 
     case TAG_METERING_MODE:
       switch(val) {
-      case 2:
-	exifObj.MeteringMode = gFXIFbundle.getString("centerweight");
-	break;
-      case 3:
-	exifObj.MeteringMode = gFXIFbundle.getString("spot");
-	break;
-      case 5:
-	exifObj.MeteringMode = gFXIFbundle.getString("matrix");
-	break;
+        case 2:
+          exifObj.MeteringMode = gFXIFbundle.getString("centerweight");
+          break;
+        case 3:
+          exifObj.MeteringMode = gFXIFbundle.getString("spot");
+          break;
+        case 5:
+          exifObj.MeteringMode = gFXIFbundle.getString("matrix");
+          break;
       }
       break;
 
     case TAG_EXPOSURE_PROGRAM:
       switch(val) {
-      case 1:
-	exifObj.ExposureProgram = gFXIFbundle.getString("manual");
-	break;
-      case 2:
-	exifObj.ExposureProgram = gFXIFbundle.getString("program") + " (" 
-	  + gFXIFbundle.getString("auto") + ")";
-	break;
-      case 3:
-	exifObj.ExposureProgram = gFXIFbundle.getString("apriority")
-	  + " (" +gFXIFbundle.getString("semiauto") + ")";
-	break;
-      case 4:
-	exifObj.ExposureProgram = gFXIFbundle.getString("spriority")
-	  + " (" + gFXIFbundle.getString("semiauto") +")";
-	break;
-      case 5:
-	exifObj.ExposureProgram = gFXIFbundle.getString("creative");
-	break;
-      case 6:
-	exifObj.ExposureProgram = gFXIFbundle.getString("action");
-	break;
-      case 7:
-	exifObj.ExposureProgram = gFXIFbundle.getString("portrait");
-	break;
-      case 8:
-	exifObj.ExposureProgram = gFXIFbundle.getString("landscape");
-	break;
-
-      default:
-	break;
+        case 1:
+          exifObj.ExposureProgram = gFXIFbundle.getString("manual");
+          break;
+        case 2:
+          exifObj.ExposureProgram = gFXIFbundle.getString("program") + " (" 
+            + gFXIFbundle.getString("auto") + ")";
+          break;
+        case 3:
+          exifObj.ExposureProgram = gFXIFbundle.getString("apriority")
+            + " (" +gFXIFbundle.getString("semiauto") + ")";
+          break;
+        case 4:
+          exifObj.ExposureProgram = gFXIFbundle.getString("spriority")
+            + " (" + gFXIFbundle.getString("semiauto") +")";
+          break;
+        case 5:
+          exifObj.ExposureProgram = gFXIFbundle.getString("creative");
+          break;
+        case 6:
+          exifObj.ExposureProgram = gFXIFbundle.getString("action");
+          break;
+        case 7:
+          exifObj.ExposureProgram = gFXIFbundle.getString("portrait");
+          break;
+        case 8:
+          exifObj.ExposureProgram = gFXIFbundle.getString("landscape");
+          break;
+        default:
+        break;
       }
       break;
 
     case TAG_EXPOSURE_INDEX:
       if (!exifObj.ISOequivalent) {
-	exifObj.ISOequivalent = val.toFixed(0);
+        ExifObj.ISOequivalent = val.toFixed(0);
       }
       break;
 
     case TAG_EXPOSURE_MODE:
       switch(val) {
-      case 0: //Automatic
-	break;
-      case 1:
-	exifObj.ExposureMode = gFXIFbundle.getString("manual");
-	break;
-      case 2:
-	exifObj.ExposureMode = gFXIFbundle.getString("autobracketing");
-	break;
+        case 0: //Automatic
+          break;
+        case 1:
+          exifObj.ExposureMode = gFXIFbundle.getString("manual");
+          break;
+        case 2:
+          exifObj.ExposureMode = gFXIFbundle.getString("autobracketing");
+          break;
       }
       break;
 
@@ -604,14 +665,14 @@ function readExifDir(exifObj, data, dirstart, swapbytes)
       exifObj.ISOequivalent = val.toFixed(0);
       
       if (exifObj.ISOequivalent < 50 ){
-	// Fixes strange encoding on some older digicams.
-	exifObj.ISOequivalent *= 200;
+        // Fixes strange encoding on some older digicams.
+        exifObj.ISOequivalent *= 200;
       }
       break;
 
     case TAG_DIGITALZOOMRATIO:
       if(val > 1) {
-	exifObj.DigitalZoomRatio = val.toFixed(3) + "x";
+        ExifObj.DigitalZoomRatio = val.toFixed(3) + "x";
       }
       break;
 
@@ -694,40 +755,79 @@ function readExifSection(exifObj, exifData, ifd_ofs, swapbytes)
 /* Reads the actual IPTC/NAA tags.
    Overwrites information from EXIF tags for textual informations like
    By, Caption, Headline, Copyright.
+   But doesn't overwrite those fields when already populated by IPTC4XMP.
+   The tag CodedCharacterSet in record 1 is read and interpreted to detect
+   if the string data in record 2 is supposed to be UTF-8 coded. For now
+   we assume record 1 comes before 2 in the file.
 */
 function readIptcDir(iptcObj, data)
 {
   var pos = 0;
+  var utf8Strings = false;
 
-  while(pos < data.length) {
-    var entryMarker = read16(data, pos, false);
+  // Don't read outside the array, take the 5 bytes into account
+  // since they are mandatory for a proper entry.
+  while(pos + 5 <= data.length) {
+    var entryMarker = data[pos];
+    var entryRecord = data[pos + 1];
     var tag = data[pos + 2];
-    // dataLen is really only the data length
+    // dataLen is really only the length of the data.
+    // There are signs, that the highest bit of this int
+    // indicates an extended tag. Be aware of this.
     var dataLen = read16(data, pos + 3, false);
-    if(entryMarker == 0x1C02 &&                // must be the right marker
-       pos + 5 + dataLen <= data.length &&     // and don't read outside the array
-       dataLen > 0) {                          // and only use tags with actual length, no data tags are common
-      var val = bytesToString(data, pos + 5, dataLen);
-      switch(tag) {
-        case TAG_IPTC_BYLINE:
-          if(val.length)
-            iptcObj.Photographer = val;
-          break;
-
-        case TAG_IPTC_CAPTION:
-          if(val.length)
-            iptcObj.Caption = val;
-          break;
-
-        case TAG_IPTC_HEADLINE:
-          if(val.length)
-            iptcObj.Headline = val;
-          break;
-
-        case TAG_IPTC_COPYRIGHT:
-          if(val.length)
-            iptcObj.Copyright = val;
-          break;
+    if(entryMarker == 0x1C) {
+      if(entryRecord == 0x01) {
+        // Only use tags with length > 0, tags without actual data are common.
+        if(dataLen > 0) {
+          if(pos + 5 + dataLen > data.length) {   // Don't read outside the array.
+            var read = pos + 5 + dataLen;
+            break;
+          }
+          if(tag == TAG_IPTC_CODEDCHARSET) {
+            var val = bytesToString(data, pos + 5, dataLen);
+            // ESC %G
+            if(val == UTF8_INDICATOR) {
+                utf8Strings = true;
+            }
+          }
+        }
+      }
+      else
+      if(entryRecord == 0x02) {
+        // Only use tags with length > 0, tags without actual data are common.
+        if(dataLen > 0) {
+          if(pos + 5 + dataLen > data.length) {   // Don't read outside the array.
+            var read = pos + 5 + dataLen;
+            break;
+          }
+          if(utf8Strings) {
+            var val = utf8BytesToString(data, pos + 5, dataLen);
+          }
+          else {
+            var val = bytesToString(data, pos + 5, dataLen);
+          }
+          switch(tag) {
+            case TAG_IPTC_BYLINE:
+              if(!iptcObj.Photographer || !xmpDone)
+                iptcObj.Photographer = val;
+              break;
+    
+            case TAG_IPTC_CAPTION:
+              if(!iptcObj.Caption || !xmpDone)
+                iptcObj.Caption = val;
+              break;
+    
+            case TAG_IPTC_HEADLINE:
+              if(!iptcObj.Headline || !xmpDone)
+                iptcObj.Headline = val;
+              break;
+    
+            case TAG_IPTC_COPYRIGHT:
+              if(!iptcObj.Copyright || !xmpDone)
+                iptcObj.Copyright = val;
+              break;
+          }
+        }
       }
     }
 
@@ -735,33 +835,37 @@ function readIptcDir(iptcObj, data)
   }
 }
 
+
+/* Looks for 8BIM markers in this image resources block.
+   The format is defined by Adobe and stems from its PSD
+   format.
+*/
 function readPsSection(iptcObj, psData)
 {
   var pointer = 0;
 
   var segmentMarker = read32(psData, pointer, false);
   pointer += 4;
-	while(segmentMarker == BIM_MARKER &&
+  while(segmentMarker == BIM_MARKER &&
         pointer < psData.length) {
-    // step over 8BIM header
     var segmentType = read16(psData, pointer, false);
     pointer += 2;
-    // header is variable length padded to even length
-    // including the length byte
+    // Step over 8BIM header.
+    // It's an even length pascal string, i.e. one byte length information
+    // plus string. The whole thing is padded to have an even length.
     var headerLen = psData[pointer];
     pointer += 1 + headerLen + ((headerLen + 1) % 2);
 
     // read dir length excluding length field
     var segmentLen = read32(psData, pointer, false);
     pointer += 4;
-    if(segmentType == 0x0404)  // IPTC segment
-    {
+    // IPTC-NAA record
+    if(segmentType == 0x0404) {
       readIptcDir(iptcObj, psData.slice(pointer, pointer + segmentLen));
       break;
     }
 
-    // dir is variable length padded to even length
-    // including the length byte
+    // Dir data, variable length padded to even length.
     pointer += segmentLen + (segmentLen % 2);
     segmentMarker = read32(psData, pointer, false);
     pointer += 4;
@@ -807,36 +911,48 @@ function exifData(imgUrl)
     var bis = Components.classes["@mozilla.org/binaryinputstream;1"].createInstance(Components.interfaces.nsIBinaryInputStream);
     bis.setInputStream(istream);
     var swapbytes = false;
-    var exifDone = false;
-    var iptcDone = false;
     var marker = bis.read16();
     var len;
     if(marker == SOI_MARKER) {
       marker = bis.read16();
       // reading SOS marker indicates start of image stream
       while(marker != SOS_MARKER &&
-            (!exifDone || !iptcDone)) {
+            (!exifDone || !iptcDone || !xmpDone)) {
         // length includes the length bytes
         len = bis.read16() - 2;
 
-        if(marker == EXIF_MARKER) { // bingo!
-          // 6 bytes, 'Exif\0\0'
-          bis.readBytes(6);
-          // 8 byte TIFF header
-          // first two determine byte order
-          var exifData = bis.readByteArray(len - 6);
-          var bi = read16(exifData, 0, false);
-          if(bi == INTEL_BYTE_ORDER) {
-            swapbytes = true;
+        if(marker == APP1_MARKER) {
+          // For Exif the first 6 bytes should be 'Exif\0\0'
+          var header = bis.readBytes(6);
+          // Is it EXIF?
+          if(header == 'Exif\0\0') {
+            // 8 byte TIFF header
+            // first two determine byte order
+            var exifData = bis.readByteArray(len - 6);
+            var bo = read16(exifData, 0, false);
+            if(bo == INTEL_BYTE_ORDER) {
+              swapbytes = true;
+            }
+            // next two bytes are always 0x002A
+            // offset to Image File Directory (includes the previous 8 bytes)
+            var ifd_ofs = read32(exifData, 4, swapbytes);
+            readExifSection(exifObj, exifData, ifd_ofs, swapbytes);
+            exifDone = true;
           }
-          // next two bytes are always 0x002A
-          // offset to Image File Directory (includes the previous 8 bytes)
-          var ifd_ofs = read32(exifData, 4, swapbytes);
-          readExifSection(exifObj, exifData, ifd_ofs, swapbytes);
-          exifDone = true;
+          else {
+            // Maybe it's IPTC4XMP (IPTC Core).
+            // If it is, it starts with the XMP namespace URI 'http://ns.adobe.com/xap/1.0/\0'.
+            // see http://partners.adobe.com/public/developer/en/xmp/sdk/XMPspecification.pdf
+            header += bis.readBytes(23);  // 6 bytes read means 23 more to go
+            if(header == 'http://ns.adobe.com/xap/1.0/\0') {
+              var xmpData = bis.readByteArray(len - 29);
+              parseXML(exifObj, xmpData);
+              xmpDone = true;
+            }
+          }
         }
         else
-          if(marker == APP14_MARKER) {
+          if(marker == APP13_MARKER) {
             // 6 bytes, 'Photoshop 3.0\0'
             var psString = bis.readBytes(14);
             if(psString == 'Photoshop 3.0\0') {
@@ -846,7 +962,7 @@ function exifData(imgUrl)
             }
           }
           else {
-            // read and discard data...
+            // read and discard data ...
             bis.readBytes(len);
           }
 
@@ -862,6 +978,118 @@ function exifData(imgUrl)
   }
 
   return exifObj;
+}
+
+function parseXML(exifObj, xml)
+{
+  var parser = new DOMParser();
+  var dom = parser.parseFromBuffer(xml, xml.length, 'text/xml');
+  if (dom.documentElement.nodeName == 'parsererror') {
+    return 'Parsing Error!';
+  }
+
+  var val = "";
+
+  // Creators come in an ordered list. Get them all.
+  val = getOrderedArray(dom, "dc:creator");
+  if(val.length) {
+    exifObj.Photographer = val;
+  }
+
+  var el = dom.getElementsByTagName("photoshop:Headline");
+  if(el.length) {
+    var headline = el[0].firstChild.nodeValue;
+    exifObj.Headline = headline;
+  }
+
+  var langTest = getLangTester();
+
+  val = getAltValue(dom, "dc:description", langTest);
+  if(val.length) {
+    exifObj.Caption = val;
+  }
+
+  val = getAltValue(dom, "dc:rights", langTest);
+  if(val.length) {
+    exifObj.Copyright = val;
+  }
+}
+
+// Retrieves a regular expression with which to test if a property is
+// available in the users language.
+// Currently we end up using only the first language code is used for testing.
+function getLangTester()
+{
+  // Get the browsers language as default, only use the primary part of the string.
+  // That's a bit laborious since defLang must be a string, no array.
+  var nl = navigator.language.match(/^[a-z]{2,3}/i);
+  var defLang = nl.length ? nl[0] : "en";
+  var lang = defLang;
+  // See if we can get a user provided preferred language.
+  try {
+    var prefService = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService);
+    lang = prefService.getBranch("intl.").getCharPref("accept_languages");
+  } catch (e) {}
+  if(!lang.length)  // maybe the pref was empty
+    lang = defLang;
+  lang = lang.split(", ");
+
+  return new RegExp("^"+lang[0].match(/^[a-z]{2,3}/i), "i");
+}
+
+function getAltValue(dom, property, langTest)
+{
+  var el = dom.getElementsByTagName(property);
+  if(!el.length) {
+    return "";
+  }
+  var list = el[0].getElementsByTagName("rdf:li");
+  var val = "";
+
+  for(var i = 1; i < list.length; i++)
+  {
+    if(langTest.test(list[i].getAttribute("xml:lang"))) {
+      val = list[i].firstChild.nodeValue;
+      break;
+    }
+  }
+  // our language wasn't found
+  if(!val.length &&
+     list.length > 0) {
+    val = list[0].firstChild.nodeValue;
+  }
+
+  return val;
+}
+
+// Get all entries from an ordered array.
+// Elements might be straight text nodes or come
+// with a property qualifier in a more complex organisation.
+function getOrderedArray(dom, property)
+{
+  var val = "";
+
+  var el = dom.getElementsByTagName(property);
+  if(el.length) {
+    var list = el[0].getElementsByTagName("rdf:li");
+    for(var i=0; i < list.length; i++) {
+      var el = list[i].firstChild;
+      if(el.nodeType == Node.TEXT_NODE) {  // it's just the photographer
+        val += el.nodeValue + ", ";
+      }
+// This part is untested due do lack of software that can write that.
+      else if(el.nodeType == Node.ELEMENT_NODE) {
+        // Above li contains a rdf:Container which contains the rdf:value and a ns:role.
+        var list = el.getElementsByTagName("rdf:value");        
+        if(list.length)
+          val += list[0].firstChild.nodeValue + ", ";
+      }
+    }
+    // Remove last, superfluous comma.
+    val = val.replace(/, $/, '');
+  }
+
+  return val;
 }
 
 function copyEXIFToClipboard()
@@ -939,14 +1167,14 @@ function onFxIFLoad()
 
 function getPreferences()
 {
-	if (!prefInstance) {
-		try {
-			var prefService = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService);
-			prefInstance = prefService.getBranch("extensions.fxif."); // preferences extensions.fxif node
-		} catch (e) {}
-	}
+  if (!prefInstance) {
+    try {
+      var prefService = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService);
+      prefInstance = prefService.getBranch("extensions.fxif."); // preferences extensions.fxif node
+    } catch (e) {}
+  }
 
-	return prefInstance;
+  return prefInstance;
 }
 
 var originalLoad = window.onLoad;
