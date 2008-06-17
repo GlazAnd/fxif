@@ -186,6 +186,8 @@ function ConvertAnyFormat(data, format, offset, numbytes, swapbytes)
     case FMT_STRING:
     case FMT_UNDEFINED: // treat as string
       value = bytesToString(data, offset, numbytes);
+      // strip trailing whitespace
+      value = value.replace(/\s+$/, '');
       break;
 
     case FMT_SBYTE:     value = data[offset];  break;
@@ -221,7 +223,7 @@ function ConvertAnyFormat(data, format, offset, numbytes, swapbytes)
 function readGPSDir(exifObj, data, dirstart, swapbytes)
 {
   var numEntries = read16(data, dirstart, swapbytes);
-  var gpsLatHemisphere = 'E', gpsLonHemisphere = 'N', gpsAltReference = 0;
+  var gpsLatHemisphere = 'N', gpsLonHemisphere = 'E', gpsAltReference = 0;
   var gpsLat, gpsLon, gpsAlt;
   var vals = new Array();
 
@@ -284,7 +286,8 @@ function readGPSDir(exifObj, data, dirstart, swapbytes)
   var degFormat = "dms";
   var degFormatter = dd2dms;
   try {
-    if (!getPreferences().getBoolPref("gpsInDMSFormat"))
+    // 0 = DMS, 1 = DD
+    if (getPreferences().getIntPref("gpsFormat"))
     {
       // but dd if the user wants that
       degFormat = "dd";
@@ -305,6 +308,14 @@ function readGPSDir(exifObj, data, dirstart, swapbytes)
   if (vals[TAG_GPS_ALT] != undefined) {
     exifObj.GPSAlt = gFXIFbundle.getFormattedString("meters", [vals[TAG_GPS_ALT] * (gpsAltReference ? -1.0 : 1.0)]);
   }
+
+  // Get the straight decimal values without rounding.
+  // For creating links to map services.
+  if (vals[TAG_GPS_LAT] != undefined &&
+      vals[TAG_GPS_LON] != undefined) {
+    exifObj.GPSPureDdLat = vals[TAG_GPS_LAT] / 3600 * (gpsLatHemisphere == 'N' ? 1.0 : -1.0);
+    exifObj.GPSPureDdLon = vals[TAG_GPS_LON] / 3600 * (gpsLonHemisphere == 'E' ? 1.0 : -1.0);
+  }
 }
 
 function dd2dms(gpsval)
@@ -315,7 +326,7 @@ function dd2dms(gpsval)
   gpsval -= gpsDeg * 3600.0;
   var gpsMin = Math.floor(gpsval / 60);
   // round to 2 digits after the comma
-  var gpsSec = Math.round((gpsval - gpsMin * 60.0) * 100) / 100;
+  var gpsSec = (gpsval - gpsMin * 60.0).toFixed(2);
   return new Array(gpsDeg, gpsMin, gpsSec);
 }
 
@@ -329,7 +340,7 @@ function dd2dd(gpsval)
 {
   // round to 6 digits after the comma
   var gpsArr = new Array();
-  gpsArr.push(Math.round((gpsval / 3600) * 1000000) / 1000000);
+  gpsArr.push((gpsval / 3600).toFixed(6));
   return gpsArr;
 }
 
@@ -380,8 +391,6 @@ function readExifDir(exifObj, data, dirstart, swapbytes)
       break;
 
     case TAG_USERCOMMENT:
-      // strip trailing whitespace
-      val = val.replace(/\s+$/, '');
       // strip leading ASCII string
       exifObj.UserComment = val.replace(/^ASCII\s*/, '');
       break;
@@ -721,7 +730,6 @@ function readExifDir(exifObj, data, dirstart, swapbytes)
 function readExifSection(exifObj, exifData, ifd_ofs, swapbytes)
 {
   var ntags = readExifDir(exifObj, exifData, ifd_ofs, swapbytes);
-
   if(ntags == 0) {
     return null;
   }
@@ -781,6 +789,7 @@ function readIptcDir(iptcObj, data)
         if(dataLen > 0) {
           if(pos + 5 + dataLen > data.length) {   // Don't read outside the array.
             var read = pos + 5 + dataLen;
+            alert("Read outside of array, read to: " + read + ", array length: " + data.length);
             break;
           }
           if(tag == TAG_IPTC_CODEDCHARSET) {
@@ -798,6 +807,7 @@ function readIptcDir(iptcObj, data)
         if(dataLen > 0) {
           if(pos + 5 + dataLen > data.length) {   // Don't read outside the array.
             var read = pos + 5 + dataLen;
+            alert("Read outside of array, read to: " + read + ", array length: " + data.length);
             break;
           }
           if(utf8Strings) {
@@ -829,6 +839,14 @@ function readIptcDir(iptcObj, data)
           }
         }
       }
+      else
+      {
+//      alert("Tag: " + tag + ", dataLen: " + dataLen);
+      }
+    }
+    else {
+      alert("Wrong entryMarker (" + entryMarker + ")");
+      break;
     }
 
     pos += 5 + dataLen;
@@ -859,7 +877,7 @@ function readPsSection(iptcObj, psData)
     // read dir length excluding length field
     var segmentLen = read32(psData, pointer, false);
     pointer += 4;
-    // IPTC-NAA record
+    // IPTC-NAA record as IIM
     if(segmentType == 0x0404) {
       readIptcDir(iptcObj, psData.slice(pointer, pointer + segmentLen));
       break;
@@ -900,6 +918,17 @@ function exifData(imgUrl)
         istream = Components.classes["@mozilla.org/network/file-input-stream;1"].createInstance(Components.interfaces.nsIFileInputStream);
         istream.init(f, 1, 0, false);
       }
+      else
+      if(u.schemeIs("mailbox") ||
+         u.schemeIs("news") ||
+         u.schemeIs("imap")) {
+        // get a channel
+        var c = ios.newChannelFromURI(u);
+        // and buffered open it into a stream
+        // not that great in terms of responsiveness,
+        // but ways easier than asyncOpen().
+        istream = c.open();
+      }
       else {
         // no input stream and not a local file.  oh well.
         // might be in the process of loading or just not
@@ -929,10 +958,9 @@ function exifData(imgUrl)
             // 8 byte TIFF header
             // first two determine byte order
             var exifData = bis.readByteArray(len - 6);
-            var bo = read16(exifData, 0, false);
-            if(bo == INTEL_BYTE_ORDER) {
-              swapbytes = true;
-            }
+
+            swapbytes = read16(exifData, 0, false) == INTEL_BYTE_ORDER;
+
             // next two bytes are always 0x002A
             // offset to Image File Directory (includes the previous 8 bytes)
             var ifd_ofs = read32(exifData, 4, swapbytes);
@@ -940,23 +968,24 @@ function exifData(imgUrl)
             exifDone = true;
           }
           else {
-            // Maybe it's IPTC4XMP (IPTC Core).
-            // If it is, it starts with the XMP namespace URI 'http://ns.adobe.com/xap/1.0/\0'.
+            // Maybe it's XMP. If it is, it starts with the XMP namespace URI
+            // 'http://ns.adobe.com/xap/1.0/\0'.
             // see http://partners.adobe.com/public/developer/en/xmp/sdk/XMPspecification.pdf
             header += bis.readBytes(23);  // 6 bytes read means 23 more to go
+            var xmpData = bis.readByteArray(len - 29);
             if(header == 'http://ns.adobe.com/xap/1.0/\0') {
-              var xmpData = bis.readByteArray(len - 29);
               parseXML(exifObj, xmpData);
               xmpDone = true;
             }
           }
         }
         else
+          // Or is it IPTC-NAA record as IIM?
           if(marker == APP13_MARKER) {
             // 6 bytes, 'Photoshop 3.0\0'
             var psString = bis.readBytes(14);
+            var psData = bis.readByteArray(len - 14);
             if(psString == 'Photoshop 3.0\0') {
-              var psData = bis.readByteArray(len - 14);
               readPsSection(exifObj, psData);
               iptcDone = true;
             }
@@ -980,45 +1009,56 @@ function exifData(imgUrl)
   return exifObj;
 }
 
+// Parses and reads through the XMP document within the file.
+// Currently the getElementsByTagNameNS() methods are used
+// for Firefox 2 (Gecko 1.8) compatibility. These are ugly and
+// complicated. Should remove this when Firefox 3 is widespread.
 function parseXML(exifObj, xml)
 {
   var parser = new DOMParser();
   var dom = parser.parseFromBuffer(xml, xml.length, 'text/xml');
   if (dom.documentElement.nodeName == 'parsererror') {
+    alert("Error parsing XML");
     return 'Parsing Error!';
   }
 
   var val = "";
 
   // Creators come in an ordered list. Get them all.
-  val = getOrderedArray(dom, "dc:creator");
+//  val = getXMPOrderedArray(dom, "dc:creator");
+  val = getXMPOrderedArray(dom, "http://purl.org/dc/elements/1.1/", "creator");
   if(val.length) {
     exifObj.Photographer = val;
   }
 
-  var el = dom.getElementsByTagName("photoshop:Headline");
+//  var el = dom.getElementsByTagName("photoshop:Headline");
+  var el = dom.getElementsByTagNameNS("http://ns.adobe.com/photoshop/1.0/", "Headline");
   if(el.length) {
     var headline = el[0].firstChild.nodeValue;
     exifObj.Headline = headline;
   }
 
-  var langTest = getLangTester();
+  var lang = getLang();
+  // Build a regular expression to be used to test the language
+  // alternatives available in the XMP.
+  var langTest = new RegExp("^"+lang.match(/^[a-z]{2,3}/i), "i")
 
-  val = getAltValue(dom, "dc:description", langTest);
+//  val = getXMPAltValue(dom, "dc:description", langTest);
+  val = getXMPAltValue(dom, "http://purl.org/dc/elements/1.1/", "description", langTest);
   if(val.length) {
     exifObj.Caption = val;
   }
 
-  val = getAltValue(dom, "dc:rights", langTest);
+//  val = getXMPAltValue(dom, "dc:rights", langTest);
+  val = getXMPAltValue(dom, "http://purl.org/dc/elements/1.1/", "rights", langTest);
   if(val.length) {
     exifObj.Copyright = val;
   }
 }
 
-// Retrieves a regular expression with which to test if a property is
-// available in the users language.
-// Currently we end up using only the first language code is used for testing.
-function getLangTester()
+// Retrieves the language which is likely to be the users favourite
+// Currently we end up using only the first language code.
+function getLang()
 {
   // Get the browsers language as default, only use the primary part of the string.
   // That's a bit laborious since defLang must be a string, no array.
@@ -1032,18 +1072,30 @@ function getLangTester()
   } catch (e) {}
   if(!lang.length)  // maybe the pref was empty
     lang = defLang;
-  lang = lang.split(", ");
+  // To really get a clean code.
+//  lang = lang.split(",")[0].replace(/\s/g, '');
+  lang = lang.match(/[a-z]{2,3}/i)[0];
 
-  return new RegExp("^"+lang[0].match(/^[a-z]{2,3}/i), "i");
+  return lang;
 }
 
-function getAltValue(dom, property, langTest)
+// Gets names and descriptions that can be available
+// in multiple alternative languages.
+// But only those in the first structure with the
+// given property name is fetched.
+// Currently the getElementsByTagNameNS() methods are used
+// for Firefox 2 (Gecko 1.8) compatibility. These are ugly and
+// complicated. Should remove this when Firefox 3 is widespread.
+//function getXMPAltValue(dom, property, langTest)
+function getXMPAltValue(dom, ns, property, langTest)
 {
-  var el = dom.getElementsByTagName(property);
+//  var el = dom.getElementsByTagName(property);
+  var el = dom.getElementsByTagNameNS(ns, property);
   if(!el.length) {
     return "";
   }
-  var list = el[0].getElementsByTagName("rdf:li");
+//  var list = el[0].getElementsByTagName("rdf:li");
+  var list = el[0].getElementsByTagNameNS("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "li");
   var val = "";
 
   for(var i = 1; i < list.length; i++)
@@ -1065,24 +1117,34 @@ function getAltValue(dom, property, langTest)
 // Get all entries from an ordered array.
 // Elements might be straight text nodes or come
 // with a property qualifier in a more complex organisation.
-function getOrderedArray(dom, property)
+// Currently the getElementsByTagNameNS() methods are used
+// for Firefox 2 (Gecko 1.8) compatibility. These are ugly and
+// complicated. Should remove this when Firefox 3 is widespread.
+//function getXMPOrderedArray(dom, property)
+function getXMPOrderedArray(dom, ns, property)
 {
   var val = "";
 
-  var el = dom.getElementsByTagName(property);
+//  var el = dom.getElementsByTagName(property);
+  var el = dom.getElementsByTagNameNS(ns, property);
   if(el.length) {
-    var list = el[0].getElementsByTagName("rdf:li");
-    for(var i=0; i < list.length; i++) {
+//    var list = el[0].getElementsByTagName("rdf:li");
+    var list = el[0].getElementsByTagNameNS("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "li");
+    for(var i=0; i<list.length; i++) {
       var el = list[i].firstChild;
       if(el.nodeType == Node.TEXT_NODE) {  // it's just the photographer
         val += el.nodeValue + ", ";
       }
-// This part is untested due do lack of software that can write that.
+// This part is untested due do lack of software that writes that.
       else if(el.nodeType == Node.ELEMENT_NODE) {
-        // Above li contains a rdf:Container which contains the rdf:value and a ns:role.
-        var list = el.getElementsByTagName("rdf:value");        
+        // Above li contains a rdf:Description which contains the rdf:value and a ns:role.
+//        var list = el.getElementsByTagName("rdf:value");
+        var list = el.getElementsByTagNameNS("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "value");
         if(list.length)
           val += list[0].firstChild.nodeValue + ", ";
+      }
+      else {
+        alert("Uh, unknown nodeType: " + el.nodeType);
       }
     }
     // Remove last, superfluous comma.
@@ -1116,8 +1178,16 @@ function copyEXIFToClipboard()
 function showEXIFDataFor(url)
 {
   var ed = exifData(url);
+  // ed always exists, so we need a way to find out
+  // if it's empty or not.
+  // This is the best idea I could come up with, any better idea?
+  var edEmpty = true;
+  for(var tmp in ed) {
+    edEmpty = false;
+    break;
+  }
 
-  if(ed) {
+  if(!edEmpty) {
     setInfo("camera-make", ed.Make);
     setInfo("camera-model", ed.Model);
     setInfo("image-date", ed.Date);
@@ -1137,14 +1207,31 @@ function showEXIFDataFor(url)
     setInfo("image-meteringmode", ed.MeteringMode);
     setInfo("image-exposureprogram", ed.ExposureProgram);
     setInfo("image-exposuremode", ed.ExposureMode);
-    setInfo("image-gpslat", ed.GPSLat);
-    setInfo("image-gpslon", ed.GPSLon);
+    setInfo("image-gpscoord", ed.GPSLat + ", " + ed.GPSLon);
     setInfo("image-gpsalt", ed.GPSAlt);
     setInfo("image-photographer", ed.Photographer);
     setInfo("image-copyright", ed.Copyright);
     setInfo("image-title", ed.Headline);
     setInfo("image-caption", ed.Caption);
     setInfo("image-comment", ed.UserComment);
+
+    if (ed.GPSPureDdLat && ed.GPSPureDdLon) {
+      var href = 'http://maps.google.com/maps?ll=%lat%,%lon%&q=%lat%,%lon%&z=10&hl=%lang%';
+      try {
+// http://maps.yahoo.com/index.php#mvt=m&trf=0&lon=%lon%&lat=%lat%&mag=8
+// http://atlas.mapquest.com/maps/map.adp?searchtype=address&formtype=latlong&latlongtype=decimal&latitude=%lat%&longitude=%lon%
+        var mapProvider = getPreferences().getCharPref("mapProvider");
+        if(mapProvider.length)
+          href = mapProvider;
+      } catch(e) {}
+      href = href.replace(/%lat%/g, ed.GPSPureDdLat);
+      href = href.replace(/%lon%/g, ed.GPSPureDdLon);
+      href = href.replace(/%lang%/g, getLang());
+      document.getElementById("maplink-href").href = href;
+    }
+    else {
+      document.getElementById("image-gpscoord").style.display = "none";
+    }
   }
   else {
     document.getElementById("exif-sec").style.display = "none";

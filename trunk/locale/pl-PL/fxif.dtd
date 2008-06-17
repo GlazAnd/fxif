@@ -19,11 +19,18 @@
 <!ENTITY MeteringMode "Pomiar światła:">
 <!ENTITY ExposureProgram "Program ekspozycji:">
 <!ENTITY ExposureMode "Tryb ekspozycji:">
-<!ENTITY GPSLat "Szerokość geograficzna:">
-<!ENTITY GPSLon "Długość geograficzna:">
-<!ENTITY GPSLon "Wysokość:">
+<!ENTITY GPSCoord "GPS Współrzędna:">
+<!ENTITY MapLink "Mapa Łącze">
+<!ENTITY GPSAlt "Wysokość:">
 <!ENTITY Photographer "Fotograf:">
 <!ENTITY Copyright "Prawa autorskie:">
 <!ENTITY Title "Tytuł:">
 <!ENTITY Caption "Opis:">
 <!ENTITY Comment "Komentarz:">
+
+<!-- Options dialog -->
+<!ENTITY OptionsDialogTitle "FxIF Preferencje">
+<!ENTITY GPSFormat "Współrzędne w formacie do wykorzystania:">
+<!ENTITY DD.label "Dziesiętny stopni">
+<!ENTITY DMS.label "Stopień Protokoły Sekund">
+<!ENTITY OverrideMapProvider "Mapa dostawcy:">

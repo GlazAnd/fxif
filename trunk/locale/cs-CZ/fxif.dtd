@@ -19,11 +19,18 @@
 <!ENTITY MeteringMode "Režim měření:">
 <!ENTITY ExposureProgram "Program expozice:">
 <!ENTITY ExposureMode "Režim expozice:">
-<!ENTITY GPSLat "Zeměp. šířka (GPS):">
-<!ENTITY GPSLon "Zeměp. délka (GPS):">
+<!ENTITY GPSCoord "GPS Souřadnice:">
+<!ENTITY MapLink "Ukázat Odkaz">
 <!ENTITY GPSAlt "Zeměp. výška (GPS):">
 <!ENTITY Photographer "Fotograf:">
 <!ENTITY Copyright "Copyright:">
 <!ENTITY Title "Název:">
 <!ENTITY Caption "Popis:">
 <!ENTITY Comment "Komentář:">
+
+<!-- Options dialog -->
+<!ENTITY OptionsDialogTitle "FxIF Předvolby">
+<!ENTITY GPSFormat "Zeměpisné souřadnice formát použít:">
+<!ENTITY DD.label "Desetinná Stupně">
+<!ENTITY DMS.label "Stupeň Zápis Sekund">
+<!ENTITY OverrideMapProvider "Ukázat Výrobce:">
