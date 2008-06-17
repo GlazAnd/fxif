@@ -19,11 +19,18 @@
 <!ENTITY MeteringMode "測光方式:">
 <!ENTITY ExposureProgram "露出プログラム:">
 <!ENTITY ExposureMode "露出モード:">
-<!ENTITY GPSLat "GPS 緯度:">
-<!ENTITY GPSLon "GPS 経度:">
+<!ENTITY GPSCoord "GPS Coordinate:">
+<!ENTITY MapLink "地図 リンク">
 <!ENTITY GPSAlt "GPS 高度:">
 <!ENTITY Photographer "撮影:">
 <!ENTITY Copyright "著作権:">
 <!ENTITY Title "タイトル:">
 <!ENTITY Caption "説明書:">
 <!ENTITY Comment "コメント:">
+
+<!-- Options dialog -->
+<!ENTITY OptionsDialogTitle "FxIF Preferences">
+<!ENTITY GPSFormat "Coordinates format to use:">
+<!ENTITY DD.label "Decimal degrees">
+<!ENTITY DMS.label "Degree Minutes Seconds">
+<!ENTITY OverrideMapProvider "Map provider:">

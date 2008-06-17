@@ -19,11 +19,18 @@
 <!ENTITY MeteringMode "测光模式:">
 <!ENTITY ExposureProgram "曝光程序:">
 <!ENTITY ExposureMode "曝光模式:">
-<!ENTITY GPSLat "GPS 纬度:">
-<!ENTITY GPSLon "GPS 经度:">
+<!ENTITY GPSCoord "GPS Coordinate:">
+<!ENTITY MapLink "地圖 链接">
 <!ENTITY GPSAlt "GPS 高度:">
 <!ENTITY Photographer "攝影師:">
 <!ENTITY Copyright "專利權:">
 <!ENTITY Caption "描述:">
 <!ENTITY Title "書名:">
 <!ENTITY Comment "注释:">
+
+<!-- Options dialog -->
+<!ENTITY OptionsDialogTitle "FxIF Preferences">
+<!ENTITY GPSFormat "Coordinates format to use:">
+<!ENTITY DD.label "Decimal degrees">
+<!ENTITY DMS.label "Degree Minutes Seconds">
+<!ENTITY OverrideMapProvider "Map provider:">

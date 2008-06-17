@@ -5,22 +5,23 @@
   <RDF:Description RDF:about="urn:mozilla:install-manifest"
                    em:id="{11483926-db67-4190-91b1-ef20fcec5f33}"
                    em:name="FxIF"
-                   em:version="0.2.4"
+                   em:version="0.2.9b"
                    em:creator="Ted Mielczarek"
                    em:description="View EXIF data in image properties"
                    em:homepageURL="http://ted.mielczarek.org/code/mozilla/fxif/"
-                   em:iconURL="chrome://fxif/content/fxif1.gif">
+                   em:iconURL="chrome://fxif/content/fxif1.gif"
+                   em:optionsURL="chrome://fxif/content/fxifOptions.xul">
     <em:contributor>Matthias Wandel (JHead developer)</em:contributor>
-    <em:contributor>MatrixIsAllOver (eXtenZilla.it - it-IT localization)</em:contributor>
+    <em:contributor>Christian Eyrich – GPS, IPTC, XMP</em:contributor>
+    <em:contributor>MatrixIsAllOver (eXtenZilla.it – it-IT localization)</em:contributor>
     <em:contributor>Cola99 (Traditional Chinese zh-TW localization)</em:contributor>
-    <em:contributor>Cédric Corazza (frenchmozilla.sf.net - fr-FR localization)</em:contributor>
+    <em:contributor>Cédric Corazza (frenchmozilla.sf.net – fr-FR localization)</em:contributor>
     <em:contributor>Armin C. Schneider (German localization)</em:contributor>
     <em:contributor>Chris Beaven (FxIF icon)</em:contributor>
     <em:contributor>Tomáš Marek (Czech localization)</em:contributor>
     <em:contributor>Takanori (takanory.net) - Japanese localization</em:contributor>
     <em:contributor>gsling (Simplified Chinese zh-CN localization)</em:contributor>
     <em:contributor>t0m3k (CyberFoto.pl - pl-PL localization)</em:contributor>
-    <em:contributor>Christian Eyrich - GPS bits</em:contributor>
     <em:targetApplication RDF:resource="rdf:#$QPBnF1"/>
     <em:targetApplication RDF:resource="rdf:#$RPBnF1"/>
     <em:targetApplication RDF:resource="rdf:#$SPBnF1"/>

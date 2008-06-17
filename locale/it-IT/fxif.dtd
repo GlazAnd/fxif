@@ -19,11 +19,18 @@
 <!ENTITY MeteringMode "Metodo di misurazione:">
 <!ENTITY ExposureProgram "Esposizione:">
 <!ENTITY ExposureMode "Metodo di esposizione:">
-<!ENTITY GPSLat "Latitudine GPS:">
-<!ENTITY GPSLon "Longitudine GPS:">
+<!ENTITY GPSCoord "Coordinata GPS:">
+<!ENTITY MapLink "Collegamento Mappa">
 <!ENTITY GPSAlt "Altezza GPS:">
 <!ENTITY Photographer "Fotografo:">
 <!ENTITY Copyright "Diritto d'autore:">
 <!ENTITY Title "Titolo:">
 <!ENTITY Caption "Descrizione:">
 <!ENTITY Comment "Commento:">
+
+<!-- Options dialog -->
+<!ENTITY OptionsDialogTitle "FxIF Regolazione">
+<!ENTITY GPSFormat "Coordinare formato:">
+<!ENTITY DD.label "Grado decimale">
+<!ENTITY DMS.label "Grado Minuto Secondo">
+<!ENTITY OverrideMapProvider "Mappa fornitore:">

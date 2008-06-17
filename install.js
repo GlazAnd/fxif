@@ -1,7 +1,7 @@
 const APP_DISPLAY_NAME = "FxIF";
 const APP_NAME = "fxif";
 const APP_PACKAGE = "/Ted Mielczarek/fxif";
-const APP_VERSION = "0.2.4";
+const APP_VERSION = "0.2.9b";
 
 const APP_JAR_FILE = "fxif.jar";
 const APP_CONTENT_FOLDER = "content/";

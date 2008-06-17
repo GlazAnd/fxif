@@ -19,11 +19,18 @@
 <!ENTITY MeteringMode "Metering Mode:">
 <!ENTITY ExposureProgram "Exposure:">
 <!ENTITY ExposureMode "Exposure Mode:">
-<!ENTITY GPSLat "GPS Latitude:">
-<!ENTITY GPSLon "GPS Longitude:">
+<!ENTITY GPSCoord "GPS Coordinate:">
+<!ENTITY MapLink "Map Link">
 <!ENTITY GPSAlt "GPS Altitude:">
 <!ENTITY Photographer "Photographer:">
 <!ENTITY Copyright "Copyright:">
 <!ENTITY Title "Title:">
 <!ENTITY Caption "Caption:">
 <!ENTITY Comment "Comment:">
+
+<!-- Options dialog -->
+<!ENTITY OptionsDialogTitle "FxIF Preferences">
+<!ENTITY GPSFormat "Coordinates format to use:">
+<!ENTITY DD.label "Decimal degrees">
+<!ENTITY DMS.label "Degree Minutes Seconds">
+<!ENTITY OverrideMapProvider "Map provider:">
