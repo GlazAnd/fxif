@@ -29,8 +29,8 @@
 <!ENTITY Comment "Komentář:">
 
 <!-- Options dialog -->
-<!ENTITY OptionsDialogTitle "FxIF Předvolby">
-<!ENTITY GPSFormat "Zeměpisné souřadnice formát použít:">
-<!ENTITY DD.label "Desetinná Stupně">
-<!ENTITY DMS.label "Stupeň Zápis Sekund">
-<!ENTITY OverrideMapProvider "Ukázat Výrobce:">
+<!ENTITY OptionsDialogTitle "Možnosti FxIF">
+<!ENTITY GPSFormat "Formát zeměpisných souřadnic:">
+<!ENTITY DD.label "Desetiny stupně">
+<!ENTITY DMS.label "stupňů minut sekund">
+<!ENTITY OverrideMapProvider "Dodavatel map:">
