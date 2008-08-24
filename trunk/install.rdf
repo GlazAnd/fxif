@@ -22,6 +22,7 @@
     <em:contributor>Takanori (takanory.net) - Japanese localization</em:contributor>
     <em:contributor>gsling (Simplified Chinese zh-CN localization)</em:contributor>
     <em:contributor>t0m3k (CyberFoto.pl - pl-PL localization)</em:contributor>
+    <em:contributor>Álvaro G. Vicario (Spanish localization)</em:contributor>
     <em:targetApplication RDF:resource="rdf:#$QPBnF1"/>
     <em:targetApplication RDF:resource="rdf:#$RPBnF1"/>
     <em:targetApplication RDF:resource="rdf:#$SPBnF1"/>
