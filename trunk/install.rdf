@@ -44,7 +44,7 @@
   <RDF:Description RDF:about="rdf:#$QPBnF1"
                    em:id="{ec8030f7-c20a-464f-9b0e-13a3a9e97384}"
                    em:minVersion="0.10"
-                   em:maxVersion="3.0.*" />
+                   em:maxVersion="3.1.*" />
   <!-- Mozilla -->
   <RDF:Description RDF:about="rdf:#$RPBnF1"
                    em:id="{86c18b42-e466-45a9-ae7a-9b95ba6f5640}"

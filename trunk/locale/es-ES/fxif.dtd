@@ -27,6 +27,7 @@
 <!ENTITY Title "Título:">
 <!ENTITY Caption "Leyenda:">
 <!ENTITY Comment "Comentario:">
+<!ENTITY NoData "No se han encontrado datos meta">
 
 <!-- Options dialog -->
 <!ENTITY OptionsDialogTitle "Preferencias de FxIF">

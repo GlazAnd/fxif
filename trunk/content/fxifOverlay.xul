@@ -49,151 +49,155 @@
       <hbox align="end">
       <label value="&EXIFData;"/>
       <separator flex="1"/>
-      <button label="&Copy;" onclick="copyEXIFToClipboard()"/>
+      <button id="copy-button" label="&Copy;" onclick="copyEXIFToClipboard()"/>
       </hbox>
       <separator class="groove"/>
-      <grid>
-	<columns>
-	  <column/>
-	  <column/>
-	  <column flex="1"/>
-	</columns>
-	<rows>
-	  <row id="camera-make">
-	    <separator orient="vertical"/>
-	    <label value="&CameraMake;"/>
-	    <textbox id="camera-make-text" readonly="true"/>
-	  </row>
-	  <row id="camera-model">
-	    <separator orient="vertical"/>
-	    <label value="&CameraModel;"/>
-	    <textbox id="camera-model-text" readonly="true"/>
-	  </row>
-	  <row id="image-date">
-	    <separator orient="vertical"/>
-	    <label value="&ImageDate;"/>
-	    <textbox id="image-date-text" readonly="true"/>
-	  </row>
-	  <row id="image-orientation"> 
-	    <separator orient="vertical"/>
-	    <label value="&ImageOrientation;"/>
-	    <textbox id="image-orientation-text" readonly="true"/>
-	  </row>
-	  <row id="image-bw">
-	    <separator orient="vertical"/>
-	    <label value="&ImageBW;"/>
-	    <textbox id="image-bw-text" readonly="true"/>
-	  </row>
-	  <row id="image-flash">
-	    <separator orient="vertical"/>
-	    <label value="&FlashUsed;"/>
-	    <textbox id="image-flash-text" readonly="true"/>
-	  </row>
-	  <row id="image-focallen">
-	    <separator orient="vertical"/>
-	    <label value="&FocalLength;"/>
-	    <textbox id="image-focallen-text" readonly="true"/>
-	  </row>
-	  <row id="image-digitalzoom">
-	    <separator orient="vertical"/>
-	    <label value="&DigitalZoom;"/>
-	    <textbox id="image-digitalzoom-text" readonly="true"/>
-	  </row>
-	  <row id="image-ccdwidth">
-	    <separator orient="vertical"/>
-	    <label value="&CCDWidth;"/>
-	    <textbox id="image-ccdwidth-text" readonly="true"/>
-	  </row>
-	  <row id="image-exposuretime">
-	    <separator orient="vertical"/>
-	    <label value="&ExposureTime;"/>
-	    <textbox id="image-exposuretime-text" readonly="true"/>
-	  </row>
-	  <row id="image-aperture">
-	    <separator orient="vertical"/>
-	    <label value="&Aperture;"/>
-	    <textbox id="image-aperture-text" readonly="true"/>
-	  </row>
-	  <row id="image-focusdist">
-	    <separator orient="vertical"/>
-	    <label value="&FocusDist;"/>
-	    <textbox id="image-focusdist-text" readonly="true"/>
-	  </row>
-	  <row id="image-isoequiv">
-	    <separator orient="vertical"/>
-	    <label value="&ISOequiv;"/>
-	    <textbox id="image-isoequiv-text" readonly="true"/>
-	  </row>
-	  <row id="image-exposurebias">
-	    <separator orient="vertical"/>
-	    <label value="&ExposureBias;"/>
-	    <textbox id="image-exposurebias-text" readonly="true"/>
-	  </row>
-	  <row id="image-whitebalance">
-	    <separator orient="vertical"/>
-	    <label value="&WhiteBalance;"/>
-	    <textbox id="image-whitebalance-text" readonly="true"/>
-	  </row>
-	  <row id="image-lightsource">
-	    <separator orient="vertical"/>
-	    <label value="&LightSource;"/>
-	    <textbox id="image-lightsource-text" readonly="true"/>
-	  </row>
-	  <row id="image-meteringmode">
-	    <separator orient="vertical"/>
-	    <label value="&MeteringMode;"/>
-	    <textbox id="image-meteringmode-text" readonly="true"/>
-	  </row>
-	  <row id="image-exposureprogram">
-	    <separator orient="vertical"/>
-	    <label value="&ExposureProgram;"/>
-	    <textbox id="image-exposureprogram-text" readonly="true"/>
-	  </row>
-	  <row id="image-exposuremode">
-	    <separator orient="vertical"/>
-	    <label value="&ExposureMode;"/>
-	    <textbox id="image-exposuremode-text" readonly="true"/>
-	  </row>
-	  <row id="image-gpscoord">
-	    <separator orient="vertical"/>
-	    <label value="&GPSCoord;"/>
+      <grid id="data-list">
+  <columns>
+    <column/>
+    <column/>
+    <column flex="1"/>
+  </columns>
+  <rows>
+    <row id="camera-make">
+      <separator orient="vertical"/>
+      <label value="&CameraMake;"/>
+      <textbox id="camera-make-text" readonly="true"/>
+    </row>
+    <row id="camera-model">
+      <separator orient="vertical"/>
+      <label value="&CameraModel;"/>
+      <textbox id="camera-model-text" readonly="true"/>
+    </row>
+    <row id="image-date">
+      <separator orient="vertical"/>
+      <label value="&ImageDate;"/>
+      <textbox id="image-date-text" readonly="true"/>
+    </row>
+    <row id="image-orientation"> 
+      <separator orient="vertical"/>
+      <label value="&ImageOrientation;"/>
+      <textbox id="image-orientation-text" readonly="true"/>
+    </row>
+    <row id="image-bw">
+      <separator orient="vertical"/>
+      <label value="&ImageBW;"/>
+      <textbox id="image-bw-text" readonly="true"/>
+    </row>
+    <row id="image-flash">
+      <separator orient="vertical"/>
+      <label value="&FlashUsed;"/>
+      <textbox id="image-flash-text" readonly="true"/>
+    </row>
+    <row id="image-focallen">
+      <separator orient="vertical"/>
+      <label value="&FocalLength;"/>
+      <textbox id="image-focallen-text" readonly="true"/>
+    </row>
+    <row id="image-digitalzoom">
+      <separator orient="vertical"/>
+      <label value="&DigitalZoom;"/>
+      <textbox id="image-digitalzoom-text" readonly="true"/>
+    </row>
+    <row id="image-ccdwidth">
+      <separator orient="vertical"/>
+      <label value="&CCDWidth;"/>
+      <textbox id="image-ccdwidth-text" readonly="true"/>
+    </row>
+    <row id="image-exposuretime">
+      <separator orient="vertical"/>
+      <label value="&ExposureTime;"/>
+      <textbox id="image-exposuretime-text" readonly="true"/>
+    </row>
+    <row id="image-aperture">
+      <separator orient="vertical"/>
+      <label value="&Aperture;"/>
+      <textbox id="image-aperture-text" readonly="true"/>
+    </row>
+    <row id="image-focusdist">
+      <separator orient="vertical"/>
+      <label value="&FocusDist;"/>
+      <textbox id="image-focusdist-text" readonly="true"/>
+    </row>
+    <row id="image-isoequiv">
+      <separator orient="vertical"/>
+      <label value="&ISOequiv;"/>
+      <textbox id="image-isoequiv-text" readonly="true"/>
+    </row>
+    <row id="image-exposurebias">
+      <separator orient="vertical"/>
+      <label value="&ExposureBias;"/>
+      <textbox id="image-exposurebias-text" readonly="true"/>
+    </row>
+    <row id="image-whitebalance">
+      <separator orient="vertical"/>
+      <label value="&WhiteBalance;"/>
+      <textbox id="image-whitebalance-text" readonly="true"/>
+    </row>
+    <row id="image-lightsource">
+      <separator orient="vertical"/>
+      <label value="&LightSource;"/>
+      <textbox id="image-lightsource-text" readonly="true"/>
+    </row>
+    <row id="image-meteringmode">
+      <separator orient="vertical"/>
+      <label value="&MeteringMode;"/>
+      <textbox id="image-meteringmode-text" readonly="true"/>
+    </row>
+    <row id="image-exposureprogram">
+      <separator orient="vertical"/>
+      <label value="&ExposureProgram;"/>
+      <textbox id="image-exposureprogram-text" readonly="true"/>
+    </row>
+    <row id="image-exposuremode">
+      <separator orient="vertical"/>
+      <label value="&ExposureMode;"/>
+      <textbox id="image-exposuremode-text" readonly="true"/>
+    </row>
+    <row id="image-gpscoord">
+      <separator orient="vertical"/>
+      <label value="&GPSCoord;"/>
       <hbox>
         <textbox id="image-gpscoord-text" readonly="true" style="min-width:29ex;" flex="1"/>
         <hbox><html:a id="maplink-href" target="exif" style="text-decoration:underline; cursor:pointer;">&MapLink;</html:a></hbox>
       </hbox>
     </row>
-	  <row id="image-gpsalt">
-	    <separator orient="vertical"/>
-	    <label value="&GPSAlt;"/>
-	    <textbox id="image-gpsalt-text" readonly="true"/>
-	  </row>
-	  <row id="image-photographer">
-	    <separator orient="vertical"/>
-	    <label value="&Photographer;"/>
-	    <textbox id="image-photographer-text" readonly="true"/>
-	  </row>
-	  <row id="image-copyright">
-	    <separator orient="vertical"/>
-	    <label value="&Copyright;"/>
-	    <textbox id="image-copyright-text" multiline="true" readonly="true"/>
-	  </row>
-	  <row id="image-title">
-	    <separator orient="vertical"/>
-	    <label value="&Title;"/>
-	    <textbox id="image-title-text" readonly="true"/>
-	  </row>
-	  <row id="image-caption">
-	    <separator orient="vertical"/>
-	    <label value="&Caption;"/>
-	    <textbox id="image-caption-text" multiline="true" readonly="true"/>
-	  </row>
-	  <row id="image-comment">
-	    <separator orient="vertical"/>
-	    <label value="&Comment;"/>
-	    <textbox id="image-comment-text" readonly="true"/>
-	  </row>
-	</rows>
+    <row id="image-gpsalt">
+      <separator orient="vertical"/>
+      <label value="&GPSAlt;"/>
+      <textbox id="image-gpsalt-text" readonly="true"/>
+    </row>
+    <row id="image-photographer">
+      <separator orient="vertical"/>
+      <label value="&Photographer;"/>
+      <textbox id="image-photographer-text" readonly="true"/>
+    </row>
+    <row id="image-copyright">
+      <separator orient="vertical"/>
+      <label value="&Copyright;"/>
+      <textbox id="image-copyright-text" multiline="true" readonly="true"/>
+    </row>
+    <row id="image-title">
+      <separator orient="vertical"/>
+      <label value="&Title;"/>
+      <textbox id="image-title-text" readonly="true"/>
+    </row>
+    <row id="image-caption">
+      <separator orient="vertical"/>
+      <label value="&Caption;"/>
+      <textbox id="image-caption-text" multiline="true" readonly="true"/>
+    </row>
+    <row id="image-comment">
+      <separator orient="vertical"/>
+      <label value="&Comment;"/>
+      <textbox id="image-comment-text" readonly="true"/>
+    </row>
+  </rows>
       </grid>
+      <hbox id="no-data">
+        <spacer width="20"/>
+        <label value="&NoData;"/>
+      </hbox>
     </vbox>
   </window>
 
