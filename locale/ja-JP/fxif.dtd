@@ -27,6 +27,7 @@
 <!ENTITY Title "タイトル:">
 <!ENTITY Caption "説明書:">
 <!ENTITY Comment "コメント:">
+<!ENTITY NoData "いいえメタデータが見つかりました">
 
 <!-- Options dialog -->
 <!ENTITY OptionsDialogTitle "FxIF Preferences">

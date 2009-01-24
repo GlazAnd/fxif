@@ -27,6 +27,7 @@
 <!ENTITY Title "Název:">
 <!ENTITY Caption "Popis:">
 <!ENTITY Comment "Komentář:">
+<!ENTITY NoData "Ne meta data">
 
 <!-- Options dialog -->
 <!ENTITY OptionsDialogTitle "Možnosti FxIF">

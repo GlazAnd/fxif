@@ -27,6 +27,7 @@
 <!ENTITY Title "Titel:">
 <!ENTITY Caption "Beschreibung:">
 <!ENTITY Comment "Kommentar:">
+<!ENTITY NoData "Keine Metadaten gefunden">
 
 <!-- Options dialog -->
 <!ENTITY OptionsDialogTitle "FxIF-Einstellungen">

@@ -330,12 +330,6 @@ function dd2dms(gpsval)
   return new Array(gpsDeg, gpsMin, gpsSec);
 }
 
-/* Reads the actual EXIF tags.
-   Also extracts tags for textual informations like
-   By, Caption, Headline, Copyright. 
-   But doesn't overwrite those fields when already populated
-   by IPTC-NAA or IPTC4XMP.
-*/
 function dd2dd(gpsval)
 {
   // round to 6 digits after the comma
@@ -344,6 +338,12 @@ function dd2dd(gpsval)
   return gpsArr;
 }
 
+/* Reads the actual EXIF tags.
+   Also extracts tags for textual informations like
+   By, Caption, Headline, Copyright. 
+   But doesn't overwrite those fields when already populated
+   by IPTC-NAA or IPTC4XMP.
+*/
 function readExifDir(exifObj, data, dirstart, swapbytes)
 {
   var ntags = 0;
@@ -1188,6 +1188,7 @@ function showEXIFDataFor(url)
   }
 
   if(!edEmpty) {
+    document.getElementById("no-data").style.display = "none";
     setInfo("camera-make", ed.Make);
     setInfo("camera-model", ed.Model);
     setInfo("image-date", ed.Date);
@@ -1234,7 +1235,10 @@ function showEXIFDataFor(url)
     }
   }
   else {
-    document.getElementById("exif-sec").style.display = "none";
+		// Show at least a message if there's nothing. Else "it just leaves you guessing
+		// whether the extension is at fault or what." as a comment on AMO says.
+    document.getElementById("copy-button").style.display = "none";
+    document.getElementById("data-list").style.display = "none";
   }
 }
 
