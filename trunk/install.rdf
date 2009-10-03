@@ -5,7 +5,7 @@
   <RDF:Description RDF:about="urn:mozilla:install-manifest"
                    em:id="{11483926-db67-4190-91b1-ef20fcec5f33}"
                    em:name="FxIF"
-                   em:version="0.2.9b"
+                   em:version="0.3"
                    em:creator="Ted Mielczarek"
                    em:description="View EXIF data in image properties"
                    em:homepageURL="http://ted.mielczarek.org/code/mozilla/fxif/"
@@ -39,12 +39,13 @@
     <em:locale>locale/cs-CZ/</em:locale>
     <em:locale>locale/ja-JP/</em:locale>
     <em:locale>locale/pl-PL/</em:locale>
+    <em:locale>locale/es-ES/</em:locale>
   </RDF:Description>
   <!-- Firefox -->
   <RDF:Description RDF:about="rdf:#$QPBnF1"
                    em:id="{ec8030f7-c20a-464f-9b0e-13a3a9e97384}"
                    em:minVersion="0.10"
-                   em:maxVersion="3.1.*" />
+                   em:maxVersion="3.5.*" />
   <!-- Mozilla -->
   <RDF:Description RDF:about="rdf:#$RPBnF1"
                    em:id="{86c18b42-e466-45a9-ae7a-9b95ba6f5640}"

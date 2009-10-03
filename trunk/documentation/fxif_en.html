@@ -21,10 +21,10 @@ forms:</p>
 <ul>
 	<li>binary EXIF data. This is added by most cameras automatically and contains technical informations on the camera model and manufacturer, date and time the image was taken, aperture and shutter speed used, focal length and much much more.</li>
 	<li>IPTC-NAA data in a binary structure (IIM). IPTC-NAA comprises a standardized set of fields focusing on informations as the name of the photographer, caption and title for the image, copyright informations, keywords a.s.o.</li>
-	<li>XMP (Extensible Metadata Platform). In contrast to aforementioned this data isn&rsquo;t stored binary but as an XML document within the image and isn&rsquo;t restricted to only camera or image informations but can hold both and even more. It&rsquo;s developed by Adobe and pushed by their applications including Photoshop. As said, XMP can hold various informations as all the EXIF data mentioned above and also those from IPTC-NAA as well as application specific.</li>
+	<li>XMP (Extensible Metadata Platform). In contrast to aforementioned this data isn&rsquo;t stored binary but as an XML document within the image and isn&rsquo;t restricted to only camera or image informations but can hold both and even more. It&rsquo;s developed by Adobe and pushed by their applications including Photoshop. As said, XMP can hold various informations as all the EXIF data mentioned above and also those from IPTC-NAA as well as application specific.<br/>
+  Its advantage is the use of UTF-8 encoding&ndash;so data can be added in every language available&ndash;and also the possibility to hold an information in more than one language simultaneously.</li>
 </ul>
-<p>Its advantage is the use of UTF-8 encoding&ndash;so data can be added in every language available&ndash;and also the possibility to hold an information in more than one language simultaneously.</p>
-<p>Out of the camera most images will only contain binary EXIF data but this may change in future and there&rsquo;s much software to add the other informations by you. And software like Photoshop will at least duplicate the EXIF information into XMP data and add data of its own to your image if you just save it&ndash;or at least if you don&rsquo;t do <em>Save for Web</em>.</p>
+<p>Out of the camera most images will only contain binary EXIF data but this may change in future and there&rsquo;s much software for adding the other informations by you. And software like Photoshop will at least duplicate the EXIF information into XMP data and add data of its own to your image if you just save it&ndash;or at least if you don&rsquo;t do <em>Save for Web</em>.</p>
 
 <h2>And which fields in detail?</h2>
 <p>In detail you can view the following EXIF fields: ImageDescription, Make, Model, Orientation, ModifyDate/DateTimeOriginal/DateTimeDigitized, Artist, Copyright, ExposureTime., FNumber, ExposureProgram, GPSInfo, ISO, ShutterSpeedValue, ExposureCompensation, MaxApertureValue, SubjectDistance, MeteringMode, LightSource, Flash, FocalLength, UserComment, ExifImageWidth, ExifImageLength, FocalPlaneXResolution, FocalPlaneResolutionUnit. ExposureMode, WhiteBalance, DigitalZoomRatio, FocalLengthIn35mmFormat</p>
@@ -35,7 +35,7 @@ forms:</p>
 
 <h2>That&rsquo;s not that much, why not more?</h2>
 <p>FxIF wants to give you the informations which most people most likely want to see when viewing an image in the browser. That is a quick look when, by which camera with which settings, where and some informations on the subject.</p>
-<p>There are other applications that give you any possible information found in the image. But from our point of view their purpose is different and doesn&rsquo;t make much sense in the browser.</p>
+<p>There are other applications that give you any possible information found in the image. But from our point of view their purpose is different and doesn&rsquo;t make much sense in the browser. Displaying all informations available in the file can simply overwhelming and make the basic informations hard to find.</p>
 
 <h2>And why only in JPEG images?</h2>
 <p>That image format is by far the most common and concentrating on it keeps the extension simple.</p>
@@ -49,11 +49,13 @@ forms:</p>
 <h1>Configure me</h1>
 <p>Since likings are different we decided to make two functions configurable. You can do this via the options dialog on the Add-On manager (available in Firefox and SeaMonkey 2) or by directly manipulating the respective pref.</p>
 <p>First option is to choose the format used for displaying coordinates. This is either Degrees Minutes Seconds (DMS) like 40&deg;&nbsp;43&prime;&nbsp;20.7&Prime;&nbsp;N, 74&deg;&nbsp;02&prime;&nbsp;47.2&Prime;&nbsp;W or decimal degree (DD) like 40.722417&deg;&nbsp;N, 74.046444&deg;&nbsp;W. Any informations are rounded to two decimal places in DMS and six decimal places in DD format. The associated pref is <code>extensions.fxif.gpsFormat</code> where 0 means DMS and 1 DD.</p>
-<p>The other option is the map provider to use for the weblink. The default (when the pref isn&rsquo;t available or empty) is to use <code>maps.google.com</code>, but as I wrote, likings are different.</p>
+<p>The other option is the map provider to use for the weblink. The default (when the pref isn&rsquo;t available or empty) is to use <code>openstreetmap.org</code>, but as I wrote, likings are different.</p>
 <p>So to change it, insert any URL into the field (or pref). You can use really any URL, but to have the respective coordinates used, put a <code>%lat%</code> anywhere the latitude shall be inserted and <code>%lon%</code> anywhere the longitude shall be inserted.</p>
 <p>So the default is</p>
+<p><code>http://www.openstreetmap.org/?lat=%mlat%&amp;mlon=%lon%&amp</code></p>
+<p>but if you want to use Google as a map provider, insert for example</p>
 <p><code>http://maps.google.com/maps?ll=%lat%,%lon%&amp;q=%lat%,%lon%&amp;z=10&amp;hl=%lang%</code></p>
-<p>but if you want to use Yahoo as a map provider, insert for example</p>
+<p>or for Yahoo use</p>
 <p><code>http://maps.yahoo.com/index.php#mvt=m&amp;trf=0&amp;lon=%lon%&amp;lat=%lat%&amp;mag=8</code></p>
 <p>or</p>
 <p><code>http://atlas.mapquest.com/maps/map.adp?searchtype=address&amp;formtype=latlong&amp;latlongtype=decimal&amp;latitude=%lat%&amp;longitude=%lon%</code></p>
@@ -62,7 +64,7 @@ forms:</p>
 <p>The associated pref is <code>extensions.fxif.mapProvider</code>.</p>
 
 <h1>Are there localized versions?</h1>
-<p>FxIF is already available in Chinese (Chinese and Taiwanese variants), Czech, English, French, German, Italian, Japanese and Polish. The one used depends on the browsers locale. If you don&rsquo;t find your language in the list, you’re welcome to do a translation and donate it. You can get the <a href="http://code.google.com/p/fxif/source/browse/trunk/locale/en-US">english version .dtd and .properties files</a> from the FxIF repository and mail us the tranlated file for inclusion.</p>
+<p>FxIF is already available in Chinese (Chinese and Taiwanese variants), Czech, English, French, German, Italian, Japanese, Polish and Spanish. The one used depends on the browsers locale. If you don&rsquo;t find your language in the list, you’re welcome to do a translation and donate it. You can get the <a href="http://code.google.com/p/fxif/source/browse/trunk/locale/en-US">english version .dtd and .properties files</a> from the FxIF repository and mail us the tranlated file for inclusion. Also fixes for errors in translations are welcom.</p>
 
 <h1>When will the next version get released?</h1>
 <p>Like most projects &ldquo;when it&rsquo;s done&rdquo;. Since 0.23 the FxIF code has its <a href="http://code.google.com/p/fxif/">home at Google Code</a> and the source kept online can be <a href="http://code.google.com/p/fxif/source/checkout">checked out via svn</a>.</p>
@@ -73,6 +75,7 @@ forms:</p>
 	<li>Decoding of IPTC-NAA and XMP data</li>
 	<li>Decoding of creator, title, description and copyright</li>
 	<li>Ability to operate on images opened from mailbox, news and imap</li>
+  <li>Works with Firefox >= 3 and SeaMonkey >= 2
 </ul>
 </body>
 </html>

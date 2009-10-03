@@ -1217,10 +1217,8 @@ function showEXIFDataFor(url)
     setInfo("image-comment", ed.UserComment);
 
     if (ed.GPSPureDdLat && ed.GPSPureDdLon) {
-      var href = 'http://maps.google.com/maps?ll=%lat%,%lon%&q=%lat%,%lon%&z=10&hl=%lang%';
+      var href = 'http://www.openstreetmap.org/?mlat=%lat%&mlon=%lon%&layers=B000FTF';
       try {
-// http://maps.yahoo.com/index.php#mvt=m&trf=0&lon=%lon%&lat=%lat%&mag=8
-// http://atlas.mapquest.com/maps/map.adp?searchtype=address&formtype=latlong&latlongtype=decimal&latitude=%lat%&longitude=%lon%
         var mapProvider = getPreferences().getCharPref("mapProvider");
         if(mapProvider.length)
           href = mapProvider;
