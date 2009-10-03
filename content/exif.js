@@ -909,9 +909,17 @@ function exifData(imgUrl)
 
   try {
     if(!istream) {
-      // see if it's a local file and we can open it
       var ios = Components.classes["@mozilla.org/network/io-service;1"].getService(Components.interfaces.nsIIOService);
       var u = ios.newURI(imgUrl, null, null);
+      // if it's a web resource, load it with bypassing the cache
+      if(u.schemeIs("http") ||
+         u.schemeIs("https")) {
+				var c = ios.newChannelFromURI(u);
+				c.loadFlags |= Components.interfaces.nsIRequest.LOAD_BYPASS_CACHE;
+				istream = c.open();
+      }
+      else
+      // see if it's a local file and we can open it
       if(u.schemeIs("file")) {
         var fileHandler = ios.getProtocolHandler("file").QueryInterface(Components.interfaces.nsIFileProtocolHandler);
         var f = fileHandler.getFileFromURLSpec(imgUrl);
@@ -919,6 +927,7 @@ function exifData(imgUrl)
         istream.init(f, 1, 0, false);
       }
       else
+			// or is it some sort of message
       if(u.schemeIs("mailbox") ||
          u.schemeIs("news") ||
          u.schemeIs("imap")) {
