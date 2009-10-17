@@ -159,7 +159,8 @@
       <label value="&GPSCoord;"/>
       <hbox>
         <textbox id="image-gpscoord-text" readonly="true" style="min-width:29ex;" flex="1"/>
-        <hbox><html:a id="maplink-href" target="exif" style="text-decoration:underline; cursor:pointer;">&MapLink;</html:a></hbox>
+        <!-- Don't just use plain HTML here because of bug 263433 -->
+        <hbox><html:a id="maplink-href" onclick="loadInBrowser(this.getAttribute('href'), event); return false;" style="text-decoration:underline; cursor:pointer;">&MapLink;</html:a></hbox>
       </hbox>
     </row>
     <row id="image-gpsalt">

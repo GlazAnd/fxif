@@ -1235,7 +1235,7 @@ function showEXIFDataFor(url)
       href = href.replace(/%lat%/g, ed.GPSPureDdLat);
       href = href.replace(/%lon%/g, ed.GPSPureDdLon);
       href = href.replace(/%lang%/g, getLang());
-      document.getElementById("maplink-href").href = href;
+      document.getElementById("maplink-href").setAttribute("href", href);
     }
     else {
       document.getElementById("image-gpscoord").style.display = "none";
@@ -1273,6 +1273,38 @@ function getPreferences()
   }
 
   return prefInstance;
+}
+
+/*
+  Simulate a normal link to a new window but obey browser.link.open_newwindow.
+  Not using openUILinkIn from utilityOverlay.js since we can't control opening
+  of a new tab in foreground/background (resp. it relies on browser.tabs.loadInBackground
+  instead of browser.tabs.loadBookmarksInBackground).
+*/
+function loadInBrowser(urlstring, event)
+{
+  var browser = window.opener.getBrowser();
+  try {
+	  var prefRoot = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService).getBranch("browser.");
+  	var destpref = prefRoot.getIntPref("link.open_newwindow");
+	  if (destpref == 1)
+			browser.loadURI(urlstring);
+    else
+		{
+			if (destpref == 2)
+	      window.open(urlstring);
+		  else
+				if (destpref == 3)
+				{
+					var selectNewTab = !prefRoot.getBoolPref("tabs.loadInBackground");
+					if (event.shiftKey)
+						selectNewTab = !selectNewTab;
+				  var tab = browser.addTab(urlstring);
+					if (selectNewTab)
+						browser.selectedTab = tab; 
+				}
+			}
+  } catch(e) {}
 }
 
 var originalLoad = window.onLoad;
