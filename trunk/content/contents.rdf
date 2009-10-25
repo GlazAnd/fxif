@@ -21,11 +21,11 @@
 	</RDF:Seq>
 
 	<RDF:Seq RDF:about="chrome://browser/content/metaData.xul">
-		<RDF:li>chrome://fxif/content/fxifOverlay.xul</RDF:li>
+		<RDF:li>chrome://fxif/content/fxifPropertiesOverlay.xul</RDF:li>
 	</RDF:Seq>
 
 	<RDF:Seq RDF:about="chrome://navigator/content/metadata.xul">
-		<RDF:li>chrome://fxif/content/fxifOverlay.xul</RDF:li>
+		<RDF:li>chrome://fxif/content/fxifPropertiesOverlay.xul</RDF:li>
 	</RDF:Seq>
 
 </RDF:RDF>

@@ -9,5 +9,10 @@ locale	fxif	cs-CZ	locale/cs-CZ/
 locale	fxif	ja-JP	locale/ja-JP/
 locale	fxif	pl-PL	locale/pl-PL/
 locale	fxif	es-ES	locale/es-ES/
-overlay	chrome://browser/content/metaData.xul	chrome://fxif/content/fxifOverlay.xul   application={ec8030f7-c20a-464f-9b0e-13a3a9e97384}
-overlay	chrome://navigator/content/metadata.xul	chrome://fxif/content/fxifOverlay.xul   application={92650c4d-4b8e-4d2a-b7eb-24ecf4f6b63a}
+
+overlay	chrome://browser/content/metaData.xul	chrome://fxif/content/fxifPropertiesOverlay.xul   application={ec8030f7-c20a-464f-9b0e-13a3a9e97384}
+overlay	chrome://navigator/content/metadata.xul	chrome://fxif/content/fxifPropertiesOverlay.xul   application={92650c4d-4b8e-4d2a-b7eb-24ecf4f6b63a}
+overlay	chrome://browser/content/browser.xul	chrome://fxif/content/fxifContextOverlay.xul   application={ec8030f7-c20a-464f-9b0e-13a3a9e97384}
+overlay	chrome://navigator/content/navigator.xul	chrome://fxif/content/fxifContextOverlay.xul   application={92650c4d-4b8e-4d2a-b7eb-24ecf4f6b63a}
+
+skin	fxif classic/1.0		skin/

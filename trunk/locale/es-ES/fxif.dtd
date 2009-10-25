@@ -1,4 +1,5 @@
-<!ENTITY EXIFData "Datos EXIF:">
+<!ENTITY contextMenu.label "Datos EXIF">
+<!ENTITY EXIFData "Datos EXIF">
 <!ENTITY Copy "Copiar">
 <!ENTITY CameraMake "Marca de la cámara:">
 <!ENTITY CameraModel "Modelo de la cámara:">
