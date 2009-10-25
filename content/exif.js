@@ -99,7 +99,9 @@ var prefInstance = null;
 var exifDone = false;
 var iptcDone = false;
 var xmpDone = false;
+var imgURL = null;
 
+var originalLoad = window.onLoad;
 
 function read32(data, offset, swapbytes)
 {
@@ -1249,7 +1251,7 @@ function showEXIFDataFor(url)
   }
 }
 
-function onFxIFLoad()
+function onFxIFOverlayLoad()
 {
   originalLoad();
 
@@ -1261,6 +1263,17 @@ function onFxIFLoad()
   else {
     document.getElementById("exif-sec").style.display = "none";
   }
+}
+
+function onFxIFDialogLoad()
+{
+  gFXIFbundle = document.getElementById("bundle_fxif");
+  var fileName = window.arguments[0];
+  var pos = fileName.lastIndexOf('/');
+  // if no /, pos is -1 and the + 1 will
+  // result in using whole string - that's what we want
+  window.document.title = gFXIFbundle.getString("contextMenu.label") + " " + decodeURI(fileName.substr(pos + 1));
+  showEXIFDataFor(window.arguments[0]);
 }
 
 function getPreferences()
@@ -1307,7 +1320,47 @@ function loadInBrowser(urlstring, event)
   } catch(e) {}
 }
 
-var originalLoad = window.onLoad;
-// I don't like this, but I want to make sure that the original onload
-// finishes before I run my stuff
-window.onLoad = onFxIFLoad;
+// do initialisation stuff for adding our own
+// context menu entry for Firefox >= 3.6
+function fxifInitMenuItems()
+{
+	var contextMenu = document.getElementById("contentAreaContextMenu");
+  if (contextMenu)
+    contextMenu.addEventListener("popupshowing", showFxIFMenuItems, false);
+}
+
+// do initialisation stuff for adding our own
+// context menu entry for Firefox >= 3.6
+function fxifInitDialogs()
+{
+  // I don't like this, but I want to make sure that the original onload
+  // finishes before I run my stuff
+  window.onLoad = onFxIFLoad;
+}
+
+// hide or show the menu entry depending on the context
+function showFxIFMenuItems()
+{
+	var reg_jpg = new RegExp('\.jp(eg|e|g)(\\?.*)?$', 'i');
+
+  showMetadataFor(gContextMenu.target);
+
+  // only display the entries if no properties entry available
+  var properties_entry = document.getElementById("context-metadata");
+	var bOnImage = imgURL && !properties_entry && gContextMenu.onImage && reg_jpg.test(imgURL);
+
+	var item1 = document.getElementById("context-fxif");
+	var item2 = document.getElementById("context-fxif-sep");
+	if (bOnImage) {
+		item1.hidden = false;
+		item2.hidden = false;
+	}
+	else {
+		item1.hidden = true;
+		item2.hidden = true;
+	}
+}
+
+function showImageExifs() {
+  window.openDialog("chrome://fxif/content/fxifPropertiesDialog.xul", "fxif_properties", "chrome,resizable", imgURL);
+}

@@ -1,4 +1,5 @@
-<!ENTITY EXIFData "EXIF データ:">
+<!ENTITY contextMenu.label "EXIF データ">
+<!ENTITY EXIFData "EXIF データ">
 <!ENTITY Copy "コピー">
 <!ENTITY CameraMake "メーカー名:">
 <!ENTITY CameraModel "モデル名:">

@@ -1,0 +1,188 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://fxif/skin/dialog.css" type="text/css"?>
+
+<?xul-overlay href="chrome://global/content/dialogOverlay.xul"?>
+
+
+<!--***** BEGIN LICENSE BLOCK *****
+ * Version: MPL 1.1/GPL 2.0/LGPL 2.1
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Original Code is FxIF for Firefox.
+ *
+ * The Initial Developer of the Original Code is Ted Mielczarek
+ * Portions created by the Initial Developer are Copyright (C) 2004
+ * the Initial Developer. All Rights Reserved.
+ *
+ * Contributor(s):
+ *   Christian Eyrich <ch.ey@gmx.net>
+ *  
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 2 or later (the "GPL"), or
+ * the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+ * in which case the provisions of the GPL or the LGPL are applicable instead
+ * of those above. If you wish to allow use of your version of this file only
+ * under the terms of either the GPL or the LGPL, and not to allow others to
+ * use your version of this file under the terms of the MPL, indicate your
+ * decision by deleting the provisions above and replace them with the notice
+ * and other provisions required by the GPL or the LGPL. If you do not delete
+ * the provisions above, a recipient may use your version of this file under
+ * the terms of any one of the MPL, the GPL or the LGPL.
+ *
+ * ***** END LICENSE BLOCK *****-->
+
+<!DOCTYPE window SYSTEM "chrome://fxif/locale/fxif.dtd">
+<window
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    id="fxifPropertiesDialog"
+    class="dialog"
+    style="width: 40em; height: 10em;"
+    persist="screenX screenY">
+
+  <script type="application/x-javascript" src="chrome://fxif/content/exif.js"/>
+  <script type="application/x-javascript" src="chrome://fxif/content/metadataUtils.js"/>
+  <script type="application/x-javascript">
+    window.addEventListener("load", onFxIFDialogLoad, false);
+  </script>
+
+  <stringbundle src="chrome://fxif/locale/fxif.properties" id="bundle_fxif"/>
+  <vbox id="exif-sec">
+    <grid id="data-list">
+  <columns>
+    <column/>
+    <column flex="1"/>
+  </columns>
+  <rows>
+    <row id="camera-make">
+      <label value="&CameraMake;"/>
+      <textbox id="camera-make-text" readonly="true"/>
+    </row>
+    <row id="camera-model">
+      <label value="&CameraModel;"/>
+      <textbox id="camera-model-text" readonly="true"/>
+    </row>
+    <row id="image-date">
+      <label value="&ImageDate;"/>
+      <textbox id="image-date-text" readonly="true"/>
+    </row>
+    <row id="image-orientation"> 
+      <label value="&ImageOrientation;"/>
+      <textbox id="image-orientation-text" readonly="true"/>
+    </row>
+    <row id="image-bw">
+      <label value="&ImageBW;"/>
+      <textbox id="image-bw-text" readonly="true"/>
+    </row>
+    <row id="image-flash">
+      <label value="&FlashUsed;"/>
+      <textbox id="image-flash-text" readonly="true"/>
+    </row>
+    <row id="image-focallen">
+      <label value="&FocalLength;"/>
+      <textbox id="image-focallen-text" readonly="true"/>
+    </row>
+    <row id="image-digitalzoom">
+      <label value="&DigitalZoom;"/>
+      <textbox id="image-digitalzoom-text" readonly="true"/>
+    </row>
+    <row id="image-ccdwidth">
+      <label value="&CCDWidth;"/>
+      <textbox id="image-ccdwidth-text" readonly="true"/>
+    </row>
+    <row id="image-exposuretime">
+      <label value="&ExposureTime;"/>
+      <textbox id="image-exposuretime-text" readonly="true"/>
+    </row>
+    <row id="image-aperture">
+      <label value="&Aperture;"/>
+      <textbox id="image-aperture-text" readonly="true"/>
+    </row>
+    <row id="image-focusdist">
+      <label value="&FocusDist;"/>
+      <textbox id="image-focusdist-text" readonly="true"/>
+    </row>
+    <row id="image-isoequiv">
+      <label value="&ISOequiv;"/>
+      <textbox id="image-isoequiv-text" readonly="true"/>
+    </row>
+    <row id="image-exposurebias">
+      <label value="&ExposureBias;"/>
+      <textbox id="image-exposurebias-text" readonly="true"/>
+    </row>
+    <row id="image-whitebalance">
+      <label value="&WhiteBalance;"/>
+      <textbox id="image-whitebalance-text" readonly="true"/>
+    </row>
+    <row id="image-lightsource">
+      <label value="&LightSource;"/>
+      <textbox id="image-lightsource-text" readonly="true"/>
+    </row>
+    <row id="image-meteringmode">
+      <label value="&MeteringMode;"/>
+      <textbox id="image-meteringmode-text" readonly="true"/>
+    </row>
+    <row id="image-exposureprogram">
+      <label value="&ExposureProgram;"/>
+      <textbox id="image-exposureprogram-text" readonly="true"/>
+    </row>
+    <row id="image-exposuremode">
+      <label value="&ExposureMode;"/>
+      <textbox id="image-exposuremode-text" readonly="true"/>
+    </row>
+    <row id="image-gpscoord">
+      <label value="&GPSCoord;"/>
+      <hbox>
+        <textbox id="image-gpscoord-text" readonly="true" style="min-width:29ex;" flex="1"/>
+        <!-- Don't just use plain HTML here because of bug 263433 -->
+        <hbox><html:a id="maplink-href" onclick="loadInBrowser(this.getAttribute('href'), event); return false;" style="text-decoration:underline; cursor:pointer;">&MapLink;</html:a></hbox>
+      </hbox>
+    </row>
+    <row id="image-gpsalt">
+      <label value="&GPSAlt;"/>
+      <textbox id="image-gpsalt-text" readonly="true"/>
+    </row>
+    <row id="image-photographer">
+      <label value="&Photographer;"/>
+      <textbox id="image-photographer-text" readonly="true"/>
+    </row>
+    <row id="image-copyright">
+      <label value="&Copyright;"/>
+      <textbox id="image-copyright-text" multiline="true" readonly="true"/>
+    </row>
+    <row id="image-title">
+      <label value="&Title;"/>
+      <textbox id="image-title-text" readonly="true"/>
+    </row>
+    <row id="image-caption">
+      <label value="&Caption;"/>
+      <textbox id="image-caption-text" multiline="true" readonly="true"/>
+    </row>
+    <row id="image-comment">
+      <label value="&Comment;"/>
+      <textbox id="image-comment-text" readonly="true"/>
+    </row>
+  </rows>
+    </grid>
+    <hbox id="no-data">
+      <spacer width="20"/>
+      <label value="&NoData;"/>
+    </hbox>
+  </vbox>
+  <hbox>
+    <button id="copy-button" label="&Copy;" onclick="copyEXIFToClipboard()"/>
+    <separator flex="1"/>
+  </hbox>
+</window>

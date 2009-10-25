@@ -38,18 +38,22 @@
 
 <!DOCTYPE overlay SYSTEM "chrome://fxif/locale/fxif.dtd">
 <overlay
-    id="fxifOverlay"
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
     xmlns:html="http://www.w3.org/1999/xhtml"
-    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+    id="fxifPropertiesOverlay">
 
   <window id="metadata">
     <script type="application/x-javascript" src="chrome://fxif/content/exif.js"/>
+    <script type="application/x-javascript">
+      window.addEventListener("load", onFxIFOverlayLoad, false);
+    </script>
+
     <stringbundle src="chrome://fxif/locale/fxif.properties" id="bundle_fxif"/>
     <vbox id="exif-sec">
       <hbox align="end">
-      <label value="&EXIFData;"/>
-      <separator flex="1"/>
-      <button id="copy-button" label="&Copy;" onclick="copyEXIFToClipboard()"/>
+        <label value="&EXIFData;:"/>
+        <separator flex="1"/>
+        <button id="copy-button" label="&Copy;" onclick="copyEXIFToClipboard()"/>
       </hbox>
       <separator class="groove"/>
       <grid id="data-list">
@@ -201,5 +205,4 @@
       </hbox>
     </vbox>
   </window>
-
 </overlay>

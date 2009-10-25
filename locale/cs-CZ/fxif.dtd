@@ -1,4 +1,5 @@
-<!ENTITY EXIFData "EXIF Data:">
+<!ENTITY contextMenu.label "EXIF Data">
+<!ENTITY EXIFData "EXIF Data">
 <!ENTITY Copy "Kopírovat">
 <!ENTITY CameraMake "Značka:">
 <!ENTITY CameraModel "Model:">
