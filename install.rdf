@@ -5,7 +5,7 @@
   <RDF:Description RDF:about="urn:mozilla:install-manifest"
                    em:id="{11483926-db67-4190-91b1-ef20fcec5f33}"
                    em:name="FxIF"
-                   em:version="0.3.1"
+                   em:version="0.3.2"
                    em:creator="Ted Mielczarek"
                    em:description="View EXIF data in image properties"
                    em:homepageURL="http://ted.mielczarek.org/code/mozilla/fxif/"

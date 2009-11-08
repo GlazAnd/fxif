@@ -86,7 +86,7 @@ const TAG_IPTC_CAPTION       = 0x78;
 
 var BytesPerFormat = [0,1,1,2,4,8,1,1,2,4,8,4,8];
 
-var Node = {
+var NodeTypes = {
   ELEMENT_NODE:1, ATTRIBUTE_NODE:2, TEXT_NODE:3, CDATA_SECTION_NODE:4,
   ENTITY_REFERENCE_NODE:5, ENTITY_NODE:6, PROCESSING_INSTRUCTION_NODE:7,
   COMMENT_NODE:8, DOCUMENT_NODE:9, DOCUMENT_TYPE_NODE:10,
@@ -510,7 +510,7 @@ function readExifDir(exifObj, data, dirstart, swapbytes)
               fu += " (" + gFXIFbundle.getString("auto")  + ", "
                 + gFXIFbundle.getString("redeye") + ", "
                 + gFXIFbundle.getString("noreturnlight") + ")";
-              brak;
+              break;
             case 0x5f:
               fu += " (" + gFXIFbundle.getString("auto")  + ", "
                 + gFXIFbundle.getString("redeye") + ", "
@@ -1143,11 +1143,11 @@ function getXMPOrderedArray(dom, ns, property)
     var list = el[0].getElementsByTagNameNS("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "li");
     for(var i=0; i<list.length; i++) {
       var el = list[i].firstChild;
-      if(el.nodeType == Node.TEXT_NODE) {  // it's just the photographer
+      if(el.nodeType == NodeTypes.TEXT_NODE) {  // it's just the photographer
         val += el.nodeValue + ", ";
       }
 // This part is untested due do lack of software that writes that.
-      else if(el.nodeType == Node.ELEMENT_NODE) {
+      else if(el.nodeType == NodeTypes.ELEMENT_NODE) {
         // Above li contains a rdf:Description which contains the rdf:value and a ns:role.
 //        var list = el.getElementsByTagName("rdf:value");
         var list = el.getElementsByTagNameNS("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "value");
