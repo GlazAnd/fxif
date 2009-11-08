@@ -93,7 +93,6 @@ function checkForImage(elem, htmllocalname)
       // Clicked in image map?
       var map = elem;
       ismap = true;
-      setAlt(map);
 
       while (map && map.nodeType == Node.ELEMENT_NODE && !isHTMLElement(map,"map") )
           map = map.parentNode;
@@ -154,4 +153,50 @@ function hideNode(id)
 {
   var style = document.getElementById(id).getAttribute("style");
   document.getElementById(id).setAttribute("style", "display:none;" + style);
+}
+
+/*
+ * Find <img> or <object> which uses an imagemap.
+ * If more then one object is found we can't determine which one
+ * was clicked.
+ *
+ * This code has to be changed once bug 1882 is fixed.
+ * Once bug 72527 is fixed this code should use the .images collection.
+ */
+function getImageForMap(map)
+{
+    var mapuri = "#" + map.getAttribute("name");
+    var multipleFound = false;
+    var img;
+
+    var list = getHTMLElements(map.ownerDocument, "img");
+    for (var i=0; i < list.length; i++) {
+        if (list.item(i).getAttribute("usemap") == mapuri) {
+            if (img) {
+                multipleFound = true;
+                break;
+            } else {
+                img = list.item(i);
+                imgType = "img";
+            }
+        }
+    }
+
+    list = getHTMLElements(map.ownerDocument, "object");
+    for (i = 0; i < list.length; i++) {
+        if (list.item(i).getAttribute("usemap") == mapuri) {
+            if (img) {
+              multipleFound = true;
+              break;
+            } else {
+              img = list.item(i);
+              imgType = "object";
+            }
+        }
+    }
+
+    if (multipleFound)
+        img = null;
+
+    return img;
 }
