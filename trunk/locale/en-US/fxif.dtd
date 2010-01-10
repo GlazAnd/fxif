@@ -1,12 +1,13 @@
 <!ENTITY contextMenu.label "EXIF Data">
 <!ENTITY EXIFData "EXIF Data">
 <!ENTITY Copy "Copy">
-<!ENTITY CameraMake "Camera Make:">
+<!ENTITY CameraMake "Camera Maker:">
 <!ENTITY CameraModel "Camera Model:">
+<!ENTITY CameraLens "Lens:">
 <!ENTITY ImageDate "Image Date:">
 <!ENTITY ImageOrientation "Orientation:">
 <!ENTITY ImageBW "Black and White:">
-<!ENTITY FlashUsed "Flash Used:">
+<!ENTITY FlashUsed "Flash Fired:">
 <!ENTITY FocalLength "Focal Length:">
 <!ENTITY DigitalZoom "Digital Zoom:">
 <!ENTITY CCDWidth "CCD Width:">
@@ -20,10 +21,15 @@
 <!ENTITY MeteringMode "Metering Mode:">
 <!ENTITY ExposureProgram "Exposure:">
 <!ENTITY ExposureMode "Exposure Mode:">
+<!ENTITY ImageColorSpace "Color Space:">
 <!ENTITY GPSCoord "GPS Coordinate:">
 <!ENTITY MapLink "Map Link">
 <!ENTITY GPSAlt "GPS Altitude:">
 <!ENTITY Photographer "Photographer:">
+<!ENTITY City "City:">
+<!ENTITY Sublocation "Sublocation:">
+<!ENTITY ProvinceState "Province/State:">
+<!ENTITY CountryName "Country:">
 <!ENTITY Copyright "Copyright:">
 <!ENTITY Title "Title:">
 <!ENTITY Caption "Caption:">

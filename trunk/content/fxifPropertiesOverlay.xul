@@ -73,25 +73,15 @@
       <label value="&CameraModel;"/>
       <textbox id="camera-model-text" readonly="true"/>
     </row>
+    <row id="camera-lens">
+      <separator orient="vertical"/>
+      <label value="&CameraLens;"/>
+      <textbox id="camera-lens-text" readonly="true"/>
+    </row>
     <row id="image-date">
       <separator orient="vertical"/>
       <label value="&ImageDate;"/>
       <textbox id="image-date-text" readonly="true"/>
-    </row>
-    <row id="image-orientation"> 
-      <separator orient="vertical"/>
-      <label value="&ImageOrientation;"/>
-      <textbox id="image-orientation-text" readonly="true"/>
-    </row>
-    <row id="image-bw">
-      <separator orient="vertical"/>
-      <label value="&ImageBW;"/>
-      <textbox id="image-bw-text" readonly="true"/>
-    </row>
-    <row id="image-flash">
-      <separator orient="vertical"/>
-      <label value="&FlashUsed;"/>
-      <textbox id="image-flash-text" readonly="true"/>
     </row>
     <row id="image-focallen">
       <separator orient="vertical"/>
@@ -103,25 +93,20 @@
       <label value="&DigitalZoom;"/>
       <textbox id="image-digitalzoom-text" readonly="true"/>
     </row>
-    <row id="image-ccdwidth">
+    <row id="image-focusdist">
       <separator orient="vertical"/>
-      <label value="&CCDWidth;"/>
-      <textbox id="image-ccdwidth-text" readonly="true"/>
-    </row>
-    <row id="image-exposuretime">
-      <separator orient="vertical"/>
-      <label value="&ExposureTime;"/>
-      <textbox id="image-exposuretime-text" readonly="true"/>
+      <label value="&FocusDist;"/>
+      <textbox id="image-focusdist-text" readonly="true"/>
     </row>
     <row id="image-aperture">
       <separator orient="vertical"/>
       <label value="&Aperture;"/>
       <textbox id="image-aperture-text" readonly="true"/>
     </row>
-    <row id="image-focusdist">
+    <row id="image-exposuretime">
       <separator orient="vertical"/>
-      <label value="&FocusDist;"/>
-      <textbox id="image-focusdist-text" readonly="true"/>
+      <label value="&ExposureTime;"/>
+      <textbox id="image-exposuretime-text" readonly="true"/>
     </row>
     <row id="image-isoequiv">
       <separator orient="vertical"/>
@@ -132,16 +117,6 @@
       <separator orient="vertical"/>
       <label value="&ExposureBias;"/>
       <textbox id="image-exposurebias-text" readonly="true"/>
-    </row>
-    <row id="image-whitebalance">
-      <separator orient="vertical"/>
-      <label value="&WhiteBalance;"/>
-      <textbox id="image-whitebalance-text" readonly="true"/>
-    </row>
-    <row id="image-lightsource">
-      <separator orient="vertical"/>
-      <label value="&LightSource;"/>
-      <textbox id="image-lightsource-text" readonly="true"/>
     </row>
     <row id="image-meteringmode">
       <separator orient="vertical"/>
@@ -157,6 +132,41 @@
       <separator orient="vertical"/>
       <label value="&ExposureMode;"/>
       <textbox id="image-exposuremode-text" readonly="true"/>
+    </row>
+    <row id="image-whitebalance">
+      <separator orient="vertical"/>
+      <label value="&WhiteBalance;"/>
+      <textbox id="image-whitebalance-text" readonly="true"/>
+    </row>
+    <row id="image-lightsource">
+      <separator orient="vertical"/>
+      <label value="&LightSource;"/>
+      <textbox id="image-lightsource-text" readonly="true"/>
+    </row>
+    <row id="image-flash">
+      <separator orient="vertical"/>
+      <label value="&FlashUsed;"/>
+      <textbox id="image-flash-text" readonly="true"/>
+    </row>
+    <row id="image-orientation"> 
+      <separator orient="vertical"/>
+      <label value="&ImageOrientation;"/>
+      <textbox id="image-orientation-text" readonly="true"/>
+    </row>
+    <row id="image-colorspace">
+      <separator orient="vertical"/>
+      <label value="&ImageColorSpace;"/>
+      <textbox id="image-colorspace-text" readonly="true"/>
+    </row>
+    <row id="image-bw">
+      <separator orient="vertical"/>
+      <label value="&ImageBW;"/>
+      <textbox id="image-bw-text" readonly="true"/>
+    </row>
+    <row id="image-ccdwidth">
+      <separator orient="vertical"/>
+      <label value="&CCDWidth;"/>
+      <textbox id="image-ccdwidth-text" readonly="true"/>
     </row>
     <row id="image-gpscoord">
       <separator orient="vertical"/>
@@ -176,6 +186,26 @@
       <separator orient="vertical"/>
       <label value="&Photographer;"/>
       <textbox id="image-photographer-text" readonly="true"/>
+    </row>
+    <row id="image-city">
+      <separator orient="vertical"/>
+      <label value="&City;"/>
+      <textbox id="image-city-text" readonly="true"/>
+    </row>
+    <row id="image-sublocation">
+      <separator orient="vertical"/>
+      <label value="&Sublocation;"/>
+      <textbox id="image-sublocation-text" readonly="true"/>
+    </row>
+    <row id="image-provincestate">
+      <separator orient="vertical"/>
+      <label value="&ProvinceState;"/>
+      <textbox id="image-provincestate-text" readonly="true"/>
+    </row>
+    <row id="image-countryname">
+      <separator orient="vertical"/>
+      <label value="&CountryName;"/>
+      <textbox id="image-countryname-text" readonly="true"/>
     </row>
     <row id="image-copyright">
       <separator orient="vertical"/>

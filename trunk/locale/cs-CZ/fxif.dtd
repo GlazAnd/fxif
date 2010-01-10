@@ -3,6 +3,7 @@
 <!ENTITY Copy "Kopírovat">
 <!ENTITY CameraMake "Značka:">
 <!ENTITY CameraModel "Model:">
+<!ENTITY CameraLens "Objektiv:">
 <!ENTITY ImageDate "Datum pořízení:">
 <!ENTITY ImageOrientation "Orientace:">
 <!ENTITY ImageBW "Černobílý:">
@@ -16,11 +17,12 @@
 <!ENTITY ISOequiv "Citlivost ISO:">
 <!ENTITY ExposureBias "Expoziční kompenzace:">
 <!ENTITY WhiteBalance "Vyvážení bílé:">
-<!ENTITY LightSource "Zdroj světla:">
+<!ENTITY LightSource "Zdroj svìtla:">
 <!ENTITY MeteringMode "Režim měření:">
 <!ENTITY ExposureProgram "Program expozice:">
 <!ENTITY ExposureMode "Režim expozice:">
-<!ENTITY GPSCoord "GPS Souřadnice:">
+<!ENTITY ImageColorSpace "Color Space:">
+<!ENTITY GPSCoord "Souřadnice GPS:">
 <!ENTITY MapLink "Ukázat Odkaz">
 <!ENTITY GPSAlt "Zeměp. výška (GPS):">
 <!ENTITY Photographer "Fotograf:">
@@ -28,11 +30,11 @@
 <!ENTITY Title "Název:">
 <!ENTITY Caption "Popis:">
 <!ENTITY Comment "Komentář:">
-<!ENTITY NoData "Ne meta data">
+<!ENTITY NoData "Žádná meta data">
 
 <!-- Options dialog -->
 <!ENTITY OptionsDialogTitle "Možnosti FxIF">
-<!ENTITY GPSFormat "Formát zeměpisných souřadnic:">
-<!ENTITY DD.label "Desetiny stupně">
-<!ENTITY DMS.label "stupňů minut sekund">
+<!ENTITY GPSFormat "Formát souøadnic GPS:">
+<!ENTITY DD.label "Desetiny stupòù">
+<!ENTITY DMS.label "stupòù minut sekund">
 <!ENTITY OverrideMapProvider "Dodavatel map:">

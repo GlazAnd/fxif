@@ -3,10 +3,11 @@
 <!ENTITY Copy "Kopieren">
 <!ENTITY CameraMake "Kamera-Hersteller:">
 <!ENTITY CameraModel "Kamera-Modell:">
+<!ENTITY CameraLens "Objektiv:">
 <!ENTITY ImageDate "Aufnahmedatum:">
 <!ENTITY ImageOrientation "Ausrichtung:">
 <!ENTITY ImageBW "Schwarz-Weiß:">
-<!ENTITY FlashUsed "Blitz:">
+<!ENTITY FlashUsed "Blitz ausgelöst:">
 <!ENTITY FocalLength "Brennweite:">
 <!ENTITY DigitalZoom "Digital-Zoom:">
 <!ENTITY CCDWidth "CCD-Weite:">
@@ -20,10 +21,15 @@
 <!ENTITY MeteringMode "Belichtungsmessung:">
 <!ENTITY ExposureProgram "Belichtung:">
 <!ENTITY ExposureMode "Belichtungsmodus:">
+<!ENTITY ImageColorSpace "Farbraum:">
 <!ENTITY GPSCoord "GPS-Koordinate:">
 <!ENTITY MapLink "Kartenlink">
 <!ENTITY GPSAlt "GPS-Höhe:">
 <!ENTITY Photographer "Fotograf:">
+<!ENTITY City "Ort:">
+<!ENTITY Sublocation "Ort des Motivs:">
+<!ENTITY ProvinceState "Bundesland:">
+<!ENTITY CountryName "Land:">
 <!ENTITY Copyright "Copyright:">
 <!ENTITY Title "Titel:">
 <!ENTITY Caption "Beschreibung:">

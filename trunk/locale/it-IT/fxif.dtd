@@ -3,6 +3,7 @@
 <!ENTITY Copy "Copia">
 <!ENTITY CameraMake "Marca fotocamera:">
 <!ENTITY CameraModel "Modello fotocamera:">
+<!ENTITY CameraLens "Lens:">
 <!ENTITY ImageDate "Data e ora della foto:">
 <!ENTITY ImageOrientation "Orientamento:">
 <!ENTITY ImageBW "Bianco e nero:">
@@ -20,6 +21,7 @@
 <!ENTITY MeteringMode "Metodo di misurazione:">
 <!ENTITY ExposureProgram "Esposizione:">
 <!ENTITY ExposureMode "Metodo di esposizione:">
+<!ENTITY ImageColorSpace "Color Space:">
 <!ENTITY GPSCoord "Coordinata GPS:">
 <!ENTITY MapLink "Collegamento Mappa">
 <!ENTITY GPSAlt "Altezza GPS:">

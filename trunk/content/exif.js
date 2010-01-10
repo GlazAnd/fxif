@@ -67,8 +67,11 @@ const TAG_FOCALPLANEUNITS    = 0xa210;
 const TAG_EXPOSURE_INDEX     = 0xa215;
 const TAG_EXPOSURE_MODE      = 0xa402;
 const TAG_WHITEBALANCE       = 0xa403;
-const TAG_DIGITALZOOMRATIO   = 0xA404;
+const TAG_DIGITALZOOMRATIO   = 0xa404;
 const TAG_FOCALLENGTH_35MM   = 0xa405;
+const TAG_LENS               = 0xfdea;
+const TAG_COLORSPACE         = 0xa001;
+const TAG_INTEROPINDEX       = 0x0001;
 
 const TAG_GPS_LAT_REF    = 1;
 const TAG_GPS_LAT        = 2;
@@ -80,9 +83,15 @@ const TAG_GPS_ALT        = 6;
 // iptc tags
 const TAG_IPTC_CODEDCHARSET  = 0x5A;
 const TAG_IPTC_BYLINE        = 0x50;
+const TAG_IPTC_CITY          = 0x5A;
+const TAG_IPTC_SUBLOCATION   = 0x5C;
+const TAG_IPTC_PROVINCESTATE = 0x5F;
+const TAG_IPTC_COUNTRYNAME   = 0x65;
 const TAG_IPTC_HEADLINE      = 0x69;
 const TAG_IPTC_COPYRIGHT     = 0x74;
 const TAG_IPTC_CAPTION       = 0x78;
+const TAG_IPTC_DATECREATED   = 0x37;
+const TAG_IPTC_TIMECREATED   = 0x3C;
 
 var BytesPerFormat = [0,1,1,2,4,8,1,1,2,4,8,4,8];
 
@@ -350,7 +359,8 @@ function readExifDir(exifObj, data, dirstart, swapbytes)
 {
   var ntags = 0;
   var numEntries = read16(data, dirstart, swapbytes);
-
+  var interopIndex = "";
+  var colorSpace = 0;
   for(var i=0; i<numEntries; i++) {
     var entry = dir_entry_addr(dirstart, i);
     var tag = read16(data, entry, swapbytes);
@@ -383,7 +393,8 @@ function readExifDir(exifObj, data, dirstart, swapbytes)
       break;
 
     case TAG_DATETIME_ORIGINAL:
-      exifObj.Date = val;
+      if(!exifObj.Date)
+        exifObj.Date = val;
       break;
 
     case TAG_DATETIME_DIGITIZED:
@@ -474,7 +485,7 @@ function readExifDir(exifObj, data, dirstart, swapbytes)
                 + gFXIFbundle.getString("noreturnlight") + ")";
               break;
             case 0x1f:
-              fu += " (" + gFXIFbundle.getString("manual") + ", " 
+              fu += " (" + gFXIFbundle.getString("auto") + ", " 
                 + gFXIFbundle.getString("returnlight") + ")";
               break;
             case 0x41:
@@ -563,9 +574,12 @@ function readExifDir(exifObj, data, dirstart, swapbytes)
       break;
 
     case TAG_EXPOSURE_BIAS:
-      if(val != 0) {
-        exifObj.ExposureBias = parseFloat(val).toFixed(2);
-      }
+      val = parseFloat(val);
+      if(val == 0)
+        exifObj.ExposureBias = gFXIFbundle.getString("none");
+      else
+        // add a + sign before positive values
+        exifObj.ExposureBias = (val > 0 ? '+' : '') + val.toFixed(2);
       break;
 
     case TAG_WHITEBALANCE:
@@ -596,8 +610,26 @@ function readExifDir(exifObj, data, dirstart, swapbytes)
         case 9:
           exifObj.LightSource = gFXIFbundle.getString("fineweather");
           break;
+        case 10:
+          exifObj.LightSource = gFXIFbundle.getString("cloudy");
+          break;
         case 11:
           exifObj.LightSource = gFXIFbundle.getString("shade");
+          break;
+        case 12:
+          exifObj.LightSource = gFXIFbundle.getString("daylightfluorescent");
+          break;
+        case 13:
+          exifObj.LightSource = gFXIFbundle.getString("daywhitefluorescent");
+          break;
+        case 14:
+          exifObj.LightSource = gFXIFbundle.getString("coolwhitefluorescent");
+          break;
+        case 15:
+          exifObj.LightSource = gFXIFbundle.getString("whitefluorescent");
+          break;
+        case 24:
+          exifObj.LightSource = gFXIFbundle.getString("studiotungsten");
           break;
         default:; //Quercus: 17-1-2004 There are many more modes for this, check Exif2.2 specs
         // If it just says 'unknown' or we don't know it, then
@@ -607,14 +639,26 @@ function readExifDir(exifObj, data, dirstart, swapbytes)
 
     case TAG_METERING_MODE:
       switch(val) {
+        case 0:
+          exifObj.MeteringMode = gFXIFbundle.getString("unknown");
+          break;
+        case 1:
+          exifObj.MeteringMode = gFXIFbundle.getString("average");
+          break;
         case 2:
           exifObj.MeteringMode = gFXIFbundle.getString("centerweight");
           break;
         case 3:
           exifObj.MeteringMode = gFXIFbundle.getString("spot");
           break;
+        case 3:
+          exifObj.MeteringMode = gFXIFbundle.getString("multispot");
+          break;
         case 5:
           exifObj.MeteringMode = gFXIFbundle.getString("matrix");
+          break;
+        case 6:
+          exifObj.MeteringMode = gFXIFbundle.getString("partial");
           break;
       }
       break;
@@ -654,8 +698,8 @@ function readExifDir(exifObj, data, dirstart, swapbytes)
       break;
 
     case TAG_EXPOSURE_INDEX:
-      if (!exifObj.ISOequivalent) {
-        ExifObj.ISOequivalent = val.toFixed(0);
+      if (!exifObj.ExposureIndex) {
+        ExifObj.ExposureIndex = val.toFixed(0);
       }
       break;
 
@@ -683,7 +727,7 @@ function readExifDir(exifObj, data, dirstart, swapbytes)
 
     case TAG_DIGITALZOOMRATIO:
       if(val > 1) {
-        ExifObj.DigitalZoomRatio = val.toFixed(3) + "x";
+        exifObj.DigitalZoomRatio = val.toFixed(3) + "x";
       }
       break;
 
@@ -721,9 +765,31 @@ function readExifDir(exifObj, data, dirstart, swapbytes)
         exifObj.Caption = val;
       break;
 
+    case TAG_COLORSPACE:
+      if(!exifObj.ColorSpace)
+      {
+        if(val == 1)
+          exifObj.ColorSpace = "sRGB";
+        else
+          colorSpace = val;
+      }
+      break;
+
+    case TAG_INTEROPINDEX:
+        interopIndex = val;
+      break;
+
     default:
       ntags--;
     }
+  }
+
+  // Now we can be sure to have read interopIndex and colorSpace or it wont be read at all.
+  if(colorSpace != 0)
+  {
+    if(exifObj.ColorSpace == 2 ||
+       exifObj.ColorSpace == 65535 && interopIndex.search(/^R03$/))
+      exifObj.ColorSpace = "Adobe RGB";
   }
 
   return ntags;
@@ -737,6 +803,7 @@ function readExifSection(exifObj, exifData, ifd_ofs, swapbytes)
   }
 
   // compute a few things
+/*
   if(exifObj.FocalPlaneXRes && exifObj.FocalPlaneUnits) {
     // don't convert to str just yet
     exifObj.CCDWidth = (exifObj.Width * exifObj.FocalPlaneUnits / exifObj.FocalPlaneXRes);
@@ -749,7 +816,7 @@ function readExifSection(exifObj, exifData, ifd_ofs, swapbytes)
 
     exifObj.CCDWidth = gFXIFbundle.getFormattedString("millimeters", [exifObj.CCDWidth.toFixed(2)]);
   }
-
+*/
   if(exifObj.FocalLength) {
     exifObj.FocalLength = parseFloat(exifObj.FocalLength);
     var fl = gFXIFbundle.getFormattedString("millimeters", [exifObj.FocalLength.toFixed(1)]);
@@ -774,6 +841,11 @@ function readIptcDir(iptcObj, data)
 {
   var pos = 0;
   var utf8Strings = false;
+
+  // keep until we're through the whole date because
+  // only then we have both values.
+  var iptcDate;
+  var iptcTime;
 
   // Don't read outside the array, take the 5 bytes into account
   // since they are mandatory for a proper entry.
@@ -819,11 +891,39 @@ function readIptcDir(iptcObj, data)
             var val = bytesToString(data, pos + 5, dataLen);
           }
           switch(tag) {
+            case TAG_IPTC_DATECREATED:
+                iptcDate = val;
+              break;
+
+            case TAG_IPTC_TIMECREATED:
+                iptcTime = val;
+              break;
+
             case TAG_IPTC_BYLINE:
               if(!iptcObj.Photographer || !xmpDone)
                 iptcObj.Photographer = val;
               break;
-    
+
+            case TAG_IPTC_CITY:
+              if(!iptcObj.City || !xmpDone)
+                iptcObj.City = val;
+              break;
+
+            case TAG_IPTC_SUBLOCATION:
+              if(!iptcObj.Sublocation || !xmpDone)
+                iptcObj.Sublocation = val;
+              break;
+
+            case TAG_IPTC_PROVINCESTATE:
+              if(!iptcObj.ProvinceState || !xmpDone)
+                iptcObj.ProvinceState = val;
+              break;
+
+            case TAG_IPTC_COUNTRYNAME:
+              if(!iptcObj.CountryName || !xmpDone)
+                iptcObj.CountryName = val;
+              break;
+
             case TAG_IPTC_CAPTION:
               if(!iptcObj.Caption || !xmpDone)
                 iptcObj.Caption = val;
@@ -852,6 +952,21 @@ function readIptcDir(iptcObj, data)
     }
 
     pos += 5 + dataLen;
+  }
+
+  // only overwrite existing date if XMP data not already parsed
+  if((!iptcObj.Date || !xmpDone) && iptcDate && iptcTime)
+  {
+    var matches = iptcDate.match(/^(\d{4})(\d{2})(\d{2})$/);
+    if (matches)
+    {
+      var date = matches[1] + '-' + matches[2] + '-' + matches[3];
+      matches = iptcTime.match(/^(\d{2})(\d{2})(\d{2})([+-]\d{4})$/);
+      if (matches)
+        date += ' ' + matches[1] + ':' + matches[2] + ':' + matches[3] + ' ' + matches[4];
+
+      iptcObj.Date = date;
+    }
   }
 }
 
@@ -1042,32 +1157,509 @@ function parseXML(exifObj, xml)
     exifObj.Photographer = val;
   }
 
-//  var el = dom.getElementsByTagName("photoshop:Headline");
-  var el = dom.getElementsByTagNameNS("http://ns.adobe.com/photoshop/1.0/", "Headline");
-  if(el.length) {
-    var headline = el[0].firstChild.nodeValue;
-    exifObj.Headline = headline;
-  }
+  val = getXMPValue(dom, "http://ns.adobe.com/photoshop/1.0/", "City");
+  if (val)
+    exifObj.City = val;
+
+  val = getXMPValue(dom, "http://iptc.org/std/Iptc4xmpCore/1.0/xmlns/", "Location");
+  if (val)
+    exifObj.Sublocation = val;
+
+  val = getXMPValue(dom, "http://ns.adobe.com/photoshop/1.0/", "State");
+  if (val)
+    exifObj.ProvinceState = val;
+
+  val = getXMPValue(dom, "http://ns.adobe.com/photoshop/1.0/", "Country");
+  if (val)
+    exifObj.CountryName = val;
+
+  val = getXMPValue(dom, "http://ns.adobe.com/photoshop/1.0/", "Headline");
+  if (val)
+    exifObj.Headline = val;
+
 
   var lang = getLang();
   // Build a regular expression to be used to test the language
   // alternatives available in the XMP.
   var langTest = new RegExp("^"+lang.match(/^[a-z]{2,3}/i), "i")
 
+  if (!exifObj.Headline)
+  {
+    val = getXMPAltValue(dom, "http://purl.org/dc/elements/1.1/", "title", langTest);
+    if(val) {
+      exifObj.Headline = val;
+    }
+  }
+
 //  val = getXMPAltValue(dom, "dc:description", langTest);
   val = getXMPAltValue(dom, "http://purl.org/dc/elements/1.1/", "description", langTest);
-  if(val.length) {
+  if(val) {
     exifObj.Caption = val;
   }
 
 //  val = getXMPAltValue(dom, "dc:rights", langTest);
   val = getXMPAltValue(dom, "http://purl.org/dc/elements/1.1/", "rights", langTest);
-  if(val.length) {
+  if(val)
     exifObj.Copyright = val;
+  else
+  {
+    val = getXMPAltValue(dom, "http://ns.adobe.com/xap/1.0/rights/", "UsageTerms ", langTest);
+    if(val)
+      exifObj.Copyright = val;
+    else
+      val = getXMPValue(dom, "http://creativecommons.org/ns#", "license");
+  }
+  if(val)
+    exifObj.Copyright = val;
+
+
+
+  // XMP:EXIF
+
+  val = getXMPValue(dom, "http://ns.adobe.com/tiff/1.0/", "Make");
+  if (val)
+    exifObj.Make = val;
+
+  val = getXMPValue(dom, "http://ns.adobe.com/tiff/1.0/", "Model");
+  if (val)
+    exifObj.Model = val;
+
+  val = getXMPValue(dom, "http://ns.adobe.com/exif/1.0/aux/", "Lens");
+  if (val)
+    exifObj.Lens = val;
+
+  val = getXMPValue(dom, "http://ns.adobe.com/exif/1.0/", "DateTimeOriginal");
+  if (val) {
+    var date = readAndFormatISODate(val);
+    if (date)
+      exifObj.Date = date;
+  }
+
+  if(!exifObj.Date)
+  {
+    val = getXMPValue(dom, "http://ns.adobe.com/exif/1.0/", "DateTimeDigitized");
+    if (val) {
+      var date = readAndFormatISODate(val);
+      if (date)
+        exifObj.Date = date;
+    }
+  }
+
+  val = getXMPValue(dom, "http://ns.adobe.com/exif/1.0/", "FNumber");
+  if (!val)
+    val = getXMPValue(dom, "http://ns.adobe.com/exif/1.0/", "ApertureValue");
+  if (val)
+    exifObj.ApertureFNumber = "f/" + parseRational(val).toFixed(1);
+
+  val = getXMPValue(dom, "http://ns.adobe.com/exif/1.0/", "FocalLength");
+  if (val)
+    exifObj.FocalLength = parseRational(val).toFixed(1);
+
+  val = getXMPValue(dom, "http://ns.adobe.com/exif/1.0/", "FocalLengthIn35mmFilm");
+  if (!val)
+    // this name is no official but written by some applications
+    val = getXMPValue(dom, "http://ns.adobe.com/exif/1.0/", "FocalLengthIn35mmFormat");
+  if (val)
+    exifObj.FocalLength35mmEquiv = val;
+
+  if(exifObj.FocalLength) {
+    var fl = gFXIFbundle.getFormattedString("millimeters", [exifObj.FocalLength]);
+    if(exifObj.FocalLength35mmEquiv) {
+      exifObj.FocalLength35mmEquiv = parseFloat(exifObj.FocalLength35mmEquiv);
+      fl += " " + gFXIFbundle.getFormattedString("35mmequiv", [exifObj.FocalLength35mmEquiv.toFixed(0)]);
+    }
+
+    exifObj.FocalLengthText = fl;
+  }
+
+  val = getXMPValue(dom, "http://ns.adobe.com/exif/1.0/", "SubjectDistance");
+  if (val)
+  {
+    var distance = parseRational(val).toFixed(2);
+    if(distance < 0)
+      exifObj.Distance = gFXIFbundle.getString("infinite");
+    else
+      exifObj.Distance = gFXIFbundle.getFormattedString("meters", [distance]);
+  }
+
+  val = getXMPValue(dom, "http://ns.adobe.com/exif/1.0/", "ExposureTime");
+  if (val)
+  {
+    var et = "";
+    val = parseRational(val);
+    if (val < 0.010)
+      et = gFXIFbundle.getFormattedString("seconds", [val.toFixed(4)]);
+    else
+      et = gFXIFbundle.getFormattedString("seconds", [val.toFixed(3)]);
+    if (val <= 0.5)
+      et += " (1/" + Math.floor(0.5 + 1/val).toFixed(0) + ")";
+    exifObj.ExposureTime = et;
+  }
+
+  var el = dom.getElementsByTagNameNS("http://ns.adobe.com/exif/1.0/", "Flash");
+  var flashFired = 0;
+  var flashFunktion = 0;
+  var flashMode = 0;
+  var redEyeMode = 0;
+  var flashReturn = 0;
+  if(el.length) {
+    flashFired = el[0].getAttributeNS("http://ns.adobe.com/exif/1.0/", "Fired");
+    flashFunction = el[0].getAttributeNS("http://ns.adobe.com/exif/1.0/", "Function");
+    flashMode = Number(el[0].getAttributeNS("http://ns.adobe.com/exif/1.0/", "Mode"));
+    redEyeMode = el[0].getAttributeNS("http://ns.adobe.com/exif/1.0/", "RedEyeMode");
+    flashReturn = Number(el[0].getAttributeNS("http://ns.adobe.com/exif/1.0/", "Return"));
+  }
+
+  if(val >= 0) {
+    var fu;
+    if(flashFired.match(/^true$/i)) {
+      fu = gFXIFbundle.getString("yes");
+
+      var addfunc = new Array();
+      if(flashMode == 3)
+        addfunc.push(gFXIFbundle.getString("auto"));
+      else
+        if(flashMode == 1)
+          addfunc.push(gFXIFbundle.getString("manual"));
+
+      if(redEyeMode.match(/^true$/i))
+        addfunc.push(gFXIFbundle.getString("redeye"));
+  
+      if(flashReturn == 3)
+        addfunc.push(gFXIFbundle.getString("returnlight"));
+      else
+        if(flashReturn == 2)
+          addfunc.push(gFXIFbundle.getString("noreturnlight"));
+
+      if (addfunc.length)
+        fu += " (" + addfunc.join(", ") + ")";
+    }
+    else {
+      fu = gFXIFbundle.getString("no");
+      if(flashMode == 2)
+        fu += " (" + gFXIFbundle.getString("manual") + ")";
+      else
+        if(flashMode == 3)
+          fu += " (" + gFXIFbundle.getString("auto") + ")";
+    }
+    exifObj.FlashUsed = fu;
+  }
+
+  val = getXMPValue(dom, "http://ns.adobe.com/tiff/1.0/", "Orientation");
+  if(!exifObj.Orientation && val && val > 1)
+    exifObj.Orientation = gFXIFbundle.getString("orientation" + val);
+
+  val = getXMPValue(dom, "http://ns.adobe.com/tiff/1.0/", "ImageHeight");
+  if(val)
+    exifObj.Length = val;
+
+  val = getXMPValue(dom, "http://ns.adobe.com/tiff/1.0/", "ImageWidth");
+  if(val)
+    exifObj.Width = val;
+
+  val = getXMPValue(dom, "http://ns.adobe.com/exif/1.0/", "FocalPlaneXResolution");
+  if(val)
+    exifObj.FocalPlaneXRes = val;
+
+  val = getXMPValue(dom, "http://ns.adobe.com/exif/1.0/", "FocalPlaneResolutionUnit");
+  if(val) {
+    switch(Number(val)) {
+      case 1: exifObj.FocalPlaneUnits = 25.4; break; // inches
+      case 2: 
+        // According to the information I was using, 2 means meters.
+        // But looking at the Cannon powershot's files, inches is the only
+        // sensible value.
+        exifObj.FocalPlaneUnits = 25.4;
+        break;
+      case 3: exifObj.FocalPlaneUnits = 10;   break;  // centimeter
+      case 4: exifObj.FocalPlaneUnits = 1;    break;  // millimeter
+      case 5: exifObj.FocalPlaneUnits = .001; break;  // micrometer
+    }
+  }
+
+  val = getXMPValue(dom, "http://ns.adobe.com/exif/1.0/", "ExposureBiasValue");
+  if(val) {
+    val = parseRational(val).toFixed(2);
+    if(val == 0)
+      exifObj.ExposureBias = gFXIFbundle.getString("none");
+    else
+      // add a + sign before positive values
+      exifObj.ExposureBias = (val > 0 ? '+' : '') + val;
+  }
+
+  val = getXMPValue(dom, "http://ns.adobe.com/exif/1.0/", "WhiteBalance");
+  if(val) {
+    switch(Number(val)) {
+      case 0: 
+        exifObj.WhiteBalance = gFXIFbundle.getString("auto"); 
+        break;
+      case 1:
+        exifObj.WhiteBalance = gFXIFbundle.getString("manual");
+        break;
+    }
+  }
+
+  val = getXMPValue(dom, "http://ns.adobe.com/exif/1.0/", "LightSource");
+  if(val) {
+    switch(Number(val)) {
+      case 0:
+        exifObj.LightSource = gFXIFbundle.getString("unknown");
+        break;
+      case 1:
+        exifObj.LightSource = gFXIFbundle.getString("daylight");
+        break;
+      case 2:
+        exifObj.LightSource = gFXIFbundle.getString("fluorescent");
+        break;
+      case 3:
+        exifObj.LightSource = gFXIFbundle.getString("incandescent");
+        break;
+      case 4:
+        exifObj.LightSource = gFXIFbundle.getString("flash");
+        break;
+      case 9:
+        exifObj.LightSource = gFXIFbundle.getString("fineweather");
+        break;
+      case 10:
+        exifObj.LightSource = gFXIFbundle.getString("cloudy");
+        break;
+      case 11:
+        exifObj.LightSource = gFXIFbundle.getString("shade");
+        break;
+      case 12:
+        exifObj.LightSource = gFXIFbundle.getString("daylightfluorescent");
+        break;
+      case 13:
+        exifObj.LightSource = gFXIFbundle.getString("daywhitefluorescent");
+        break;
+      case 14:
+        exifObj.LightSource = gFXIFbundle.getString("coolwhitefluorescent");
+        break;
+      case 15:
+        exifObj.LightSource = gFXIFbundle.getString("whitefluorescent");
+        break;
+      case 24:
+        exifObj.LightSource = gFXIFbundle.getString("studiotungsten");
+        break;
+      default:; //Quercus: 17-1-2004 There are many more modes for this, check Exif2.2 specs
+      // If it just says 'unknown' or we don't know it, then
+      // don't bother showing it - it doesn't add any useful information.
+    }
+  }
+
+  val = getXMPValue(dom, "http://ns.adobe.com/exif/1.0/", "MeteringMode");
+  if(val) {
+    switch(Number(val)) {
+      case 0:
+        exifObj.MeteringMode = gFXIFbundle.getString("unknown");
+        break;
+      case 1:
+        exifObj.MeteringMode = gFXIFbundle.getString("average");
+        break;
+      case 2:
+        exifObj.MeteringMode = gFXIFbundle.getString("centerweight");
+        break;
+      case 3:
+        exifObj.MeteringMode = gFXIFbundle.getString("spot");
+        break;
+      case 3:
+        exifObj.MeteringMode = gFXIFbundle.getString("multispot");
+        break;
+      case 5:
+        exifObj.MeteringMode = gFXIFbundle.getString("matrix");
+        break;
+      case 6:
+        exifObj.MeteringMode = gFXIFbundle.getString("partial");
+        break;
+    }
+  }
+
+  val = getXMPValue(dom, "http://ns.adobe.com/exif/1.0/", "ExposureProgram");
+  if(val) {
+    switch(Number(val)) {
+      case 1:
+        exifObj.ExposureProgram = gFXIFbundle.getString("manual");
+        break;
+      case 2:
+        exifObj.ExposureProgram = gFXIFbundle.getString("program") + " (" 
+          + gFXIFbundle.getString("auto") + ")";
+        break;
+      case 3:
+        exifObj.ExposureProgram = gFXIFbundle.getString("apriority")
+          + " (" +gFXIFbundle.getString("semiauto") + ")";
+        break;
+      case 4:
+        exifObj.ExposureProgram = gFXIFbundle.getString("spriority")
+          + " (" + gFXIFbundle.getString("semiauto") +")";
+        break;
+      case 5:
+        exifObj.ExposureProgram = gFXIFbundle.getString("creative");
+        break;
+      case 6:
+        exifObj.ExposureProgram = gFXIFbundle.getString("action");
+        break;
+      case 7:
+        exifObj.ExposureProgram = gFXIFbundle.getString("portrait");
+        break;
+      case 8:
+        exifObj.ExposureProgram = gFXIFbundle.getString("landscape");
+        break;
+      default:
+      break;
+    }
+  }
+
+  val = getXMPValue(dom, "http://ns.adobe.com/exif/1.0/", "ExposureIndex");
+  if(val) {
+    if (!exifObj.ExposureIndex)
+      ExifObj.ExposureIndex = parseRational(val).toFixed(0);
+  }
+
+  val = getXMPValue(dom, "http://ns.adobe.com/exif/1.0/", "ExposureMode");
+  if(val) {
+    switch(Number(val)) {
+      case 0: //Automatic
+        break;
+      case 1:
+        exifObj.ExposureMode = gFXIFbundle.getString("manual");
+        break;
+      case 2:
+        exifObj.ExposureMode = gFXIFbundle.getString("autobracketing");
+        break;
+    }
+  }
+
+  val = getXMPOrderedArray(dom, "http://ns.adobe.com/exif/1.0/", "ISOSpeedRatings");
+  if(val.length)
+    exifObj.ISOequivalent = val;
+
+  val = getXMPValue(dom, "http://ns.adobe.com/exif/1.0/", "DigitalZoomRatio");
+  if (val && val > 1)
+    exifObj.DigitalZoomRatio = parseRational(val).toFixed(3) + "x";
+
+  val = getXMPValue(dom, "http://ns.adobe.com/exif/1.0/", "ColorSpace");
+  if (val)
+  {
+    if(val == 1)
+      exifObj.ColorSpace = "sRGB";
+    else if(val == 2)
+      exifObj.ColorSpace = "Adobe RGB";
+  }
+
+  if (!exifObj.ColorSpace)
+  {
+    // At least Photoshop writes ColorSpace "uncallibrated" though it uses
+    // a defined colorspace which is documented in ICCProfile
+    val = getXMPValue(dom, "http://ns.adobe.com/photoshop/1.0/", "ICCProfile");
+    if(val)
+      exifObj.ColorSpace = val;
+  }
+
+  // GPS stuff
+
+  val = getXMPValue(dom, "http://ns.adobe.com/exif/1.0/", "GPSAltitude");
+  var gpsAlt;
+  if (val)
+    gpsAlt = parseRational(val);
+
+  val = getXMPValue(dom, "http://ns.adobe.com/exif/1.0/", "GPSAltitudeRef");
+  var gpsAltRef = 0;
+  if (val)
+    gpsAltRef = Number(val);
+
+  val = getXMPValue(dom, "http://ns.adobe.com/exif/1.0/", "GPSLatitude");
+  var gpsLat;
+  if (val)
+    gpsLat = parseGPSPos(val);
+
+  val = getXMPValue(dom, "http://ns.adobe.com/exif/1.0/", "GPSLongitude");
+  var gpsLon;
+  if (val)
+    gpsLon = parseGPSPos(val);
+
+
+  // use dms format by default
+  var degFormat = "dms";
+  var degFormatter = dd2dms;
+  try {
+    // 0 = DMS, 1 = DD
+    if (getPreferences().getIntPref("gpsFormat"))
+    {
+      // but dd if the user wants that
+      degFormat = "dd";
+      degFormatter = dd2dd;
+    }
+  } catch(e){}
+
+  if (gpsLat != undefined) {
+    var gpsArr = degFormatter(Math.abs(gpsLat));
+    gpsArr.push(gpsLat < 0 ? 'S' : 'N');
+    exifObj.GPSLat = gFXIFbundle.getFormattedString("latlon"+degFormat, gpsArr);
+  }
+  if (gpsLon != undefined) {
+    var gpsArr = degFormatter(Math.abs(gpsLon));
+    gpsArr.push(gpsLon < 0 ? 'W' : 'E');
+    exifObj.GPSLon = gFXIFbundle.getFormattedString("latlon"+degFormat, gpsArr);
+  }
+  if (gpsAlt != undefined) {
+    exifObj.GPSAlt = gFXIFbundle.getFormattedString("meters", [gpsAlt * (gpsAltRef ? -1.0 : 1.0)]);
+  }
+
+  // Get the straight decimal values without rounding.
+  // For creating links to map services.
+  if (gpsLat != undefined &&
+      gpsLon != undefined) {
+    exifObj.GPSPureDdLat = gpsLat / 3600;
+    exifObj.GPSPureDdLon = gpsLon / 3600;
   }
 }
 
-// Retrieves the language which is likely to be the users favourite
+// Parse a GPS datum.
+// It's stored like 49,9.8672N
+function parseGPSPos(gpsstring)
+{
+  var matches = gpsstring.match(/^(\d{1,3}).([0-9.]+) ?([NSEW])$/);
+  if (matches)
+  {
+    var val = matches[1] * 3600 + matches[2] * 60;
+    val = val * (matches[3] == 'N' || matches[3] == 'E' ? 1.0 : -1.0);
+    return val;
+  }
+}
+
+
+// Parse rational numbers. They consist of two
+// integers separated by a "/".
+function parseRational(ratstring)
+{
+  var matches = ratstring.match(/^([+-]?\d+)\/(\d+)$/);
+  if (matches)
+  {
+    var val = matches[1] / matches[2];
+    return val;
+  }
+  else
+    return 0;
+}
+
+// Since JS can't really parse dates and keep timezone informations,
+// I only break the string up and reformat it without any JS functions.
+// Input format is YYYY:MM:DDTHH:MM:SS[.SS][+/-HH:MM] and
+// Outputformat is YYYY:MM:DD HH:MM:SS [+/-HH:MM]
+function readAndFormatISODate(datestring)
+{
+//  var exploded_date = datestring.match(/^(\d{4})-(\d{2})-(\d{2})[T ](\d{2}):(\d{2}):(\d{2})(?:.\d{2})?(?:([+-])(\d{2}):(\d{2}))?$/);
+  var exploded_date = datestring.match(/^(\d{4}-\d{2}-\d{2})[T ](\d{2}:\d{2}:\d{2})(?:.\d{2})?(?:([+-])(\d{2}):(\d{2}))?$/);
+  if (exploded_date)
+  {
+    date = exploded_date[1] + ' ' + exploded_date[2];
+    if (typeof exploded_date[3] != "undefined" && exploded_date[3].length > 0)
+      date += ' ' + exploded_date[3] + exploded_date[4] + exploded_date[5];
+    return date;
+  }
+}
+
+// Retrieves the language which is likely to be the users favourite one.
 // Currently we end up using only the first language code.
 function getLang()
 {
@@ -1090,6 +1682,32 @@ function getLang()
   return lang;
 }
 
+
+// Retrieves a property stored somewhere in the XMP data.
+// Unfortunately there are at least two common ways a property
+// value can be stored.
+// 1. As property value of an element
+// 2. As content of an element with name of the property
+// This function looks for both and returns the first one found.
+// ns "http://ns.adobe.com/exif/1.0/"
+// property "FNumber"
+function getXMPValue(dom, ns, property)
+{
+  var el = dom.getElementsByTagNameNS(ns, property);
+  if(el.length && el[0].hasChildNodes())
+    return el[0].firstChild.nodeValue;
+
+  var list = dom.getElementsByTagNameNS("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "Description");
+  var val = "";
+
+  for(var i = 0; i < list.length; i++)
+  {
+    var attr = list[i].getAttributeNS(ns, property);
+    if(attr)
+      return attr;
+  }
+}
+
 // Gets names and descriptions that can be available
 // in multiple alternative languages.
 // But only those in the first structure with the
@@ -1100,26 +1718,42 @@ function getLang()
 //function getXMPAltValue(dom, property, langTest)
 function getXMPAltValue(dom, ns, property, langTest)
 {
-//  var el = dom.getElementsByTagName(property);
-  var el = dom.getElementsByTagNameNS(ns, property);
-  if(!el.length) {
-    return "";
-  }
-//  var list = el[0].getElementsByTagName("rdf:li");
-  var list = el[0].getElementsByTagNameNS("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "li");
-  var val = "";
+  var val;
 
-  for(var i = 1; i < list.length; i++)
+//  var propertyList = dom.getElementsByTagName(property);
+  var propertyList = dom.getElementsByTagNameNS(ns, property);
+
+  // go through all the property elements (though there should
+  // only be one)
+  for(var i = 0; i < propertyList.length && !val; i++)
   {
-    if(langTest.test(list[i].getAttribute("xml:lang"))) {
-      val = list[i].firstChild.nodeValue;
-      break;
+//    var entriesList = propertyList[0].getElementsByTagName("rdf:li");
+    var entriesList = propertyList[0].getElementsByTagNameNS("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "li");
+
+    for(var j = 0; j < entriesList.length; j++)
+    {
+      // found a non empty entry with fitting language
+      if(entriesList[j].hasChildNodes() &&
+         langTest.test(entriesList[j].getAttribute("xml:lang"))) {
+        val = entriesList[j].firstChild.nodeValue;
+        break;
+      }
     }
   }
-  // our language wasn't found
-  if(!val.length &&
-     list.length > 0) {
-    val = list[0].firstChild.nodeValue;
+  // our language wasn't found or its entry was empty
+  for(var i = 0; i < propertyList.length && !val; i++)
+  {
+    var entriesList = propertyList[0].getElementsByTagNameNS("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "li");
+
+    for(var j = 0; j < entriesList.length; j++)
+    {
+      // found a non empty entry with fitting language
+      if(entriesList[j].hasChildNodes() &&
+         entriesList[j].getAttribute("xml:lang") == "x-default") {
+        val = entriesList[j].firstChild.nodeValue;
+        break;
+      }
+    }
   }
 
   return val;
@@ -1141,21 +1775,21 @@ function getXMPOrderedArray(dom, ns, property)
   if(el.length) {
 //    var list = el[0].getElementsByTagName("rdf:li");
     var list = el[0].getElementsByTagNameNS("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "li");
-    for(var i=0; i<list.length; i++) {
-      var el = list[i].firstChild;
-      if(el.nodeType == NodeTypes.TEXT_NODE) {  // it's just the photographer
-        val += el.nodeValue + ", ";
-      }
+    for(var i = 0; i < list.length; i++) {
+      if (list[i].hasChildNodes()) {
+        var el = list[i].firstChild;
+        if(el.nodeType == NodeTypes.TEXT_NODE)  // it's just the photographer
+          val += el.nodeValue + ", ";
 // This part is untested due do lack of software that writes that.
-      else if(el.nodeType == NodeTypes.ELEMENT_NODE) {
-        // Above li contains a rdf:Description which contains the rdf:value and a ns:role.
-//        var list = el.getElementsByTagName("rdf:value");
-        var list = el.getElementsByTagNameNS("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "value");
-        if(list.length)
-          val += list[0].firstChild.nodeValue + ", ";
-      }
-      else {
-        alert("Uh, unknown nodeType: " + el.nodeType);
+        else if(el.nodeType == NodeTypes.ELEMENT_NODE) {
+          // Above li contains a rdf:Description which contains the rdf:value and a ns:role.
+//          var list = el.getElementsByTagName("rdf:value");
+          var list = el.getElementsByTagNameNS("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "value");
+          if(list.length && list[0].hasChildNodes())
+            val += list[0].firstChild.nodeValue + ", ";
+        }
+        else
+          alert("Uh, unknown nodeType: " + el.nodeType);
       }
     }
     // Remove last, superfluous comma.
@@ -1202,9 +1836,10 @@ function showEXIFDataFor(url)
     document.getElementById("no-data").style.display = "none";
     setInfo("camera-make", ed.Make);
     setInfo("camera-model", ed.Model);
+    setInfo("camera-lens", ed.Lens);
     setInfo("image-date", ed.Date);
     setInfo("image-orientation", ed.Orientation);
-    setInfo("image-bw", ed.IsColor);
+    setInfo("image-bw", ed.IsColor);		// TODO: what's this?
     setInfo("image-flash", ed.FlashUsed);
     setInfo("image-focallen", ed.FocalLengthText);
     setInfo("image-digitalzoom", ed.DigitalZoomRatio);
@@ -1219,9 +1854,14 @@ function showEXIFDataFor(url)
     setInfo("image-meteringmode", ed.MeteringMode);
     setInfo("image-exposureprogram", ed.ExposureProgram);
     setInfo("image-exposuremode", ed.ExposureMode);
+    setInfo("image-colorspace", ed.ColorSpace);
     setInfo("image-gpscoord", ed.GPSLat + ", " + ed.GPSLon);
     setInfo("image-gpsalt", ed.GPSAlt);
     setInfo("image-photographer", ed.Photographer);
+    setInfo("image-city", ed.City);
+    setInfo("image-sublocation", ed.Sublocation);
+    setInfo("image-provincestate", ed.ProvinceState);
+    setInfo("image-countryname", ed.CountryName);
     setInfo("image-copyright", ed.Copyright);
     setInfo("image-title", ed.Headline);
     setInfo("image-caption", ed.Caption);
