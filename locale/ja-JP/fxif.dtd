@@ -3,6 +3,7 @@
 <!ENTITY Copy "コピー">
 <!ENTITY CameraMake "メーカー名:">
 <!ENTITY CameraModel "モデル名:">
+<!ENTITY CameraLens "Lens:">
 <!ENTITY ImageDate "撮影日時:">
 <!ENTITY ImageOrientation "画像方向:">
 <!ENTITY ImageBW "白黒画像:">
@@ -20,6 +21,7 @@
 <!ENTITY MeteringMode "測光方式:">
 <!ENTITY ExposureProgram "露出プログラム:">
 <!ENTITY ExposureMode "露出モード:">
+<!ENTITY ImageColorSpace "Color Space:">
 <!ENTITY GPSCoord "GPS Coordinate:">
 <!ENTITY MapLink "地図 リンク">
 <!ENTITY GPSAlt "GPS 高度:">

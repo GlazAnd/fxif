@@ -1,0 +1,44 @@
+<!ENTITY contextMenu.label "Данные EXIF">
+<!ENTITY EXIFData "Данные EXIF">
+<!ENTITY Copy "Копировать">
+<!ENTITY CameraMake "Изготовитель камеры:">
+<!ENTITY CameraModel "Модель камеры:">
+<!ENTITY CameraLens "Объектив:">
+<!ENTITY ImageDate "Дата съемки:">
+<!ENTITY ImageOrientation "Ориентация:">
+<!ENTITY ImageBW "Черно-белый снимок:">
+<!ENTITY FlashUsed "Вспышка:">
+<!ENTITY FocalLength "Фокусное расстояние:">
+<!ENTITY DigitalZoom "Цифровое увеличение:">
+<!ENTITY CCDWidth "CCD Width:">
+<!ENTITY ExposureTime "Выдержка:">
+<!ENTITY Aperture "Диафрагма:">
+<!ENTITY FocusDist "Расстояние до объекта:">
+<!ENTITY ISOequiv "Значение ISO:">
+<!ENTITY ExposureBias "Экспокоррекция:">
+<!ENTITY WhiteBalance "Баланс белого:">
+<!ENTITY LightSource "Источник света:">
+<!ENTITY MeteringMode "Замер экспозиции:">
+<!ENTITY ExposureProgram "Программа экспозиции:">
+<!ENTITY ExposureMode "Режим съемки:">
+<!ENTITY ImageColorSpace "Color Space:">
+<!ENTITY GPSCoord "Координаты GPS:">
+<!ENTITY MapLink "Ссылка на карту">
+<!ENTITY GPSAlt "Высота по GPS:">
+<!ENTITY Photographer "Автор:">
+<!ENTITY City "Город:">
+<!ENTITY Sublocation "Район:">
+<!ENTITY ProvinceState "Провинция/штат:">
+<!ENTITY CountryName "Страна:">
+<!ENTITY Copyright "Авторские права:">
+<!ENTITY Title "Название:">
+<!ENTITY Caption "Заголовок:">
+<!ENTITY Comment "Комментарий:">
+<!ENTITY NoData "Данные не найдены">
+
+<!-- Options dialog -->
+<!ENTITY OptionsDialogTitle "Настройки FxIF">
+<!ENTITY GPSFormat "Формат координат GPS:">
+<!ENTITY DD.label "Десятичные градусы">
+<!ENTITY DMS.label "Градусы Минуты Секунды">
+<!ENTITY OverrideMapProvider "Поставщик карт:">

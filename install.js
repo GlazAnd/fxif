@@ -1,7 +1,7 @@
 const APP_DISPLAY_NAME = "FxIF";
 const APP_NAME = "fxif";
 const APP_PACKAGE = "/Ted Mielczarek/fxif";
-const APP_VERSION = "0.3.2";
+const APP_VERSION = "0.3.3a";
 
 const APP_JAR_FILE = "fxif.jar";
 const APP_CONTENT_FOLDER = "content/";
@@ -29,6 +29,7 @@ if(err >= SUCCESS) {
 	registerChrome(LOCALE | instFlags, jar, "locale/ja-JP/");
 	registerChrome(LOCALE | instFlags, jar, "locale/zh-CN/");
 	registerChrome(LOCALE | instFlags, jar, "locale/pl-PL/");
+	registerChrome(LOCALE | instFlags, jar, "locale/ru-RU/");
 	err = performInstall();
 	if(err >= SUCCESS) {
 		alert(APP_NAME + " " + APP_VERSION + " has been succesfully installed.\n"

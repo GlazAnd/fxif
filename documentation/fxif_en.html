@@ -27,9 +27,9 @@ forms:</p>
 <p>Out of the camera most images will only contain binary EXIF data but this may change in future and there&rsquo;s much software for adding the other informations by you. And software like Photoshop will at least duplicate the EXIF information into XMP data and add data of its own to your image if you just save it&ndash;or at least if you don&rsquo;t do <em>Save for Web</em>.</p>
 
 <h2>And which fields in detail?</h2>
-<p>In detail you can view the following EXIF fields: ImageDescription, Make, Model, Orientation, ModifyDate/DateTimeOriginal/DateTimeDigitized, Artist, Copyright, ExposureTime., FNumber, ExposureProgram, GPSInfo, ISO, ShutterSpeedValue, ExposureCompensation, MaxApertureValue, SubjectDistance, MeteringMode, LightSource, Flash, FocalLength, UserComment, ExifImageWidth, ExifImageLength, FocalPlaneXResolution, FocalPlaneResolutionUnit. ExposureMode, WhiteBalance, DigitalZoomRatio, FocalLengthIn35mmFormat</p>
-<p>Also following fields are taken from IPTC-NAA: By-line, Caption-Abstract, Headline, CopyrightNotice</p>
-<p>And the following from XMP: dc:Creator, photoshop:Headline, dc:Description, dc:Rights</p>
+<p>In detail you can view the following EXIF fields: ImageDescription, Make, Model, Orientation, ModifyDate/DateTimeOriginal/DateTimeDigitized, Artist, Copyright, ExposureTime., FNumber, ExposureProgram, GPSInfo, ISO, ShutterSpeedValue, ExposureCompensation, MaxApertureValue, SubjectDistance, MeteringMode, LightSource, Flash, FocalLength, UserComment, ExifImageWidth, ExifImageLength, FocalPlaneXResolution, FocalPlaneResolutionUnit. ExposureMode, WhiteBalance, DigitalZoomRatio, FocalLengthIn35mmFormat, ColorSpace</p>
+<p>Also following fields are taken from IPTC-NAA: By-line, Caption-Abstract, Headline, CopyrightNotice, City, Sublocation, Province/State and Country</p>
+<p>And the following from XMP: dc:Creator, photoshop:Headline, dc:title, dc:description, dc:rights, xmpRights:UsageTerms, cc:license, photoshop:City, Iptc4xmpCore:Location, photoshop:State, photoshop:Country, tiff:Make, tiff:Model, aux:Lens, exif:DateTimeOriginal, exif:DateTimeDigitized, exif:FNumber, exif:ApertureValue, exif:FocalLength, exif:FocalLengthIn35mmFilm, exif:SubjectDistance, exif:ExposureTime, exif:Flash, tiff:Orientation, exif:ExposureBiasValue, exif:WhiteBalance, exif:LightSource, exif:MeteringMode, exif:ExposureProgram, exif:ExposureIndex, exif:ExposureMode, exif:ISOSpeedRatings, exif:DigitalZoomRatio, exif:GPSAltitude, exif:GPSAltitudeRef, exif:GPSLatitude, exif:GPSLongitude, exif:ColorSpace, photoshop:ICCProfile</p>
 <p>That said, not all data is displayed always and at once. First not all files contain all fields. And second if fields that exist to hold the same information like the photographers name or description of the image are present in more than one structure, the information is only displayed once. The priority in which they&rsquo;re used is XMP, IPTC-NAA, EXIF in descending order.</p>
 <p>Also for your convenience if GPS coordinates are available in the EXIF fields, a weblink to a map provider is displayed behind them. At least it is in Firefox 3 and SeaMonkey 2 because earlier don&rsquo;t support the technique used. And be aware that these are the coordinates of the camera, not the object photographed which can differ significant especially for tele photos.</p>
 
@@ -86,6 +86,10 @@ forms:</p>
 <h1>What&rsquo;s new in 0.3.2</h1>
 <ul>
 	<li>A few bugfixes, among them is <a href="http://support.mozilla.com/en-US/forum/1/489394">All toolbars disappear on closing print preview</a>.</li>
+</ul>
+<h1>What&rsquo;s new in 0.4</h1>
+<ul>
+	<li>Added interpretation of EXIF values that are contained in XMP format rather the old binary format. Added some fields mainly regarding the location of the subject. Internally more fields are inspected to fill the license field. Also rearranged the order of the field listing, fixed some bugs in the XMP interpreter, the binary EXIF reader and added new translation for Russian thanks to Max Pozdeev.</li>
 </ul>
 </body>
 </html>

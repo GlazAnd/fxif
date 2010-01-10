@@ -3,6 +3,7 @@
 <!ENTITY Copy "复制">
 <!ENTITY CameraMake "厂商:">
 <!ENTITY CameraModel "机型:">
+<!ENTITY CameraLens "Lens:">
 <!ENTITY ImageDate "拍摄时间:">
 <!ENTITY ImageOrientation "方位:">
 <!ENTITY ImageBW "黑白照:">
@@ -20,6 +21,7 @@
 <!ENTITY MeteringMode "测光模式:">
 <!ENTITY ExposureProgram "曝光程序:">
 <!ENTITY ExposureMode "曝光模式:">
+<!ENTITY ImageColorSpace "Color Space:">
 <!ENTITY GPSCoord "GPS Coordinate:">
 <!ENTITY MapLink "地圖 链接">
 <!ENTITY GPSAlt "GPS 高度:">
