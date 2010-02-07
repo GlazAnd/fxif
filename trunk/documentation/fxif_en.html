@@ -2,54 +2,55 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<meta http-equiv="content-type" content="xhtml+xml; charset=iso-8859-1"/>
+	<meta http-equiv="content-type" content="xhtml+xml; charset=utf-8"/>
 	<title>about FxIF</title>
 </head>
 <body>
-<h1>What&rsquo;s it</h1>
-<p>FxIF (Firefox exIF) allows you to view meta information data contained in JPEG images from the convenience of your Firefox browser. Most digital cameras add EXIF data to all images you take and much editing software adds or allows you to add more informations on the picture and you the creator.</p>
+<h1>What’s it</h1>
+<p>FxIF (Firefox exIF) allows you to view meta information data contained in JPEG images from the convenience of your Firefox (or SeaMonkey or other compatible) browser. Most digital cameras add EXIF data to all images you take and much editing software adds or allows you to add more informations on the picture and you the creator.</p>
 <p>FxIF is written entirely in JavaScript, and as such should be portable to all platforms that Mozilla runs on.</p>
 
 <h1>Usage</h1>
-<p>After installing FxIF, simply right click on an image, then click <code>Properties</code>. The meta data will be displayed in the properties window. This integration into the existing dialog keeps the interface simple.</p>
+<p>After installing FxIF, simply right click on an image, then click <code>Properties</code>. The meta data will be displayed in the properties window. This integration into the existing dialog keeps the interface simple.<br />
+Since this window has been removed with Firefox 3.6 I’ve added my own one accessible through the <code>EXIF data</code> entry for those versions.</p>
 
 <h1>In detail</h1>
 
 <h2>What can it display</h2>
-<p>Meta data that&rsquo;s contained in JPEG image files in three
+<p>Meta data that’s contained in JPEG image files in three
 forms:</p>
 <ul>
 	<li>binary EXIF data. This is added by most cameras automatically and contains technical informations on the camera model and manufacturer, date and time the image was taken, aperture and shutter speed used, focal length and much much more.</li>
 	<li>IPTC-NAA data in a binary structure (IIM). IPTC-NAA comprises a standardized set of fields focusing on informations as the name of the photographer, caption and title for the image, copyright informations, keywords a.s.o.</li>
-	<li>XMP (Extensible Metadata Platform). In contrast to aforementioned this data isn&rsquo;t stored binary but as an XML document within the image and isn&rsquo;t restricted to only camera or image informations but can hold both and even more. It&rsquo;s developed by Adobe and pushed by their applications including Photoshop. As said, XMP can hold various informations as all the EXIF data mentioned above and also those from IPTC-NAA as well as application specific.<br/>
+	<li>XMP (Extensible Metadata Platform). In contrast to aforementioned this data isn’t stored binary but as an XML document within the image and isn’t restricted to only camera or image informations but can hold both and even more. It’s developed by Adobe and pushed by their applications including Photoshop. As said, XMP can hold various informations as all the EXIF data mentioned above and also those from IPTC-NAA as well as application specific.<br/>
   Its advantage is the use of UTF-8 encoding&ndash;so data can be added in every language available&ndash;and also the possibility to hold an information in more than one language simultaneously.</li>
 </ul>
-<p>Out of the camera most images will only contain binary EXIF data but this may change in future and there&rsquo;s much software for adding the other informations by you. And software like Photoshop will at least duplicate the EXIF information into XMP data and add data of its own to your image if you just save it&ndash;or at least if you don&rsquo;t do <em>Save for Web</em>.</p>
+<p>Out of the camera most images will only contain binary EXIF data but this may change in future and there’s much software for adding the other informations by you. And software like Photoshop will at least duplicate the EXIF information into XMP data and add data of its own to your image if you just save it&ndash;or at least if you don’t do <em>Save for Web</em>.</p>
 
 <h2>And which fields in detail?</h2>
 <p>In detail you can view the following EXIF fields: ImageDescription, Make, Model, Orientation, ModifyDate/DateTimeOriginal/DateTimeDigitized, Artist, Copyright, ExposureTime., FNumber, ExposureProgram, GPSInfo, ISO, ShutterSpeedValue, ExposureCompensation, MaxApertureValue, SubjectDistance, MeteringMode, LightSource, Flash, FocalLength, UserComment, ExifImageWidth, ExifImageLength, FocalPlaneXResolution, FocalPlaneResolutionUnit. ExposureMode, WhiteBalance, DigitalZoomRatio, FocalLengthIn35mmFormat, ColorSpace</p>
-<p>Also following fields are taken from IPTC-NAA: By-line, Caption-Abstract, Headline, CopyrightNotice, City, Sublocation, Province/State and Country</p>
-<p>And the following from XMP: dc:Creator, photoshop:Headline, dc:title, dc:description, dc:rights, xmpRights:UsageTerms, cc:license, photoshop:City, Iptc4xmpCore:Location, photoshop:State, photoshop:Country, tiff:Make, tiff:Model, aux:Lens, exif:DateTimeOriginal, exif:DateTimeDigitized, exif:FNumber, exif:ApertureValue, exif:FocalLength, exif:FocalLengthIn35mmFilm, exif:SubjectDistance, exif:ExposureTime, exif:Flash, tiff:Orientation, exif:ExposureBiasValue, exif:WhiteBalance, exif:LightSource, exif:MeteringMode, exif:ExposureProgram, exif:ExposureIndex, exif:ExposureMode, exif:ISOSpeedRatings, exif:DigitalZoomRatio, exif:GPSAltitude, exif:GPSAltitudeRef, exif:GPSLatitude, exif:GPSLongitude, exif:ColorSpace, photoshop:ICCProfile</p>
-<p>That said, not all data is displayed always and at once. First not all files contain all fields. And second if fields that exist to hold the same information like the photographers name or description of the image are present in more than one structure, the information is only displayed once. The priority in which they&rsquo;re used is XMP, IPTC-NAA, EXIF in descending order.</p>
-<p>Also for your convenience if GPS coordinates are available in the EXIF fields, a weblink to a map provider is displayed behind them. At least it is in Firefox 3 and SeaMonkey 2 because earlier don&rsquo;t support the technique used. And be aware that these are the coordinates of the camera, not the object photographed which can differ significant especially for tele photos.</p>
+<p>Also following fields are taken from IPTC-NAA: By-line, Caption-Abstract, Headline, Instructions, CopyrightNotice, City, Sublocation, Province/State and Country</p>
+<p>And the following from XMP: dc:Creator, photoshop:Headline, dc:title, dc:description, dc:rights, xmpRights:UsageTerms, cc:license, photoshop:City, Iptc4xmpCore:Location, photoshop:State, photoshop:Country, tiff:Make, tiff:Model, aux:Lens, exif:DateTimeOriginal, exif:DateTimeDigitized, exif:FNumber, exif:ApertureValue, exif:FocalLength, exif:FocalLengthIn35mmFilm, exif:SubjectDistance, exif:ExposureTime, exif:Flash, tiff:Orientation, exif:ExposureBiasValue, exif:WhiteBalance, exif:LightSource, exif:MeteringMode, exif:ExposureProgram, exif:ExposureIndex, exif:ExposureMode, exif:ISOSpeedRatings, exif:DigitalZoomRatio, exif:GPSAltitude, exif:GPSAltitudeRef, exif:GPSLatitude, exif:GPSLongitude, exif:ColorSpace, photoshop:ICCProfile, photoshop:Instructions</p>
+<p>That said, not all data is displayed always and at once. First not all files contain all fields. And second if fields that exist to hold the same information like the photographers name or description of the image are present in more than one structure, the information is only displayed once. The priority in which they’re used is XMP, IPTC-NAA, EXIF in descending order.</p>
+<p>Also for your convenience if GPS coordinates are available in the EXIF fields, a weblink to a map provider is displayed behind them. At least it is in Firefox 3 and SeaMonkey 2 because earlier don’t support the technique used. And be aware that these are the coordinates of the camera, not the object photographed which can differ significant especially for tele photos.</p>
 
-<h2>That&rsquo;s not that much, why not more?</h2>
+<h2>That’s not that much, why not more?</h2>
 <p>FxIF wants to give you the informations which most people most likely want to see when viewing an image in the browser. That is a quick look when, by which camera with which settings, where and some informations on the subject.</p>
-<p>There are other applications that give you any possible information found in the image. But from our point of view their purpose is different and doesn&rsquo;t make much sense in the browser. Displaying all informations available in the file can simply overwhelming and make the basic informations hard to find.</p>
+<p>There are other applications that give you any possible information found in the image. But from our point of view their purpose is different and doesn’t make much sense in the browser. Displaying all informations available in the file can simply overwhelming and make the basic informations hard to find.</p>
 
 <h2>And why only in JPEG images?</h2>
 <p>That image format is by far the most common and concentrating on it keeps the extension simple.</p>
 <h2>Where is it supposed to run on</h2>
-<p>As mentioned earlier it&rsquo;s written in JavaScript and XUL, so it should run in combination with the GRE (Gecko Runtime Environment) everywhere GRE runs.</p>
+<p>As mentioned earlier it’s written in JavaScript and XUL, so it should run in combination with the GRE (Gecko Runtime Environment) everywhere GRE runs.</p>
 <p>Out of the box the extension is made for the Firefox browser from version 0.10 on, the Mozilla Application suite from version 1.7 on and its successor SeaMonkey from version 1.0 on.</p>
 
 <h2>How much does it cost?</h2>
-<p>Nothing. It&rsquo;s free software in terms of the Free Software Foundations. It&rsquo;s triple licensed as MPL 1.1, GPL 2.0, LGPL 2.1 and like most extensions for the Mozilla platform comes with the source code in the XPI file itself.</p>
+<p>Nothing. It’s free software in terms of the Free Software Foundations. It’s triple licensed as MPL 1.1, GPL 2.0, LGPL 2.1 and like most extensions for the Mozilla platform comes with the source code in the XPI file itself.</p>
 
 <h1>Configure me</h1>
 <p>Since likings are different we decided to make two functions configurable. You can do this via the options dialog on the Add-On manager (available in Firefox and SeaMonkey 2) or by directly manipulating the respective pref.</p>
 <p>First option is to choose the format used for displaying coordinates. This is either Degrees Minutes Seconds (DMS) like 40&deg;&nbsp;43&prime;&nbsp;20.7&Prime;&nbsp;N, 74&deg;&nbsp;02&prime;&nbsp;47.2&Prime;&nbsp;W or decimal degree (DD) like 40.722417&deg;&nbsp;N, 74.046444&deg;&nbsp;W. Any informations are rounded to two decimal places in DMS and six decimal places in DD format. The associated pref is <code>extensions.fxif.gpsFormat</code> where 0 means DMS and 1 DD.</p>
-<p>The other option is the map provider to use for the weblink. The default (when the pref isn&rsquo;t available or empty) is to use <code>openstreetmap.org</code>, but as I wrote, likings are different.</p>
+<p>The other option is the map provider to use for the weblink. The default (when the pref isn’t available or empty) is to use <code>openstreetmap.org</code>, but as I wrote, likings are different.</p>
 <p>So to change it, insert any URL into the field (or pref). You can use really any URL, but to have the respective coordinates used, put a <code>%lat%</code> anywhere the latitude shall be inserted and <code>%lon%</code> anywhere the longitude shall be inserted.</p>
 <p>So the default is</p>
 <p><code>http://www.openstreetmap.org/?lat=%mlat%&amp;mlon=%lon%&amp</code></p>
@@ -60,16 +61,18 @@ forms:</p>
 <p>or</p>
 <p><code>http://atlas.mapquest.com/maps/map.adp?searchtype=address&amp;formtype=latlong&amp;latlongtype=decimal&amp;latitude=%lat%&amp;longitude=%lon%</code></p>
 <p>for MapQuest a.s.o. In URL langitude and longitude will always get inserted in unrounded decimal format.</p>
-<p>Noticed the <code>%lang%</code> in the Google Maps URL?This is the third placeholder available and will be replaced by the content language code you&rsquo;ve chosen in your general browser settings. It&rsquo;s not necessary but at least in case of Google offers the site in your language.</p>
+<p>Noticed the <code>%lang%</code> in the Google Maps URL? This is the third placeholder available and will be replaced by the content language code you’ve chosen in your general browser settings. It’s not necessary but at least in case of Google offers the site in your language.</p>
 <p>The associated pref is <code>extensions.fxif.mapProvider</code>.</p>
 
 <h1>Are there localized versions?</h1>
-<p>FxIF is already available in Chinese (Chinese and Taiwanese variants), Czech, English, French, German, Italian, Japanese, Polish and Spanish. The one used depends on the browsers locale. If you don&rsquo;t find your language in the list, you�re welcome to do a translation and donate it. You can get the <a href="http://code.google.com/p/fxif/source/browse/trunk/locale/en-US">english version .dtd and .properties files</a> from the FxIF repository and mail us the tranlated file for inclusion. Also fixes for errors in translations are welcom.</p>
+<p>FxIF is already available in Chinese (simplified as well as traditional), Czech, English, French, German, Italian, Japanese, Polish, Russian and Spanish. The one used depends on the browsers locale.</p>
+<p>If you don’t find your language in the list, you’re welcome to do a translation and donate it. You can get the <a href="http://code.google.com/p/fxif/source/browse/trunk/locale/en-US">english version .dtd and .properties files</a> from the FxIF repository and mail us the translated file for inclusion. Also fixes for errors in translations are welcome.</p>
+<p>FxIF also has a side on <a href="http://www.babelzilla.org/index.php?option=com_wts&extension=5292&type=show" target="_blank">BabelZilla.org</a> where translations are organized. You can add translations there as well.</p>
 
-<h1>When will the next version get released?</h1>
-<p>Like most projects &ldquo;when it&rsquo;s done&rdquo;. Since 0.23 the FxIF code has its <a href="http://code.google.com/p/fxif/">home at Google Code</a> and the source kept online can be <a href="http://code.google.com/p/fxif/source/checkout">checked out via svn</a>.</p>
+<h1>When will the next version be released?</h1>
+<p>Like most projects &ldquo;when it’s done&rdquo;. Since 0.23 the FxIF code has its <a href="http://code.google.com/p/fxif/">home at Google Code</a> and the source kept online can be <a href="http://code.google.com/p/fxif/source/checkout">checked out via svn</a>.</p>
 
-<h1>What&rsquo;s new in 0.30</h1>
+<h1>What’s new in 0.30</h1>
 <ul>
 	<li>Displaying of GPS coordinates</li>
 	<li>Decoding of IPTC-NAA and XMP data</li>
@@ -79,17 +82,22 @@ forms:</p>
   <li>Also works with images that aren't cached.</li>
   <li>Also works with images from mailbox, news or imap addresses</li>
 </ul>
-<h1>What&rsquo;s new in 0.3.1</h1>
+<h1>What’s new in 0.3.1</h1>
 <ul>
 	<li>Also works in Firefox >= 3.6 where the properties dialogue has been removed.</li>
 </ul>
-<h1>What&rsquo;s new in 0.3.2</h1>
+<h1>What’s new in 0.3.2</h1>
 <ul>
 	<li>A few bugfixes, among them is <a href="http://support.mozilla.com/en-US/forum/1/489394">All toolbars disappear on closing print preview</a>.</li>
 </ul>
-<h1>What&rsquo;s new in 0.4</h1>
+<h1>What’s new in 0.4</h1>
 <ul>
-	<li>Added interpretation of EXIF values that are contained in XMP format rather the old binary format. Added some fields mainly regarding the location of the subject. Internally more fields are inspected to fill the license field. Also rearranged the order of the field listing, fixed some bugs in the XMP interpreter, the binary EXIF reader and added new translation for Russian thanks to Max Pozdeev.</li>
+	<li>Added interpretation of EXIF values that are contained in XMP format rather the old binary format. Added some fields mainly regarding the location of the subject. Internally more fields are inspected to fill the license field.</li>
+  <li>Also rearranged the order of the field listing, fixed some bugs in the XMP interpreter, the binary EXIF reader.</li>
+  <li>Own EXIF window is now closable with ESC and the Copy button has a Alt+C (Option+C on Mac) shortcut.</li>
+  <li>Can now cope with images delivered compressed (e.g. "Content-Encoding: gzip")</li>
+  <li>Enabled overlaying of the properties window that's being readded by Geoff Lankows <a href="https://addons.mozilla.org/de/firefox/addon/14228" target="_blank">Element properties 5</a></li>
+  <li>Added new translation for Russian thanks to Max Pozdeev. All localizations have been overhauled, thanks to old and new contributors on <a href="www.babelzilla.org" target="_blank">BabelZilla</a>.</li>
 </ul>
 </body>
 </html>

@@ -34,6 +34,7 @@
 <!ENTITY Title "Title:">
 <!ENTITY Caption "Caption:">
 <!ENTITY Comment "Comment:">
+<!ENTITY Instructions "Instructions:">
 <!ENTITY NoData "No meta data found">
 
 <!-- Options dialog -->

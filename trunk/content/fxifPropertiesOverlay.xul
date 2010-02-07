@@ -43,9 +43,13 @@
     id="fxifPropertiesOverlay">
 
   <window id="metadata">
-    <script type="application/x-javascript" src="chrome://fxif/content/exif.js"/>
+    <script type="application/x-javascript" src="chrome://fxif/content/fxifUtils.js"/>
+    <script type="application/x-javascript" src="chrome://fxif/content/binExif.js"/>
+    <script type="application/x-javascript" src="chrome://fxif/content/binIptc.js"/>
+    <script type="application/x-javascript" src="chrome://fxif/content/xmp.js"/>
+    <script type="application/x-javascript" src="chrome://fxif/content/fxif.js"/>
     <script type="application/x-javascript">
-      window.addEventListener("load", onFxIFOverlayLoad, false);
+      window.addEventListener("load", fxifObj.onPropertiesOverlayLoad, false);
     </script>
 
     <stringbundle src="chrome://fxif/locale/fxif.properties" id="bundle_fxif"/>
@@ -53,7 +57,10 @@
       <hbox align="end">
         <label value="&EXIFData;:"/>
         <separator flex="1"/>
-        <button id="copy-button" label="&Copy;" onclick="copyEXIFToClipboard()"/>
+        <button id="copy-button" label="&Copy;" onclick="fxifObj.copyDataToClipboard()"/>
+        <keyset>
+          <key id="copy-key" modifiers="alt" key="C" oncommand="fxifObj.copyDataToClipboard();"/>
+        </keyset>
       </hbox>
       <separator class="groove"/>
       <grid id="data-list">
@@ -163,18 +170,13 @@
       <label value="&ImageBW;"/>
       <textbox id="image-bw-text" readonly="true"/>
     </row>
-    <row id="image-ccdwidth">
-      <separator orient="vertical"/>
-      <label value="&CCDWidth;"/>
-      <textbox id="image-ccdwidth-text" readonly="true"/>
-    </row>
     <row id="image-gpscoord">
       <separator orient="vertical"/>
       <label value="&GPSCoord;"/>
       <hbox>
         <textbox id="image-gpscoord-text" readonly="true" style="min-width:29ex;" flex="1"/>
         <!-- Don't just use plain HTML here because of bug 263433 -->
-        <hbox><html:a id="maplink-href" onclick="loadInBrowser(this.getAttribute('href'), event); return false;" style="text-decoration:underline; cursor:pointer;">&MapLink;</html:a></hbox>
+        <hbox><html:a id="maplink-href" onclick="fxifObj.loadInBrowser(this.getAttribute('href'), event); return false;" style="text-decoration:underline; cursor:pointer;">&MapLink;</html:a></hbox>
       </hbox>
     </row>
     <row id="image-gpsalt">
@@ -225,7 +227,12 @@
     <row id="image-comment">
       <separator orient="vertical"/>
       <label value="&Comment;"/>
-      <textbox id="image-comment-text" readonly="true"/>
+      <textbox id="image-comment-text" multiline="true" readonly="true"/>
+    </row>
+    <row id="image-instructions">
+      <separator orient="vertical"/>
+      <label value="&Instructions;"/>
+      <textbox id="image-instructions-text" multiline="true" readonly="true"/>
     </row>
   </rows>
       </grid>

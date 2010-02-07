@@ -1,0 +1,40 @@
+<!ENTITY contextMenu.label "Informacje EXIF">
+<!ENTITY EXIFData "Informacje EXIF">
+<!ENTITY Copy "Kopiuj">
+<!ENTITY CameraMake "Producent:">
+<!ENTITY CameraModel "Model:">
+<!ENTITY CameraLens "Obiektyw:">
+<!ENTITY ImageDate "Data wykonania:">
+<!ENTITY ImageOrientation "Orientacja:">
+<!ENTITY ImageBW "Czarno-Białe:">
+<!ENTITY FlashUsed "Lampa błyskowa:">
+<!ENTITY FocalLength "Długość ogniskowej:">
+<!ENTITY DigitalZoom "Zoom cyfrowy:">
+<!ENTITY CCDWidth "Szerokość matrycy:">
+<!ENTITY ExposureTime "Czas ekspozycji:">
+<!ENTITY Aperture "Przysłona:">
+<!ENTITY FocusDist "Odległość ostrzenia:">
+<!ENTITY ISOequiv "Czułość ISO:">
+<!ENTITY ExposureBias "Korekta ekspozycji:">
+<!ENTITY WhiteBalance "Balans bieli:">
+<!ENTITY LightSource "Źródło światła:">
+<!ENTITY MeteringMode "Pomiar światła:">
+<!ENTITY ExposureProgram "Program ekspozycji:">
+<!ENTITY ExposureMode "Tryb ekspozycji:">
+<!ENTITY ImageColorSpace "Przestrzeń barw:">
+<!ENTITY GPSCoord "Współrzędne GPS:">
+<!ENTITY MapLink "Mapa Łącze">
+<!ENTITY GPSAlt "Wysokość:">
+<!ENTITY Photographer "Fotograf:">
+<!ENTITY Copyright "Prawa autorskie:">
+<!ENTITY Title "Tytuł:">
+<!ENTITY Caption "Opis:">
+<!ENTITY Comment "Komentarz:">
+<!ENTITY NoData "Brak danych EXIF">
+
+<!-- Options dialog -->
+<!ENTITY OptionsDialogTitle "Preferencje FxIF">
+<!ENTITY GPSFormat "Współrzędne w formacie do wykorzystania:">
+<!ENTITY DD.label "Stopnie dziesiętne">
+<!ENTITY DMS.label "Stopnie, minuty, sekundy">
+<!ENTITY OverrideMapProvider "Dostawca mapy:">

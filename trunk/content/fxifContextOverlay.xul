@@ -41,14 +41,15 @@
     xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
     id="fxifContextOverlay">
 
-  <script type="application/x-javascript" src="chrome://fxif/content/exif.js"/>
+  <script type="application/x-javascript" src="chrome://fxif/content/fxifUtils.js"/>
+  <script type="application/x-javascript" src="chrome://fxif/content/fxif.js"/>
   <script type="application/x-javascript" src="chrome://fxif/content/metadataUtils.js"/>
   <script type="application/x-javascript">
-    window.addEventListener("load", fxifInitMenuItems, false);
+    window.addEventListener("load", fxifObj.initMenuItems, false);
   </script>
 
   <popup id="contentAreaContextMenu">
     <menuseparator id="context-fxif-sep"/>
-    <menuitem id="context-fxif" label="&contextMenu.label;" oncommand="showImageExifs();"/>
+    <menuitem id="context-fxif" label="&contextMenu.label;" oncommand="fxifObj.showImageData();"/>
   </popup>
 </overlay>

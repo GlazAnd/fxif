@@ -1,7 +1,7 @@
 const APP_DISPLAY_NAME = "FxIF";
 const APP_NAME = "fxif";
 const APP_PACKAGE = "/Ted Mielczarek/fxif";
-const APP_VERSION = "0.3.3a";
+const APP_VERSION = "0.4";
 
 const APP_JAR_FILE = "fxif.jar";
 const APP_CONTENT_FOLDER = "content/";
@@ -19,17 +19,18 @@ var err = addFile(APP_PACKAGE, APP_VERSION, "chrome/" + APP_JAR_FILE, chromef, n
 if(err >= SUCCESS) {
 	var jar = getFolder(chromef, APP_JAR_FILE);
 	registerChrome(CONTENT | instFlags, jar, APP_CONTENT_FOLDER);
+	registerChrome(LOCALE | instFlags, jar, "locale/cs/");
+	registerChrome(LOCALE | instFlags, jar, "locale/de/");
 	registerChrome(LOCALE | instFlags, jar, "locale/en-US/");
-	registerChrome(LOCALE | instFlags, jar, "locale/es-ES/");
-	registerChrome(LOCALE | instFlags, jar, "locale/it-IT/");
-	registerChrome(LOCALE | instFlags, jar, "locale/zh-TW/");
-	registerChrome(LOCALE | instFlags, jar, "locale/fr-FR/");
-	registerChrome(LOCALE | instFlags, jar, "locale/cs-CZ/");
-	registerChrome(LOCALE | instFlags, jar, "locale/de-DE/");
-	registerChrome(LOCALE | instFlags, jar, "locale/ja-JP/");
+	registerChrome(LOCALE | instFlags, jar, "locale/es/");
+	registerChrome(LOCALE | instFlags, jar, "locale/it/");
+	registerChrome(LOCALE | instFlags, jar, "locale/fr/");
+	registerChrome(LOCALE | instFlags, jar, "locale/ja/");
+	registerChrome(LOCALE | instFlags, jar, "locale/pl/");
+	registerChrome(LOCALE | instFlags, jar, "locale/pt-BR/");
+	registerChrome(LOCALE | instFlags, jar, "locale/ru/");
 	registerChrome(LOCALE | instFlags, jar, "locale/zh-CN/");
-	registerChrome(LOCALE | instFlags, jar, "locale/pl-PL/");
-	registerChrome(LOCALE | instFlags, jar, "locale/ru-RU/");
+	registerChrome(LOCALE | instFlags, jar, "locale/zh-TW/");
 	err = performInstall();
 	if(err >= SUCCESS) {
 		alert(APP_NAME + " " + APP_VERSION + " has been succesfully installed.\n"

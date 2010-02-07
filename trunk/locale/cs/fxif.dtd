@@ -1,0 +1,43 @@
+<!ENTITY contextMenu.label "EXIF Data">
+<!ENTITY EXIFData "EXIF Data">
+<!ENTITY Copy "Kopírovat">
+<!ENTITY CameraMake "Značka:">
+<!ENTITY CameraModel "Model:">
+<!ENTITY CameraLens "Objektiv:">
+<!ENTITY ImageDate "Datum pořízení:">
+<!ENTITY ImageOrientation "Orientace:">
+<!ENTITY ImageBW "Černobílý:">
+<!ENTITY FlashUsed "Použit blesk:">
+<!ENTITY FocalLength "Ohnisk. vzdálenost:">
+<!ENTITY DigitalZoom "Digitální zoom:">
+<!ENTITY CCDWidth "Šířka CCD:">
+<!ENTITY ExposureTime "Čas expozice:">
+<!ENTITY Aperture "Clona:">
+<!ENTITY FocusDist "Vzdálenost ostření:">
+<!ENTITY ISOequiv "Citlivost ISO:">
+<!ENTITY ExposureBias "Expoziční kompenzace:">
+<!ENTITY WhiteBalance "Vyvážení bílé:">
+<!ENTITY LightSource "Zdroj svìtla:">
+<!ENTITY MeteringMode "Režim měření:">
+<!ENTITY ExposureProgram "Program expozice:">
+<!ENTITY ExposureMode "Režim expozice:">
+<!ENTITY ImageColorSpace "Barevný prostor:">
+<!ENTITY GPSCoord "Souřadnice GPS:">
+<!ENTITY MapLink "Ukázat Odkaz">
+<!ENTITY GPSAlt "Zeměp. výška (GPS):">
+<!ENTITY Photographer "Fotograf:">
+<!ENTITY City "Město:">
+<!ENTITY Sublocation "Místo:">
+<!ENTITY ProvinceState "Region:">
+<!ENTITY CountryName "Země:">
+<!ENTITY Copyright "Copyright:">
+<!ENTITY Title "Název:">
+<!ENTITY Caption "Popis:">
+<!ENTITY Comment "Komentář:">
+<!ENTITY NoData "Žádná meta data">
+<!-- Options dialog -->
+<!ENTITY OptionsDialogTitle "Možnosti FxIF">
+<!ENTITY GPSFormat "Formát souøadnic GPS:">
+<!ENTITY DD.label "Desetiny stupòù">
+<!ENTITY DMS.label "stupòù minut sekund">
+<!ENTITY OverrideMapProvider "Dodavatel map:">
