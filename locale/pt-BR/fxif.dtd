@@ -1,0 +1,42 @@
+<!ENTITY contextMenu.label "MetaData">
+<!ENTITY EXIFData "MetaData">
+<!ENTITY Copy "Copiar">
+<!ENTITY CameraMake "Fabricante da Câmera:">
+<!ENTITY CameraModel "Modelo da Câmera:">
+<!ENTITY CameraLens "Lentes:">
+<!ENTITY ImageDate "Data da Imagem:">
+<!ENTITY ImageOrientation "Orientação:">
+<!ENTITY ImageBW "Preto e Branco:">
+<!ENTITY FlashUsed "Flash Disparado:">
+<!ENTITY FocalLength "Distância Focal:">
+<!ENTITY DigitalZoom "Zoom Digital:">
+<!ENTITY CCDWidth "Tamanho do Visor CCD:">
+<!ENTITY ExposureTime "Tempo de Exposição:">
+<!ENTITY Aperture "Abertura:">
+<!ENTITY FocusDist "Distância Focal:">
+<!ENTITY ISOequiv "Equivalência do ISO:">
+<!ENTITY ExposureBias "Bias de Exposição:">
+<!ENTITY WhiteBalance "Balanço de Branco:">
+<!ENTITY LightSource "Fonte de Luz:">
+<!ENTITY MeteringMode "Modo de Medição:">
+<!ENTITY ExposureProgram "Exposição:">
+<!ENTITY ExposureMode "Modo de Exposição:">
+<!ENTITY ImageColorSpace "Espaço de Cores:">
+<!ENTITY GPSCoord "Coordenadas GPS:">
+<!ENTITY MapLink "Link de Mapa:">
+<!ENTITY GPSAlt "Altitude do GPS:">
+<!ENTITY Photographer "Fotógrafo:">
+<!ENTITY City "Cidade:">
+<!ENTITY Sublocation "Sub-localidade:">
+<!ENTITY ProvinceState "Cidade/Estado:">
+<!ENTITY CountryName "País:">
+<!ENTITY Copyright "Direito de Cópia:">
+<!ENTITY Title "Título:">
+<!ENTITY Caption "Legenda:">
+<!ENTITY Comment "Comentário:">
+<!ENTITY NoData "Nenhum metadado encontrado">
+<!ENTITY OptionsDialogTitle "Preferências do FxIF">
+<!ENTITY GPSFormat "Formato das coordenadas:">
+<!ENTITY DD.label "Graus decimais">
+<!ENTITY DMS.label "Graus Minutos Segundos">
+<!ENTITY OverrideMapProvider "Fornecedor do Mapa:">

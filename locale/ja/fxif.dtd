@@ -1,0 +1,43 @@
+<!ENTITY contextMenu.label "EXIF データ">
+<!ENTITY EXIFData "EXIF データ">
+<!ENTITY Copy "コピー">
+<!ENTITY CameraMake "カメラメーカー:">
+<!ENTITY CameraModel "カメラモデル:">
+<!ENTITY CameraLens "レンズ:">
+<!ENTITY ImageDate "撮影日時:">
+<!ENTITY ImageOrientation "画像方向:">
+<!ENTITY ImageBW "白黒画像:">
+<!ENTITY FlashUsed "フラッシュ使用:">
+<!ENTITY FocalLength "焦点距離:">
+<!ENTITY DigitalZoom "デジタルズーム:">
+<!ENTITY CCDWidth "CCD径:">
+<!ENTITY ExposureTime "露出時間:">
+<!ENTITY Aperture "絞り値:">
+<!ENTITY FocusDist "フォーカス距離:">
+<!ENTITY ISOequiv "ISO 感度:">
+<!ENTITY ExposureBias "露出補正値:">
+<!ENTITY WhiteBalance "ホワイトバランス:">
+<!ENTITY LightSource "光源:">
+<!ENTITY MeteringMode "測光方式:">
+<!ENTITY ExposureProgram "露出:">
+<!ENTITY ExposureMode "露出モード:">
+<!ENTITY ImageColorSpace "色空間:">
+<!ENTITY GPSCoord "GPS 位置:">
+<!ENTITY MapLink "地図 リンク">
+<!ENTITY GPSAlt "GPS 高度:">
+<!ENTITY Photographer "撮影者:">
+<!ENTITY City "市区町村:">
+<!ENTITY Sublocation "地方:">
+<!ENTITY ProvinceState "県/州:">
+<!ENTITY CountryName "国:">
+<!ENTITY Copyright "著作権:">
+<!ENTITY Title "タイトル:">
+<!ENTITY Caption "キャプション:">
+<!ENTITY Comment "コメント:">
+<!ENTITY NoData "メタデータがありません">
+<!-- Options dialog -->
+<!ENTITY OptionsDialogTitle "FxIF　設定">
+<!ENTITY GPSFormat "使用する位置情報の形式:">
+<!ENTITY DD.label "10進法">
+<!ENTITY DMS.label "度分秒">
+<!ENTITY OverrideMapProvider "マップ提供元:">

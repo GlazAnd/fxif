@@ -4,13 +4,13 @@
          xmlns:chrome="http://www.mozilla.org/rdf/chrome#">
 
     <RDF:Seq RDF:about="urn:mozilla:locale:root">
-      <RDF:li RDF:resource="urn:mozilla:locale:zh-TW"/>
+      <RDF:li RDF:resource="urn:mozilla:locale:de"/>
     </RDF:Seq>
 
-    <RDF:Description RDF:about="urn:mozilla:locale:zh-TW">
+    <RDF:Description RDF:about="urn:mozilla:locale:de">
       <chrome:packages>
-        <RDF:Seq RDF:about="urn:mozilla:locale:zh-TW:packages">
-          <RDF:li RDF:resource="urn:mozilla:locale:zh-TW:fxif"/>
+        <RDF:Seq RDF:about="urn:mozilla:locale:de:packages">
+          <RDF:li RDF:resource="urn:mozilla:locale:de:fxif"/>
         </RDF:Seq>
       </chrome:packages>
     </RDF:Description>

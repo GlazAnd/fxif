@@ -62,7 +62,7 @@ function showMetadataFor(elem)
   if (isHTMLElement(elem, ""))
     htmllocalname = elem.localName.toLowerCase();
   
-  checkForImage(elem, htmllocalname);
+  return checkForImage(elem, htmllocalname);
 }
 
 function checkForImage(elem, htmllocalname)
@@ -106,7 +106,7 @@ function checkForImage(elem, htmllocalname)
       }
   }
 
-  imgURL = (!img || imgType == "object") ? null : img.src;
+  return (!img || imgType == "object") ? null : img.src;
 }
 
 /*

@@ -4,15 +4,18 @@
          xmlns:chrome="http://www.mozilla.org/rdf/chrome#">
 
     <RDF:Seq RDF:about="urn:mozilla:locale:root">
-        <RDF:li RDF:resource="urn:mozilla:locale:zh-CN"/>
+      <RDF:li RDF:resource="urn:mozilla:locale:zh-CN"/>
     </RDF:Seq>
 
-    <RDF:Description RDF:about="urn:mozilla:locale:zh-CN">
-        <chrome:packages>
-            <RDF:Seq RDF:about="urn:mozilla:locale:zh-CN:packages">
-                <RDF:li RDF:resource="urn:mozilla:locale:zh-CN:fxif"/>
-            </RDF:Seq>
-        </chrome:packages>
+    <RDF:Description RDF:about="urn:mozilla:locale:zh-CN"
+      chrome:displayName="simplified Chinese"
+      chrome:author="Hector Zhao"
+      chrome:name="zh-CN">
+      <chrome:packages>
+        <RDF:Seq RDF:about="urn:mozilla:locale:zh-CN:packages">
+          <RDF:li RDF:resource="urn:mozilla:locale:zh-CN:fxif"/>
+        </RDF:Seq>
+      </chrome:packages>
     </RDF:Description>
 </RDF:RDF>
 

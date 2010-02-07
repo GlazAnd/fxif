@@ -5,25 +5,27 @@
   <RDF:Description RDF:about="urn:mozilla:install-manifest"
                    em:id="{11483926-db67-4190-91b1-ef20fcec5f33}"
                    em:name="FxIF"
-                   em:version="0.3.3"
+                   em:version="0.4"
                    em:creator="Ted Mielczarek"
                    em:description="View EXIF data in image properties"
-                   em:homepageURL="http://ted.mielczarek.org/code/mozilla/fxif/"
-                   em:iconURL="chrome://fxif/content/fxif1.gif"
+                   em:homepageURL="http://christian-eyrich.de/mozilla/fxif/"
+                   em:iconURL="chrome://fxif/content/fxif_small.gif"
                    em:optionsURL="chrome://fxif/content/fxifOptions.xul">
+    <em:developer>Christian Eyrich – GPS, IPTC, XMP and current maintainer</em:developer>
     <em:contributor>Matthias Wandel (JHead developer)</em:contributor>
-    <em:contributor>Christian Eyrich – GPS, IPTC, XMP</em:contributor>
-    <em:contributor>MatrixIsAllOver (eXtenZilla.it – it-IT localization)</em:contributor>
-    <em:contributor>Cola99 (Traditional Chinese zh-TW localization)</em:contributor>
-    <em:contributor>Cédric Corazza (frenchmozilla.sf.net – fr-FR localization)</em:contributor>
-    <em:contributor>Armin C. Schneider (German localization)</em:contributor>
     <em:contributor>Chris Beaven (FxIF icon)</em:contributor>
-    <em:contributor>Tomáš Marek (Czech localization)</em:contributor>
-    <em:contributor>Takanori (takanory.net) - Japanese localization</em:contributor>
-    <em:contributor>gsling (Simplified Chinese zh-CN localization)</em:contributor>
-    <em:contributor>t0m3k (CyberFoto.pl - pl-PL localization)</em:contributor>
-    <em:contributor>Álvaro G. Vicario (Spanish localization)</em:contributor>
-    <em:contributor>Max Pozdeev (Russian localization)</em:contributor>
+    <em:translator>Tomáš Marek - Czech (cs)</em:translator>
+    <em:translator>Armin C. Schneider - initial German (de)</em:translator>
+    <em:translator>Álvaro G. Vicario - Spanish (es)</em:translator>
+    <em:translator>Cédric Corazza – French (fr)</em:translator>
+    <em:translator>MatrixIsAllOver – Italian (it)</em:translator>
+    <em:translator>Takanori - initial Japanese (ja)</em:translator>
+    <em:translator>Hisateru Tanaka - new Japanese (ja)</em:translator>
+    <em:translator>Tomasz Tracz - Polish (pl)</em:translator>
+    <em:translator>Edgard Dias Magalhães - Brazilian Portuguese (pt-BR)</em:translator>
+    <em:translator>Max Pozdeev - Russian (ru)</em:translator>
+    <em:translator>Hector Zhao - simplified Chinese (zh-CN)</em:translator>
+    <em:translator>Cola99 - initial traditional Chinese (zh-TW)</em:translator>
     <em:targetApplication RDF:resource="rdf:#$QPBnF1"/>
     <em:targetApplication RDF:resource="rdf:#$RPBnF1"/>
     <em:targetApplication RDF:resource="rdf:#$SPBnF1"/>
@@ -31,17 +33,18 @@
   </RDF:Description>
   <RDF:Description RDF:about="urn:mozilla:extension:file:fxif.jar"
                    em:package="content/">
+    <em:locale>locale/cs/</em:locale>
+    <em:locale>locale/de/</em:locale>
     <em:locale>locale/en-US/</em:locale>
-    <em:locale>locale/it-IT/</em:locale>
-    <em:locale>locale/zh-TW/</em:locale>
+    <em:locale>locale/es/</em:locale>
+    <em:locale>locale/fr/</em:locale>
+    <em:locale>locale/it/</em:locale>
+    <em:locale>locale/ja/</em:locale>
+    <em:locale>locale/pl/</em:locale>
+    <em:locale>locale/pt-BR/</em:locale>
+    <em:locale>locale/ru/</em:locale>
     <em:locale>locale/zh-CN/</em:locale>
-    <em:locale>locale/fr-FR/</em:locale>
-    <em:locale>locale/de-DE/</em:locale>
-    <em:locale>locale/cs-CZ/</em:locale>
-    <em:locale>locale/ja-JP/</em:locale>
-    <em:locale>locale/pl-PL/</em:locale>
-    <em:locale>locale/es-ES/</em:locale>
-    <em:locale>locale/ru-RU/</em:locale>
+    <em:locale>locale/zh-TW/</em:locale>
   </RDF:Description>
   <!-- Firefox -->
   <RDF:Description RDF:about="rdf:#$QPBnF1"

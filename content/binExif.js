@@ -1,0 +1,704 @@
+/* ***** BEGIN LICENSE BLOCK *****
+ * Version: MPL 1.1
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Original Code is JHEAD (http://www.sentex.net/~mwandel/jhead/).
+ *
+ * The Initial Developer of the Original Code is
+ * Matthias Wandel.
+ * Portions created by the Initial Developer are Copyright (C) 2005
+ * the Initial Developer. All Rights Reserved.
+ *
+ * Contributor(s):
+ *   Ted Mielczarek <luser_mozilla@perilith.com>
+ *   Christian Eyrich <ch.ey@gmx.net>
+ * ***** END LICENSE BLOCK ***** */
+
+/*
+ *  Interpreter for binary EXIF data.
+ */
+
+function exifClass(stringBundle)
+{
+  var fxifUtils = new fxifUtilsClass();
+
+
+  // data formats
+  const FMT_BYTE       = 1;
+  const FMT_STRING     = 2;
+  const FMT_USHORT     = 3;
+  const FMT_ULONG      = 4;
+  const FMT_URATIONAL  = 5;
+  const FMT_SBYTE      = 6;
+  const FMT_UNDEFINED  = 7;
+  const FMT_SSHORT     = 8;
+  const FMT_SLONG      = 9;
+  const FMT_SRATIONAL  = 10;
+  const FMT_SINGLE     = 11;
+  const FMT_DOUBLE     = 12;
+
+  // EXIF tags
+  const TAG_DESCRIPTION        = 0x010E;
+  const TAG_MAKE               = 0x010F;
+  const TAG_MODEL              = 0x0110;
+  const TAG_ORIENTATION        = 0x0112;
+  const TAG_DATETIME           = 0x0132;
+  const TAG_ARTIST             = 0x013B;
+  const TAG_THUMBNAIL_OFFSET   = 0x0201;
+  const TAG_THUMBNAIL_LENGTH   = 0x0202;
+  const TAG_COPYRIGHT          = 0x8298;
+  const TAG_EXPOSURETIME       = 0x829A;
+  const TAG_FNUMBER            = 0x829D;
+  const TAG_EXIF_OFFSET        = 0x8769;
+  const TAG_EXPOSURE_PROGRAM   = 0x8822;
+  const TAG_GPSINFO            = 0x8825;
+  const TAG_ISO_EQUIVALENT     = 0x8827;
+  const TAG_DATETIME_ORIGINAL  = 0x9003;
+  const TAG_DATETIME_DIGITIZED = 0x9004;
+  const TAG_SHUTTERSPEED       = 0x9201;
+  const TAG_APERTURE           = 0x9202;
+  const TAG_EXPOSURE_BIAS      = 0x9204;
+  const TAG_MAXAPERTURE        = 0x9205;
+  const TAG_SUBJECT_DISTANCE   = 0x9206;
+  const TAG_METERING_MODE      = 0x9207;
+  const TAG_LIGHT_SOURCE       = 0x9208;
+  const TAG_FLASH              = 0x9209;
+  const TAG_FOCALLENGTH        = 0x920A;
+  const TAG_MAKER_NOTE         = 0x927C;
+  const TAG_USERCOMMENT        = 0x9286;
+  const TAG_EXIF_IMAGEWIDTH    = 0xa002;
+  const TAG_EXIF_IMAGELENGTH   = 0xa003;
+  const TAG_INTEROP_OFFSET     = 0xa005;
+  const TAG_FOCALPLANEXRES     = 0xa20E;
+  const TAG_FOCALPLANEUNITS    = 0xa210;
+  const TAG_EXPOSURE_INDEX     = 0xa215;
+  const TAG_EXPOSURE_MODE      = 0xa402;
+  const TAG_WHITEBALANCE       = 0xa403;
+  const TAG_DIGITALZOOMRATIO   = 0xa404;
+  const TAG_FOCALLENGTH_35MM   = 0xa405;
+  const TAG_LENS               = 0xfdea;
+  const TAG_COLORSPACE         = 0xa001;
+  const TAG_INTEROPINDEX       = 0x0001;
+
+  const TAG_GPS_LAT_REF    = 1;
+  const TAG_GPS_LAT        = 2;
+  const TAG_GPS_LON_REF    = 3;
+  const TAG_GPS_LON        = 4;
+  const TAG_GPS_ALT_REF    = 5;
+  const TAG_GPS_ALT        = 6;
+
+  var BytesPerFormat = [0,1,1,2,4,8,1,1,2,4,8,4,8];
+
+
+  function dir_entry_addr(start, entry)
+  {
+    return start + 2 + 12*entry;
+  }
+
+  function ConvertAnyFormat(data, format, offset, numbytes, swapbytes)
+  {
+      var value = 0;
+
+      switch(format) {
+      case FMT_STRING:
+      case FMT_UNDEFINED: // treat as string
+        value = fxifUtils.bytesToString(data, offset, numbytes);
+        // strip trailing whitespace
+        value = value.replace(/\s+$/, '');
+        break;
+
+      case FMT_SBYTE:     value = data[offset];  break;
+      case FMT_BYTE:      value = data[offset];  break;
+
+      case FMT_USHORT:    value = fxifUtils.read16(data, offset, swapbytes);  break;
+      case FMT_ULONG:     value = fxifUtils.read32(data, offset, swapbytes);  break;
+
+      case FMT_URATIONAL:
+      case FMT_SRATIONAL:
+        {
+          var Num,Den;
+          Num = fxifUtils.read32(data, offset, swapbytes);
+          Den = fxifUtils.read32(data, offset+4, swapbytes);
+          if (Den == 0){
+            value = 0;
+          }else{
+            value = Num/Den;
+          }
+          break;
+        }
+
+      case FMT_SSHORT:    Value = fxifUtils.read16(data, offset, swapbytes); break;
+      case FMT_SLONG:     Value = fxifUtils.read32(data, offset, swapbytes); break;
+
+        // ignore, probably never used
+      case FMT_SINGLE:    value = 0; break;
+      case FMT_DOUBLE:    value = 0; break;
+      }
+      return value;
+  }
+
+  function readGPSDir(dataObj, data, dirstart, swapbytes)
+  {
+    var numEntries = fxifUtils.read16(data, dirstart, swapbytes);
+    var gpsLatHemisphere = 'N', gpsLonHemisphere = 'E', gpsAltReference = 0;
+    var gpsLat, gpsLon, gpsAlt;
+    var vals = new Array();
+
+    for(var i=0; i<numEntries; i++) {
+      var entry = dir_entry_addr(dirstart, i);
+      var tag = fxifUtils.read16(data, entry, swapbytes);
+      var format = fxifUtils.read16(data, entry+2, swapbytes);
+      var components = fxifUtils.read32(data, entry+4, swapbytes);
+
+      if(format >= BytesPerFormat.length)
+        continue;
+
+      var nbytes = components * BytesPerFormat[format];
+      var valueoffset;
+
+      if(nbytes <= 4) // stored in the entry
+        valueoffset = entry + 8;
+      else
+        valueoffset = fxifUtils.read32(data, entry + 8, swapbytes);
+
+      var val = ConvertAnyFormat(data, format, valueoffset, nbytes, swapbytes);
+
+      switch(tag) {
+      case TAG_GPS_LAT_REF:
+        gpsLatHemisphere = val;
+        break;
+
+      case TAG_GPS_LON_REF:
+        gpsLonHemisphere = val;
+        break;
+
+      case TAG_GPS_ALT_REF:
+        gpsAltReference = val;
+        break;
+
+      case TAG_GPS_LAT:
+      case TAG_GPS_LON:
+        // data is saved as three 64bit rationals -> 24 bytes
+        // so we've to do another two ConvertAnyFormat() ourself
+        // e.g. 0x0b / 0x01, 0x07 / 0x01, 0x011c4d / 0x0c92
+        // but can also be only 0x31 / 0x01, 0x3d8ba / 0x2710, 0x0 / 0x01
+        var gpsval = val * 3600;
+        gpsval += ConvertAnyFormat(data, format, valueoffset+8, nbytes, swapbytes) * 60;
+        gpsval += ConvertAnyFormat(data, format, valueoffset+16, nbytes, swapbytes);
+        vals[tag] = gpsval;
+        break;
+
+      case TAG_GPS_ALT:
+        vals[tag] = val;
+        break;
+
+      default:
+        break;
+      }
+    }
+
+    // use dms format by default
+    var degFormat = "dms";
+    var degFormatter = fxifUtils.dd2dms;
+    try {
+      // 0 = DMS, 1 = DD
+      if (fxifUtils.getPreferences().getIntPref("gpsFormat"))
+      {
+        // but dd if the user wants that
+        degFormat = "dd";
+        degFormatter = fxifUtils.dd2dd;
+      }
+    } catch(e){}
+    // now output all existing values
+    if (vals[TAG_GPS_LAT] != undefined) {
+      var gpsArr = degFormatter(vals[TAG_GPS_LAT]);
+      gpsArr.push(gpsLatHemisphere);
+      dataObj.GPSLat = stringBundle.getFormattedString("latlon"+degFormat, gpsArr);
+    }
+    if (vals[TAG_GPS_LON] != undefined) {
+      var gpsArr = degFormatter(vals[TAG_GPS_LON]);
+      gpsArr.push(gpsLonHemisphere);
+      dataObj.GPSLon = stringBundle.getFormattedString("latlon"+degFormat, gpsArr);
+    }
+    if (vals[TAG_GPS_ALT] != undefined) {
+      dataObj.GPSAlt = stringBundle.getFormattedString("meters", [vals[TAG_GPS_ALT] * (gpsAltReference ? -1.0 : 1.0)]);
+    }
+
+    // Get the straight decimal values without rounding.
+    // For creating links to map services.
+    if (vals[TAG_GPS_LAT] != undefined &&
+        vals[TAG_GPS_LON] != undefined) {
+      dataObj.GPSPureDdLat = vals[TAG_GPS_LAT] / 3600 * (gpsLatHemisphere == 'N' ? 1.0 : -1.0);
+      dataObj.GPSPureDdLon = vals[TAG_GPS_LON] / 3600 * (gpsLonHemisphere == 'E' ? 1.0 : -1.0);
+    }
+  }
+
+  /* Reads the actual EXIF tags.
+     Also extracts tags for textual informations like
+     By, Caption, Headline, Copyright.
+     But doesn't overwrite those fields when already populated
+     by IPTC-NAA or IPTC4XMP.
+  */
+  this.readExifDir = function (dataObj, data, dirstart, swapbytes)
+  {
+    var ntags = 0;
+    var numEntries = fxifUtils.read16(data, dirstart, swapbytes);
+    var interopIndex = "";
+    var colorSpace = 0;
+    for(var i=0; i<numEntries; i++) {
+      var entry = dir_entry_addr(dirstart, i);
+      var tag = fxifUtils.read16(data, entry, swapbytes);
+      var format = fxifUtils.read16(data, entry+2, swapbytes);
+      var components = fxifUtils.read32(data, entry+4, swapbytes);
+
+      if(format >= BytesPerFormat.length)
+        continue;
+
+      var nbytes = components * BytesPerFormat[format];
+      var valueoffset;
+
+      if(nbytes <= 4) { // stored in the entry
+        valueoffset = entry + 8;
+      }
+      else {
+        valueoffset = fxifUtils.read32(data, entry + 8, swapbytes);
+      }
+
+      var val = ConvertAnyFormat(data, format, valueoffset, nbytes, swapbytes);
+
+      ntags++;
+      switch(tag) {
+      case TAG_MAKE:
+        dataObj.Make = val;
+        break;
+
+      case TAG_MODEL:
+        dataObj.Model = val;
+        break;
+
+      case TAG_DATETIME_ORIGINAL:
+        if(!dataObj.Date)
+          dataObj.Date = val;
+        break;
+
+      case TAG_DATETIME_DIGITIZED:
+      case TAG_DATETIME:
+        if(!dataObj.Date)
+          dataObj.Date = val;
+        break;
+
+      case TAG_USERCOMMENT:
+        // strip leading ASCII string
+        dataObj.UserComment = val.replace(/^ASCII\s*/, '');
+        break;
+
+      case TAG_FNUMBER:
+        dataObj.ApertureFNumber = "f/" + parseFloat(val).toFixed(1);
+        break;
+
+        // only use these if we don't have the previous
+      case TAG_APERTURE:
+      case TAG_MAXAPERTURE:
+        if(!dataObj.ApertureFNumber) {
+          dataObj.ApertureFNumber = "f/" + (parseFloat(val) * Math.log(2) * 0.5).toFixed(1);
+        }
+        break;
+
+      case TAG_FOCALLENGTH:
+        dataObj.FocalLength = parseFloat(val);
+        break;
+
+      case TAG_SUBJECT_DISTANCE:
+        if(val < 0) {
+          dataObj.Distance = stringBundle.getString("infinite");
+        }
+        else {
+          dataObj.Distance = stringBundle.getFormattedString("meters", [val]);
+        }
+        break;
+
+      case TAG_EXPOSURETIME:
+        var et = "";
+        val = parseFloat(val);
+        if (val < 0.010) {
+          et = stringBundle.getFormattedString("seconds", [val.toFixed(4)]);
+        }else {
+          et = stringBundle.getFormattedString("seconds", [val.toFixed(3)]);
+        }
+        if (val <= 0.5){
+          et += " (1/" + Math.floor(0.5 + 1/val).toFixed(0) + ")";
+        }
+        dataObj.ExposureTime = et;
+        break;
+
+      case TAG_SHUTTERSPEED:
+        if(!dataObj.ExposureTime) {
+          dataObj.ExposureTime = stringBundle.getFormattedString("seconds", [(1.0 / Math.exp(parseFloat(val) * Math.log(2))).toFixed(4)]);
+        }
+        break;
+
+      case TAG_FLASH:
+        if(val >= 0) {
+          var fu;
+          if(val & 1) {
+            fu = stringBundle.getString("yes");
+
+            switch(val) {
+              case 0x5:
+                fu += " (" + stringBundle.getString("nostrobe") + ")";
+                break;
+              case 0x7:
+                fu += " (" + stringBundle.getString("strobe") + ")";
+                break;
+              case 0x9:
+                fu += " (" + stringBundle.getString("manual") + ")";
+                break;
+              case 0xd:
+                fu += " (" + stringBundle.getString("manual") + ", "
+                  + stringBundle.getString("noreturnlight") + ")";
+                break;
+              case 0xf:
+                fu += " (" + stringBundle.getString("manual") + ", "
+                  + stringBundle.getString("returnlight") + ")";
+                break;
+              case 0x19:
+                fu += " (" + stringBundle.getString("auto") + ")";
+                break;
+              case 0x1d:
+                fu += " (" + stringBundle.getString("auto") + ", "
+                  + stringBundle.getString("noreturnlight") + ")";
+                break;
+              case 0x1f:
+                fu += " (" + stringBundle.getString("auto") + ", "
+                  + stringBundle.getString("returnlight") + ")";
+                break;
+              case 0x41:
+                fu += " (" + stringBundle.getString("redeye") + ")";
+                break;
+              case 0x45:
+                fu += " (" + stringBundle.getString("redeye")
+                  + stringBundle.getString("noreturnlight") + ")";
+                break;
+              case 0x47:
+                fu += " (" + stringBundle.getString("redeye")
+                  + stringBundle.getString("returnlight") + ")";
+                break;
+              case 0x49:
+                fu += " (" + stringBundle.getString("manual") + ", "
+                  + stringBundle.getString("redeye") + ")";
+                break;
+              case 0x4d:
+                fu += " (" + stringBundle.getString("manual")  + ", "
+                  + stringBundle.getString("redeye") + ", "
+                  + stringBundle.getString("noreturnlight") + ")";
+                break;
+              case 0x4f:
+                fu += " (" + stringBundle.getString("redeye")  + ", "
+                  + stringBundle.getString("redeye") + ", "
+                  + stringBundle.getString("returnlight") + ")";
+                break;
+              case 0x59:
+                fu += " (" + stringBundle.getString("auto") + ", "
+                  + stringBundle.getString("redeye") + ")";
+                break;
+              case 0x5d:
+                fu += " (" + stringBundle.getString("auto")  + ", "
+                  + stringBundle.getString("redeye") + ", "
+                  + stringBundle.getString("noreturnlight") + ")";
+                break;
+              case 0x5f:
+                fu += " (" + stringBundle.getString("auto")  + ", "
+                  + stringBundle.getString("redeye") + ", "
+                  + stringBundle.getString("returnlight") + ")";
+                break;
+            }
+          }
+          else {
+            fu = stringBundle.getString("no");
+            switch (val) {
+              case 0x18: fu += " (" + stringBundle.getString("auto") + ")"; break;
+            }
+          }
+          dataObj.FlashUsed = fu;
+        }
+        break;
+
+      case TAG_ORIENTATION:
+        if(!dataObj.Orientation && val > 1) {
+          dataObj.Orientation = stringBundle.getString("orientation" + val);
+        }
+        break;
+  /*
+      case TAG_EXIF_IMAGELENGTH:
+        dataObj.Length = val;
+        break;
+
+      case TAG_EXIF_IMAGEWIDTH:
+        dataObj.Width = val;
+        break;
+  */
+      case TAG_FOCALPLANEXRES:
+        dataObj.FocalPlaneXRes = val;
+        break;
+
+      case TAG_FOCALPLANEUNITS:
+        switch(val) {
+          case 1: dataObj.FocalPlaneUnits = 25.4; break; // inch
+          case 2:
+            // According to the information I was using, 2 means meters.
+            // But looking at the Cannon powershot's files, inches is the only
+            // sensible value.
+            dataObj.FocalPlaneUnits = 25.4;
+            break;
+
+          case 3: dataObj.FocalPlaneUnits = 10;   break;  // centimeter
+          case 4: dataObj.FocalPlaneUnits = 1;    break;  // millimeter
+          case 5: dataObj.FocalPlaneUnits = .001; break;  // micrometer
+        }
+        break;
+
+      case TAG_EXPOSURE_BIAS:
+        val = parseFloat(val);
+        if(val == 0)
+          dataObj.ExposureBias = stringBundle.getString("none");
+        else
+          // add a + sign before positive values
+          dataObj.ExposureBias = (val > 0 ? '+' : '') + val.toFixed(2);
+        break;
+
+      case TAG_WHITEBALANCE:
+        switch(val) {
+          case 0:
+            dataObj.WhiteBalance = stringBundle.getString("auto");
+            break;
+          case 1:
+            dataObj.WhiteBalance = stringBundle.getString("manual");
+            break;
+        }
+        break;
+
+      case TAG_LIGHT_SOURCE:
+        switch(val) {
+          case 1:
+            dataObj.LightSource = stringBundle.getString("daylight");
+            break;
+          case 2:
+            dataObj.LightSource = stringBundle.getString("fluorescent");
+            break;
+          case 3:
+            dataObj.LightSource = stringBundle.getString("incandescent");
+            break;
+          case 4:
+            dataObj.LightSource = stringBundle.getString("flash");
+            break;
+          case 9:
+            dataObj.LightSource = stringBundle.getString("fineweather");
+            break;
+          case 10:
+            dataObj.LightSource = stringBundle.getString("cloudy");
+            break;
+          case 11:
+            dataObj.LightSource = stringBundle.getString("shade");
+            break;
+          case 12:
+            dataObj.LightSource = stringBundle.getString("daylightfluorescent");
+            break;
+          case 13:
+            dataObj.LightSource = stringBundle.getString("daywhitefluorescent");
+            break;
+          case 14:
+            dataObj.LightSource = stringBundle.getString("coolwhitefluorescent");
+            break;
+          case 15:
+            dataObj.LightSource = stringBundle.getString("whitefluorescent");
+            break;
+          case 24:
+            dataObj.LightSource = stringBundle.getString("studiotungsten");
+            break;
+          default:; //Quercus: 17-1-2004 There are many more modes for this, check Exif2.2 specs
+          // If it just says 'unknown' or we don't know it, then
+          // don't bother showing it - it doesn't add any useful information.
+        }
+        break;
+
+      case TAG_METERING_MODE:
+        switch(val) {
+          case 0:
+            dataObj.MeteringMode = stringBundle.getString("unknown");
+            break;
+          case 1:
+            dataObj.MeteringMode = stringBundle.getString("average");
+            break;
+          case 2:
+            dataObj.MeteringMode = stringBundle.getString("centerweight");
+            break;
+          case 3:
+            dataObj.MeteringMode = stringBundle.getString("spot");
+            break;
+          case 3:
+            dataObj.MeteringMode = stringBundle.getString("multispot");
+            break;
+          case 5:
+            dataObj.MeteringMode = stringBundle.getString("matrix");
+            break;
+          case 6:
+            dataObj.MeteringMode = stringBundle.getString("partial");
+            break;
+        }
+        break;
+
+      case TAG_EXPOSURE_PROGRAM:
+        switch(val) {
+          case 1:
+            dataObj.ExposureProgram = stringBundle.getString("manual");
+            break;
+          case 2:
+            dataObj.ExposureProgram = stringBundle.getString("program") + " ("
+              + stringBundle.getString("auto") + ")";
+            break;
+          case 3:
+            dataObj.ExposureProgram = stringBundle.getString("apriority")
+              + " (" + stringBundle.getString("semiauto") + ")";
+            break;
+          case 4:
+            dataObj.ExposureProgram = stringBundle.getString("spriority")
+              + " (" + stringBundle.getString("semiauto") +")";
+            break;
+          case 5:
+            dataObj.ExposureProgram = stringBundle.getString("creative");
+            break;
+          case 6:
+            dataObj.ExposureProgram = stringBundle.getString("action");
+            break;
+          case 7:
+            dataObj.ExposureProgram = stringBundle.getString("portrait");
+            break;
+          case 8:
+            dataObj.ExposureProgram = stringBundle.getString("landscape");
+            break;
+          default:
+          break;
+        }
+        break;
+
+      case TAG_EXPOSURE_INDEX:
+        if (!dataObj.ExposureIndex) {
+          dataObj.ExposureIndex = val.toFixed(0);
+        }
+        break;
+
+      case TAG_EXPOSURE_MODE:
+        switch(val) {
+          case 0: //Automatic
+            break;
+          case 1:
+            dataObj.ExposureMode = stringBundle.getString("manual");
+            break;
+          case 2:
+            dataObj.ExposureMode = stringBundle.getString("autobracketing");
+            break;
+        }
+        break;
+
+      case TAG_ISO_EQUIVALENT:
+        dataObj.ISOequivalent = val.toFixed(0);
+
+        if (dataObj.ISOequivalent < 50 ){
+          // Fixes strange encoding on some older digicams.
+          dataObj.ISOequivalent *= 200;
+        }
+        break;
+
+      case TAG_DIGITALZOOMRATIO:
+        if(val > 1) {
+          dataObj.DigitalZoomRatio = val.toFixed(3) + "x";
+        }
+        break;
+
+      case TAG_THUMBNAIL_OFFSET:
+        break;
+
+      case TAG_THUMBNAIL_LENGTH:
+        break;
+
+      case TAG_FOCALLENGTH_35MM:
+        dataObj.FocalLength35mmEquiv = val;
+        break;
+
+      case TAG_EXIF_OFFSET:
+      case TAG_INTEROP_OFFSET:
+        ntags += this.readExifDir(dataObj, data, val, swapbytes);
+        break;
+
+      case TAG_GPSINFO:
+        readGPSDir(dataObj, data, val, swapbytes);
+        break;
+
+      case TAG_ARTIST:
+        if(!dataObj.Photographer)
+          dataObj.Photographer = val;
+        break;
+
+      case TAG_COPYRIGHT:
+        if(!dataObj.Copyright)
+          dataObj.Copyright = val;
+        break;
+
+      case TAG_DESCRIPTION:
+        if(!dataObj.Caption)
+          dataObj.Caption = val;
+        break;
+
+      case TAG_COLORSPACE:
+        if(!dataObj.ColorSpace)
+        {
+          if(val == 1)
+            dataObj.ColorSpace = "sRGB";
+          else
+            colorSpace = val;
+        }
+        break;
+
+      case TAG_INTEROPINDEX:
+          interopIndex = val;
+        break;
+
+      default:
+        ntags--;
+      }
+    }
+
+
+    // Now we can be sure to have read all data. So fill
+    // some properties which depend on more than one field.
+
+    if(colorSpace != 0)
+    {
+      if(dataObj.ColorSpace == 2 ||
+         dataObj.ColorSpace == 65535 && interopIndex.search(/^R03$/))
+        dataObj.ColorSpace = "Adobe RGB";
+    }
+
+    if(dataObj.FocalLength) {
+      dataObj.FocalLength = parseFloat(dataObj.FocalLength);
+      var fl = stringBundle.getFormattedString("millimeters", [dataObj.FocalLength.toFixed(1)]);
+      if(dataObj.FocalLength35mmEquiv) {
+        dataObj.FocalLength35mmEquiv = parseFloat(dataObj.FocalLength35mmEquiv);
+        fl += " " + stringBundle.getFormattedString("35mmequiv", [dataObj.FocalLength35mmEquiv.toFixed(0)]);
+      }
+
+      dataObj.FocalLengthText = fl;
+    }
+
+    return ntags;
+  }
+}

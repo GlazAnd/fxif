@@ -14,7 +14,7 @@
  *
  * The Original Code is FxIF for Firefox.
  *
- * The Initial Developer of the Original Code is Christian Eyrich
+ * The Initial Developer of the Original Code is Christian Eyrich <ch.ey@gmx.net>
  * Portions created by the Initial Developer are Copyright (C) 2008
  * the Initial Developer. All Rights Reserved.
  *
@@ -43,11 +43,11 @@
         id="fxifoptions"
         title="&OptionsDialogTitle;"
         buttons="accept,cancel"
-        onload="onLoadPrefs();"
-        ondialogaccept="return onSave();">
+        onload="fxifOptions.onLoadPrefs();"
+        ondialogaccept="return fxifOptions.onSave();">
 
+  <script type="application/x-javascript" src="chrome://fxif/content/fxifUtils.js"/>
   <script type="application/x-javascript" src="chrome://fxif/content/fxifOptions.js"/>
-  <script type="application/x-javascript" src="chrome://fxif/content/exif.js"/>
 
   <vbox>
     <groupbox>
