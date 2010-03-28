@@ -34,6 +34,7 @@
 <!ENTITY Title "Název:">
 <!ENTITY Caption "Popis:">
 <!ENTITY Comment "Komentář:">
+<!ENTITY Instructions "Instrukce:">
 <!ENTITY NoData "Žádná meta data">
 <!-- Options dialog -->
 <!ENTITY OptionsDialogTitle "Možnosti FxIF">

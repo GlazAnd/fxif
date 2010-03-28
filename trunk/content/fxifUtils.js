@@ -103,20 +103,21 @@ function fxifUtilsClass ()
   // Currently we end up using only the first language code.
   this.getLang = function ()
   {
-    // Get the browsers language as default, only use the primary part of the string.
-    // That's a bit laborious since defLang must be a string, no array.
-    var nl = navigator.language.match(/^[a-z]{2,3}/i);
-    var defLang = nl.length ? nl[0] : "en";
-    var lang = defLang;
+    var lang;
+
     // See if we can get a user provided preferred language.
     try {
       var prefService = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService);
-      lang = prefService.getBranch("intl.").getCharPref("accept_languages");
+      lang = prefService.getBranch("intl.").getComplexValue("accept_languages", Components.interfaces.nsIPrefLocalizedString).data;
     } catch (e) {}
-    if(!lang.length)  // maybe the pref was empty
-      lang = defLang;
+    if(!lang || !lang.length)  // maybe the pref was empty
+    {
+      // Get the browsers language as default, only use the primary part of the string.
+      // That's a bit laborious since defLang must be a string, no array.
+      var nl = navigator.language.match(/^[a-z]{2,3}/i);
+      lang = nl.length ? nl[0] : "en";
+    }
     // To really get a clean code.
-//    lang = lang.split(",")[0].replace(/\s/g, '');
     lang = lang.match(/[a-z]{2,3}/i)[0];
 
     return lang;

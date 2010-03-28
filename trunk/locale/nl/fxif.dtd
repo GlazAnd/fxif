@@ -1,0 +1,43 @@
+<!ENTITY contextMenu.label "EXIF-gegevens">
+<!ENTITY EXIFData "EXIF-gegevens">
+<!ENTITY Copy "Kopiëren">
+<!ENTITY CameraMake "Camerafabrikant:">
+<!ENTITY CameraModel "Cameramodel:">
+<!ENTITY CameraLens "Lens:">
+<!ENTITY ImageDate "Afbeeldingsdatum:">
+<!ENTITY ImageOrientation "Oriëntatie:">
+<!ENTITY ImageBW "Zwart-wit:">
+<!ENTITY FlashUsed "Geflitst:">
+<!ENTITY FocalLength "Focuslengte:">
+<!ENTITY DigitalZoom "Digitale zoom:">
+<!ENTITY CCDWidth "CCD-breedte:">
+<!ENTITY ExposureTime "Belichtingstijd:">
+<!ENTITY Aperture "Diafragma:">
+<!ENTITY FocusDist "Focusafstand:">
+<!ENTITY ISOequiv "ISO-equivalent:">
+<!ENTITY ExposureBias "Belichtingsverstoring:">
+<!ENTITY WhiteBalance "Witbalans:">
+<!ENTITY LightSource "Lichtbron:">
+<!ENTITY MeteringMode "Meetmethode:">
+<!ENTITY ExposureProgram "Belichting:">
+<!ENTITY ExposureMode "Belichtingsmodus:">
+<!ENTITY ImageColorSpace "Kleurruimte:">
+<!ENTITY GPSCoord "GPS-coördinaat:">
+<!ENTITY MapLink "Plattegrondkoppeling">
+<!ENTITY GPSAlt "GPS-hoogte:">
+<!ENTITY Photographer "Fotograaf:">
+<!ENTITY City "Stad:">
+<!ENTITY Sublocation "Sublocatie:">
+<!ENTITY ProvinceState "Provincie/Staat:">
+<!ENTITY CountryName "Land:">
+<!ENTITY Copyright "Auteursrecht:">
+<!ENTITY Title "Titel">
+<!ENTITY Caption "Naam:">
+<!ENTITY Comment "Opmerking:">
+<!ENTITY Instructions "Instructies:">
+<!ENTITY NoData "Geen metagegevens gevonden">
+<!ENTITY OptionsDialogTitle "FxIF voorkeuren">
+<!ENTITY GPSFormat "Te gebruiken opmaak voor coördinaten:">
+<!ENTITY DD.label "Decimale graden">
+<!ENTITY DMS.label "Graden Minuten Seconden">
+<!ENTITY OverrideMapProvider "Kaartaanbieder:">

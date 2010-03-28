@@ -3,4 +3,4 @@
 APP_NAME=fxif
 CHROME_PROVIDERS="content locale skin"
 ROOT_FILES=install.js
-ROOT_DIRS=
+ROOT_DIRS="defaults"

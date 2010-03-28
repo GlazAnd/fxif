@@ -1,7 +1,7 @@
 const APP_DISPLAY_NAME = "FxIF";
 const APP_NAME = "fxif";
 const APP_PACKAGE = "/Ted Mielczarek/fxif";
-const APP_VERSION = "0.4";
+const APP_VERSION = "0.4.1";
 
 const APP_JAR_FILE = "fxif.jar";
 const APP_CONTENT_FOLDER = "content/";
@@ -22,10 +22,11 @@ if(err >= SUCCESS) {
 	registerChrome(LOCALE | instFlags, jar, "locale/cs/");
 	registerChrome(LOCALE | instFlags, jar, "locale/de/");
 	registerChrome(LOCALE | instFlags, jar, "locale/en-US/");
-	registerChrome(LOCALE | instFlags, jar, "locale/es/");
+	registerChrome(LOCALE | instFlags, jar, "locale/es-ES/");
 	registerChrome(LOCALE | instFlags, jar, "locale/it/");
 	registerChrome(LOCALE | instFlags, jar, "locale/fr/");
 	registerChrome(LOCALE | instFlags, jar, "locale/ja/");
+	registerChrome(LOCALE | instFlags, jar, "locale/nl/");
 	registerChrome(LOCALE | instFlags, jar, "locale/pl/");
 	registerChrome(LOCALE | instFlags, jar, "locale/pt-BR/");
 	registerChrome(LOCALE | instFlags, jar, "locale/ru/");

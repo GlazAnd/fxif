@@ -205,7 +205,7 @@ function xmpClass(stringBundle)
 
     var el = dom.getElementsByTagNameNS("http://ns.adobe.com/exif/1.0/", "Flash");
     var flashFired = 0;
-    var flashFunktion = 0;
+    var flashFunction = 0;
     var flashMode = 0;
     var redEyeMode = 0;
     var flashReturn = 0;
@@ -215,11 +215,9 @@ function xmpClass(stringBundle)
       flashMode = Number(el[0].getAttributeNS("http://ns.adobe.com/exif/1.0/", "Mode"));
       redEyeMode = el[0].getAttributeNS("http://ns.adobe.com/exif/1.0/", "RedEyeMode");
       flashReturn = Number(el[0].getAttributeNS("http://ns.adobe.com/exif/1.0/", "Return"));
-    }
 
-    if(val >= 0) {
       var fu;
-      if(flashFired.match(/^true$/i)) {
+      if(flashFired && flashFired.match(/^true$/i)) {
         fu = stringBundle.getString("yes");
 
         var addfunc = new Array();
@@ -291,7 +289,7 @@ function xmpClass(stringBundle)
         dataObj.ExposureBias = stringBundle.getString("none");
       else
         // add a + sign before positive values
-        dataObj.ExposureBias = (val > 0 ? '+' : '') + val;
+        dataObj.ExposureBias = (val > 0 ? '+' : '') + stringBundle.getFormattedString("ev", [val]);
     }
 
     val = getXMPValue(dom, "http://ns.adobe.com/exif/1.0/", "WhiteBalance");

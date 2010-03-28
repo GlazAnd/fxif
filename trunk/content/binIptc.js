@@ -100,7 +100,7 @@ function iptcClass()
      if the string data in record 2 is supposed to be UTF-8 coded. For now
      we assume record 1 comes before 2 in the file.
   */
-  function readIptcDir(iptcObj, data)
+  function readIptcDir(dataObj, data)
   {
     var pos = 0;
     var utf8Strings = false;
@@ -163,47 +163,47 @@ function iptcClass()
                 break;
 
               case TAG_IPTC_BYLINE:
-                if(!iptcObj.Photographer || !fxifUtils.xmpDone)
-                  iptcObj.Photographer = val;
+                if(!dataObj.Photographer || !fxifUtils.xmpDone)
+                  dataObj.Photographer = val;
                 break;
 
               case TAG_IPTC_CITY:
-                if(!iptcObj.City || !fxifUtils.xmpDone)
-                  iptcObj.City = val;
+                if(!dataObj.City || !fxifUtils.xmpDone)
+                  dataObj.City = val;
                 break;
 
               case TAG_IPTC_SUBLOCATION:
-                if(!iptcObj.Sublocation || !fxifUtils.xmpDone)
-                  iptcObj.Sublocation = val;
+                if(!dataObj.Sublocation || !fxifUtils.xmpDone)
+                  dataObj.Sublocation = val;
                 break;
 
               case TAG_IPTC_PROVINCESTATE:
-                if(!iptcObj.ProvinceState || !fxifUtils.xmpDone)
-                  iptcObj.ProvinceState = val;
+                if(!dataObj.ProvinceState || !fxifUtils.xmpDone)
+                  dataObj.ProvinceState = val;
                 break;
 
               case TAG_IPTC_COUNTRYNAME:
-                if(!iptcObj.CountryName || !fxifUtils.xmpDone)
-                  iptcObj.CountryName = val;
+                if(!dataObj.CountryName || !fxifUtils.xmpDone)
+                  dataObj.CountryName = val;
                 break;
 
               case TAG_IPTC_CAPTION:
-                if(!iptcObj.Caption || !fxifUtils.xmpDone)
-                  iptcObj.Caption = val;
+                if(!dataObj.Caption || !fxifUtils.xmpDone)
+                  dataObj.Caption = val;
                 break;
 
               case TAG_IPTC_HEADLINE:
-                if(!iptcObj.Headline || !fxifUtils.xmpDone)
-                  iptcObj.Headline = val;
+                if(!dataObj.Headline || !fxifUtils.xmpDone)
+                  dataObj.Headline = val;
                 break;
 
               case TAG_IPTC_COPYRIGHT:
-                if(!iptcObj.Copyright || !fxifUtils.xmpDone)
-                  iptcObj.Copyright = val;
+                if(!dataObj.Copyright || !fxifUtils.xmpDone)
+                  dataObj.Copyright = val;
                 break;
 
               case TAG_IPTC_INSTRUCTIONS:
-                  iptcObj.Instructions = val;
+                  dataObj.Instructions = val;
                 break;
             }
           }
@@ -222,7 +222,7 @@ function iptcClass()
     }
 
     // only overwrite existing date if XMP data not already parsed
-    if((!iptcObj.Date || !fxifUtils.xmpDone) && iptcDate && iptcTime)
+    if((!dataObj.Date || !fxifUtils.xmpDone) && iptcDate && iptcTime)
     {
       var matches = iptcDate.match(/^(\d{4})(\d{2})(\d{2})$/);
       if (matches)
@@ -232,7 +232,7 @@ function iptcClass()
         if (matches)
           date += ' ' + matches[1] + ':' + matches[2] + ':' + matches[3] + ' ' + matches[4];
 
-        iptcObj.Date = date;
+        dataObj.Date = date;
       }
     }
   }
@@ -242,7 +242,7 @@ function iptcClass()
      The format is defined by Adobe and stems from its PSD
      format.
   */
-  this.readPsSection = function (iptcObj, psData)
+  this.readPsSection = function (dataObj, psData)
   {
     var pointer = 0;
 
@@ -263,7 +263,7 @@ function iptcClass()
       pointer += 4;
       // IPTC-NAA record as IIM
       if(segmentType == 0x0404) {
-        readIptcDir(iptcObj, psData.slice(pointer, pointer + segmentLen));
+        readIptcDir(dataObj, psData.slice(pointer, pointer + segmentLen));
         break;
       }
 

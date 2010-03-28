@@ -7,13 +7,13 @@
         <RDF:li RDF:resource="urn:mozilla:locale:es"/>
     </RDF:Seq>
 
-    <RDF:Description RDF:about="urn:mozilla:locale:es"
+    <RDF:Description RDF:about="urn:mozilla:locale:es-ES"
       chrome:displayName="Spanish"
       chrome:author="Álvaro G. Vicario"
-      chrome:name="es">
+      chrome:name="es-ES">
       <chrome:packages>
         <RDF:Seq RDF:about="urn:mozilla:locale:es:packages">
-          <RDF:li RDF:resource="urn:mozilla:locale:es:fxif"/>
+          <RDF:li RDF:resource="urn:mozilla:locale:es-ES:fxif"/>
         </RDF:Seq>
       </chrome:packages>
     </RDF:Description>

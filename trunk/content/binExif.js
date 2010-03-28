@@ -254,6 +254,8 @@ function exifClass(stringBundle)
     var numEntries = fxifUtils.read16(data, dirstart, swapbytes);
     var interopIndex = "";
     var colorSpace = 0;
+    var dateTime = 0;
+    var dateTimeOrig = 0;
     for(var i=0; i<numEntries; i++) {
       var entry = dir_entry_addr(dirstart, i);
       var tag = fxifUtils.read16(data, entry, swapbytes);
@@ -286,14 +288,12 @@ function exifClass(stringBundle)
         break;
 
       case TAG_DATETIME_ORIGINAL:
-        if(!dataObj.Date)
-          dataObj.Date = val;
+          dateTimeOrig = val;
         break;
 
       case TAG_DATETIME_DIGITIZED:
       case TAG_DATETIME:
-        if(!dataObj.Date)
-          dataObj.Date = val;
+          dateTime = val;
         break;
 
       case TAG_USERCOMMENT:
@@ -472,7 +472,7 @@ function exifClass(stringBundle)
           dataObj.ExposureBias = stringBundle.getString("none");
         else
           // add a + sign before positive values
-          dataObj.ExposureBias = (val > 0 ? '+' : '') + val.toFixed(2);
+          dataObj.ExposureBias = (val > 0 ? '+' : '') + stringBundle.getFormattedString("ev", [val.toFixed(2)]);
         break;
 
       case TAG_WHITEBALANCE:
@@ -679,7 +679,16 @@ function exifClass(stringBundle)
 
 
     // Now we can be sure to have read all data. So fill
-    // some properties which depend on more than one field.
+    // some properties which depend on more than one field
+    // or a field by various fields ordered by priority.
+
+    if(!dataObj.Date)
+    {
+      if(dateTimeOrig)
+        dataObj.Date = dateTimeOrig;
+      else if(dateTime)
+        dataObj.Date = dateTime;
+    }
 
     if(colorSpace != 0)
     {
