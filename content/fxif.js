@@ -142,20 +142,45 @@ function fxifClass ()
                 // offset to Image File Directory (includes the previous 8 bytes)
                 var ifd_ofs = fxifUtils.read32(exifData, 4, swapbytes);
                 var exifReader = new exifClass(stringBundle);
-                exifReader.readExifDir(dataObj, exifData, ifd_ofs, swapbytes);
+                try {
+                  exifReader.readExifDir(dataObj, exifData, ifd_ofs, swapbytes);
+                }
+                catch(ex) {
+                  pushError(dataObj, "EXIF");
+                }
                 fxifUtils.exifDone = true;
               }
               else {
                 // Maybe it's XMP. If it is, it starts with the XMP namespace URI
                 // 'http://ns.adobe.com/xap/1.0/\0'.
                 // see http://partners.adobe.com/public/developer/en/xmp/sdk/XMPspecification.pdf
-                header += bis.readBytes(23);  // 6 bytes read means 23 more to go
-                var xmpData = bis.readByteArray(len - 29);
-                if(header == 'http://ns.adobe.com/xap/1.0/\0') {
-                  var xmpReader = new xmpClass(stringBundle);
-                  xmpReader.parseXML(dataObj, xmpData);
-                  fxifUtils.xmpDone = true;
+                header += bis.readBytes(22);  // 6 bytes read means 22 more to go
+                if(header == 'http://ns.adobe.com/xap/1.0/') {
+                  // There is at least one programm which writes spaces behind the namespace URI.
+                  // Overread up to 5 bytes of such garbage until a '\0'. I deliberately don't read
+                  // until reaching len bytes.
+                  var a; var j = 0;
+                  do
+                  {
+                    a = bis.readBytes(1);
+                    j++;
+                  } while(j < 5 && a == ' ');
+                  if (a == '\0') {
+                    var xmpData = bis.readByteArray(len - (28 + j));
+                    try {
+                      var xmpReader = new xmpClass(stringBundle);
+                      xmpReader.parseXML(dataObj, xmpData);
+                    }
+                    catch(ex) {
+                      pushError(dataObj, "XMP");
+                    }
+                    fxifUtils.xmpDone = true;
+                  }
+                  else
+                    bis.readBytes(len - (28 + j));
                 }
+                else
+                  bis.readBytes(len - 28);
               }
             }
             else
@@ -166,7 +191,12 @@ function fxifClass ()
                 var psData = bis.readByteArray(len - 14);
                 if(psString == 'Photoshop 3.0\0') {
                   var iptcReader = new iptcClass();
-                  iptcReader.readPsSection(dataObj, psData);
+                  try {
+                    iptcReader.readPsSection(dataObj, psData);
+                  }
+                  catch(ex) {
+                    pushError(dataObj, "IPTC");
+                  }
                   fxifUtils.iptcDone = true;
                 }
               }
@@ -183,11 +213,21 @@ function fxifClass ()
       }
       catch(ex) {
         dump(ex + '\n');
+        dataObj.error = stringBundle.getString("generalError");
         return null;
       }
     }
 
     return dataObj;
+  }
+
+  function pushError(dataObj, type)
+  {
+    if (dataObj.error)
+      dataObj.error += '\n';
+    else
+      dataObj.error = '';
+    dataObj.error += stringBundle.getFormattedString("specialError", [type, type]);
   }
 
   // Returns true if imgURL is a JPEG image, false otherwise.
@@ -217,9 +257,17 @@ function fxifClass ()
     // This is the best idea I could come up with, any better idea?
     var edEmpty = true;
     for(var tmp in ed) {
-      edEmpty = false;
-      break;
+      if (tmp != "error")
+      {
+        edEmpty = false;
+        break;
+      }
     }
+
+    if(!ed.error)
+      document.getElementById("error").style.display = "none";
+    else
+      document.getElementById("error-label").value = ed.error;
 
     if(!edEmpty) {
       document.getElementById("no-data").style.display = "none";

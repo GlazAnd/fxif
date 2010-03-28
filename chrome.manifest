@@ -2,10 +2,11 @@ content	fxif	content/
 locale	fxif	cs	locale/cs/
 locale	fxif	de	locale/de/
 locale	fxif	en-US	locale/en-US/
-locale	fxif	es	locale/es/
+locale	fxif	es-ES	locale/es-ES/
 locale	fxif	fr	locale/fr/
 locale	fxif	it	locale/it/
 locale	fxif	ja	locale/ja/
+locale	fxif	nl	locale/nl/
 locale	fxif	pl	locale/pl/
 locale	fxif	pt-BR	locale/pt-BR/
 locale	fxif	ru	locale/ru/

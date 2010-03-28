@@ -34,6 +34,7 @@
 <!ENTITY Title "Название:">
 <!ENTITY Caption "Заголовок:">
 <!ENTITY Comment "Комментарий:">
+<!ENTITY Instructions "Инструкции:">
 <!ENTITY NoData "Данные не найдены">
 
 <!-- Options dialog -->

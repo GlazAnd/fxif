@@ -63,6 +63,10 @@
         </keyset>
       </hbox>
       <separator class="groove"/>
+      <hbox id="error">
+        <spacer width="20"/>
+        <label id="error-label" value="" style="color:red !important;"/>
+      </hbox>
       <grid id="data-list">
   <columns>
     <column/>

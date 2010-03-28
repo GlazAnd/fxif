@@ -26,10 +26,15 @@
 <!ENTITY MapLink "Mapa Łącze">
 <!ENTITY GPSAlt "Wysokość:">
 <!ENTITY Photographer "Fotograf:">
+<!ENTITY City "Miejscowość:">
+<!ENTITY Sublocation "Ulica:">
+<!ENTITY ProvinceState "Region:">
+<!ENTITY CountryName "Kraj:">
 <!ENTITY Copyright "Prawa autorskie:">
 <!ENTITY Title "Tytuł:">
 <!ENTITY Caption "Opis:">
 <!ENTITY Comment "Komentarz:">
+<!ENTITY Instructions "Instrukcje:">
 <!ENTITY NoData "Brak danych EXIF">
 
 <!-- Options dialog -->

@@ -23,7 +23,7 @@
 <!ENTITY ExposureMode "Modo de Exposição:">
 <!ENTITY ImageColorSpace "Espaço de Cores:">
 <!ENTITY GPSCoord "Coordenadas GPS:">
-<!ENTITY MapLink "Link de Mapa:">
+<!ENTITY MapLink "Endereço do Mapa:">
 <!ENTITY GPSAlt "Altitude do GPS:">
 <!ENTITY Photographer "Fotógrafo:">
 <!ENTITY City "Cidade:">
@@ -34,6 +34,7 @@
 <!ENTITY Title "Título:">
 <!ENTITY Caption "Legenda:">
 <!ENTITY Comment "Comentário:">
+<!ENTITY Instructions "Instruções:">
 <!ENTITY NoData "Nenhum metadado encontrado">
 <!ENTITY OptionsDialogTitle "Preferências do FxIF">
 <!ENTITY GPSFormat "Formato das coordenadas:">

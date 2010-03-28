@@ -34,8 +34,8 @@
 <!ENTITY Title "标题:">
 <!ENTITY Caption "图像标题:">
 <!ENTITY Comment "用户注释:">
+<!ENTITY Instructions "特别指示:">
 <!ENTITY NoData "未找到元数据">
-
 <!-- Options dialog -->
 <!ENTITY OptionsDialogTitle "FxIF 首选项">
 <!ENTITY GPSFormat "使用坐标格式:">
