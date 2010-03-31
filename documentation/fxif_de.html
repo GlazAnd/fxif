@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="content-type" content="xhtml+xml; charset=utf-8"/>
+	<title>Über FxIF</title>
+</head>
+<body>
+<h1>Um was geht’s?</h1>
+<p>FxIF (Firefox exIF) erlaubt es Ihnen, in JPEG-Bildern enthaltene Metainformationen bequem in Firefox (oder SeaMonkey oder anderen kompatiblen Browsern) anzeigen zu lassen. Die meisten Digitalkameras speichern EXIF-Daten in allen Bildern die sie machen und viele Bearbeitungsprogramme fügen diese hinzu oder erlauben Ihnen Informationen zum Bild oder sich, dem Fotografen, hinzuzufügen.</p>
+
+<p>FxIF ist komplett in JavaScript geschrieben und sollte als solches portabel sein und auf jeder Plattform laufen auf der Mozilla läuft.</p>
+
+<h1>Nutzung</h1>
+<p>Machen Sie nach der Installation von FxIF einfach einen Rechtsklick auf ein Bild und wählen Sie dann <code>Eigenschaften</code>. Die Metadaten werden im Eigenschaften-Fenster eingeblendet. Diese Integration in den vorhandenen Dialog hält die Oberfläche einfach.<br />
+Da dieses Fenster mit Firefox 3.6 entfernt wurde, wird ab dieser Versioner ein eigener Menüeintrag <code>EXIF-Daten</code> eingefügt der ein eigenes Fenster öffnet.</p>
+
+<h1>Im Detail</h1>
+
+<h2>Was kann angezeigt werden?</h2>
+<p>In JPEG-Dateien enthaltene Metadaten in drei Formen:</p>
+<ul>
+	<li>Binäre EXIF-Daten. Diese werden von fast allen Kameras automatisch geschrieben und enthalten technische Informationen über das Kameramodel und dessen Hersteller, Datum und Uhrzeit der Aufnahme, die verwendeten Blendenwerte und Verschlußzeiten, Brennweite und vieles mehr.</li>
+	<li>IPTC-NAA-Daten in binärer Struktur (IIM). IPTC-NAA umfassen einen standardisierten Satz von Feldern die sich mit Informationen wie den Namen des Fotografen, Kurzbeschreibung der Aufnahme und Titel des Bildes, Copyright-Angaben, Schlagworte usw. befassen.</li>
+	<li>XMP (Extensible Metadata Platform). Im Gegensatz zu den vorgenannten werden diese Daten nicht binär gespeichert sondern als im Bild enthaltenes XML-Dokument und sind nicht auf Kamera- oder Bildinformationen beschränkt sondern können beides und vieles mehr enthalten. Das Format wurde von Adobe entwickelt und fand zuerst vor allem durch deren Anwendungen wie Photoshop Verbreitung, findet mittlerweilen jedoch breite Unterstützung. Wie gesagt kann das XMP-Dokument sowohl alle vorgenannten EXIF- und IPTC-Daten enthalten wie auch weitere Anwendungsspezifische.<br/>
+  Ein großer Vorteil ist die Verwendung der UTF-8-Kodierung &ndash; so können Daten in jeder bekannten Sprache abgelegt werden. Es besteht sogar die Möglichkeit Informationen in mehreren Sprachen gleichzeitig zu enthalten und je nach Sprache des Anwenders die entsprechende auszulesen.</li>
+</ul>
+<p>Direkt aus der Kamera werden die meisten Bilder momentan nur binäre EXIF-Daten enthalten, dies wird sich in der Zukunft aber wahrscheinlich ändern und es existiert eine Vielzahl von Programmen um weitere Daten in allen Formaten hinzuzufügen. Software wie Photoshop kopiert die enthaltenen EXIF-Informationen beim Speichern in ein XMP-Dokument und fügt auch weitere zu sich selbst hinzu &ndash; zumindest wenn Sie nicht als <em>Für Web und Geräte speichern</em> verwenden.</p>
+
+<h2>Und welche Felder genau?</h2>
+<p>Im Detail können Sie die folgenden EXIF-Felder ansehen: ImageDescription, Make, Model, Orientation, ModifyDate/DateTimeOriginal/DateTimeDigitized, Artist, Copyright, ExposureTime., FNumber, ExposureProgram, GPSInfo, ISO, ShutterSpeedValue, ExposureCompensation, MaxApertureValue, SubjectDistance, MeteringMode, LightSource, Flash, FocalLength, UserComment, ExifImageWidth, ExifImageLength, FocalPlaneXResolution, FocalPlaneResolutionUnit. ExposureMode, WhiteBalance, DigitalZoomRatio, FocalLengthIn35mmFormat, ColorSpace</p>
+<p>Die folgenden Felder werden aus IPTC-NAA ausgelesen: By-line, Caption-Abstract, Headline, Instructions, CopyrightNotice, City, Sublocation, Province/State and Country</p>
+<p>Und die folgenden aus XMP: dc:Creator, photoshop:Headline, dc:title, dc:description, dc:rights, xmpRights:UsageTerms, cc:license, photoshop:City, Iptc4xmpCore:Location, photoshop:State, photoshop:Country, tiff:Make, tiff:Model, aux:Lens, exif:DateTimeOriginal, exif:DateTimeDigitized, exif:FNumber, exif:ApertureValue, exif:FocalLength, exif:FocalLengthIn35mmFilm, exif:SubjectDistance, exif:ExposureTime, exif:Flash, tiff:Orientation, exif:ExposureBiasValue, exif:WhiteBalance, exif:LightSource, exif:MeteringMode, exif:ExposureProgram, exif:ExposureIndex, exif:ExposureMode, exif:ISOSpeedRatings, exif:DigitalZoomRatio, exif:GPSAltitude, exif:GPSAltitudeRef, exif:GPSLatitude, exif:GPSLongitude, exif:ColorSpace, photoshop:ICCProfile, photoshop:Instructions</p>
+<p>Wie gesagt werden nicht alle Daten immer und auf einmal angezeigt. Denn zuerst einmal enthalten nicht alle Dateien alle Felder. Und zweitens sind manche Felder in verschiedenen Strukturen gleichbedeutend wie beispielsweise der Name des Fotografen oder die Bildbeschreibung, in diesen Fällen wird die Information nur einmal angezeigt. Die Priorität liegt hierbei auf XMP, dann folgt IPTC-NAA und schließlich EXIF.</p>
+<p>Zu Ihrer Bequemlichkeit wird aus in EXIF-Feldern enthaltenen GPS-Koordinaten auch ein Weblink zu einem Kartenanbieter generiert und in der gleichen Zeile angezeigt. Dies gilt zumindest für Firefox 3 und SeaMonkey 2 da frühere Versionen die verwendete Technik nicht unterstützen. Seien Sie sich jedoch bewusst, dass diese Koordinaten diejenigen der Kamera sind und nicht des fotografierten Objekts. Vor allem bei Telefotos kann die Abweichung erheblich sein.</p>
+
+<h2>Das ist nicht viel, warum nicht mehr?</h2>
+<p>Der Zweck von FxIF ist, die Informationen auszugeben welche die meisten Benutzer sehen möchten wenn sie ein Bild im Browser ansehen. Das ist eine Schnellübersicht zu welche Kamera mit welchen Einstellungen wurde benutzt, wo wurde das Bild gemacht und was stellt es dar.</p>
+<p>Es existiert eine Vielzahl von Programmen und auch ein, zwei Browser-Erweiterungen die Ihnen alle möglichen Informationen die im Bild enthalten sind anzeigen. Meiner Ansicht nach ist deren Zweck jedoch ein anderer und ergibt innerhalb des Browsers nicht viel Sinn. Die Ausgabe aller Informationen kann einfach überwältigend sein und dazu führen dass die gesuchten Informationen schwer zu finden sind.</p>
+
+<h2>Und warum nur in JPEG-Bildern?</h2>
+<p>Dieses Bildformat ist bei weitem das am weitesten verbreitete und die Konzentration darauf hält die Erweiterung einigermaßen einfach.</p>
+
+<h2>Wo kann die Erweiterung alles laufen?</h2>
+<p>Wie schon erwähnt ist FxIF in JavaScript und XUL geschrieben, sollte zusammen mit dem GRE (Gecko Runtime Environment) also überall laufen wo das GRE läuft.</p>
+<p>Von Haus aus ist diese Erweiterung lauffähig im Firefox-Browser von Version 0.10 aufwärts, der Mozilla Application Suite von Version 1.7 an und ihrem Nachfolger SeaMonkey ab Version 1.0.</p>
+
+<h2>Was kostet FxIF?</h2>
+<p>Nichts. Die Erweiterung ist freie Software nach der Definition der Free Software Foundation. Sie ist dreifach-lizenziert als MPL 1.1, GPL 2.0, LGPL 2.1 und enthält wie die meisten Erweiterungen für die Mozilla-Plattform den Quellcode im XPI selbst.</p>
+
+<h1>Konfiguriere mich</h1>
+<p>Da die Geschmäcker verschieden sind habe ich mich entschieden zwei Dinge in FxIF konfigurierbar zu machen. Die Konfiguration kann über den Konfigurationsdialog im Add-On-Manager (verfügbar in Firefox und SeaMonkey 2) oder über direkte Änderung des jeweiligen Prefs erfolgen.</p>
+<p>Die erste Option betrifft die Auswahl des Formats für die Koordinatenanzeige. Dieses kann entweder Grad Minuten Sekunden (DMS) sein, z.&thinsp;B. 40&deg;&nbsp;43&prime;&nbsp;20.7&Prime;&nbsp;N, 74&deg;&nbsp;02&prime;&nbsp;47.2&Prime;&nbsp;W oder Dezimalgrad (DD), z.&thinsp;B. 40.722417&deg;&nbsp;N, 74.046444&deg;&nbsp;W. Die Angaben werden auf zwei Nachkommastellen in DMS und sechs Nachkommastellen in DD gerundet. Das dazugehörige Pref ist <code>extensions.fxif.gpsFormat</code> wobei 0 DMS und 1 DD bedeutet.</p>
+<p>Die andere Option betrifft den Kartenanbieter der für den Weblink verwendet wird. Der Default (wenn das Pref nicht gesetzt oder leer ist) ist <code>openstreetmap.org</code> zu verwenden, aber wie ich schon schrieb sind die Geschmäcker verschieden.</p>
+<p>Um also den Kartenanbieter zu ändern geben Sie die URL in das Feld (oder das Pref) ein. Sie können wirklich jede URL eingeben. Um die jeweiligen Koordinaten zu verwenden muß jedoch ein <code>%lat%</code> überall dort wo der Breitengrad eingefügt werden soll stehen und <code>%lon%</code> überall wo der Längengrad eingefügt werden soll.</p>
+<p>Der Default ist also</p>
+<p><code>http://www.openstreetmap.org/?lat=%mlat%&amp;mlon=%lon%&amp;layers=B000FTF</code></p>
+<p>aber wenn Sie Google als Kartenanbieter verwenden wollen, geben Sie beispielsweise folgendes ein:</p>
+<p><code>http://maps.google.com/maps?ll=%lat%,%lon%&amp;q=%lat%,%lon%&amp;z=10&amp;hl=%lang%</code></p>
+<p>oder um Yahoo zu verwenden</p>
+<p><code>http://maps.yahoo.com/index.php#mvt=m&amp;trf=0&amp;lon=%lon%&amp;lat=%lat%&amp;mag=8</code></p>
+<p>oder</p>
+<p><code>http://atlas.mapquest.com/maps/map.adp?searchtype=address&amp;formtype=latlong&amp;latlongtype=decimal&amp;latitude=%lat%&amp;longitude=%lon%</code></p>
+<p>für MapQuest usw. In der URL werden Breite und Länge jeweils ungerundet im Dezimalformat eingefügt.</p>
+<p>Haben Sie das <code>%lang%</code> in der URL für Google Maps bemerkt? Dieses ist der dritte verfügbare Platzhalter und wird mit der Sprache ersetzt die Sie im Browser als bevorzugte Sprache für Webinhalte angegeben haben. Die Setzung dieses Parameters ist nicht nötig, aber zumindest im Falle von Google wird dann die jeweilige Seite in der Sprache des Nutzers angezeigt.</p>
+<p>Das zugehörige Pref ist <code>extensions.fxif.mapProvider</code>.</p>
+
+<h1>Gibt es lokalisierte Versionen?</h1>
+<p>FxIF ist bereits verfügbar in brasilianischem Portugiesisch, Chinesisch (vereinfachtem wie auch traditionellem), Englisch, Französisch, Deutsch, Italienisch, Japanisch, Niederländisch, Polnisch, Russisch, Spanisch und Tschechisch. Die jeweils verwendete hängt von der Sprache des Browsers ab.</p>
+<p>Sollten Sie Ihre Sprache nicht in der Liste finden, sind Sie eingeladen eine Übersetzung dafür beizusteueren. Sie können die <a href="http://code.google.com/p/fxif/source/browse/trunk/locale/de">deutsche Version der .dtd- und .properties-Dateien</a> aus dem FxIF-Repository herunterladen und mir die übersetzte Version zumailen. Ebenso bin ich dankbar für Fehlerbehebungen in Übersetzungen.</p>
+<p>FxIF hat auch eine Seite auf <a href="http://www.babelzilla.org/index.php?option=com_wts&extension=5292&type=show" target="_blank">BabelZilla.org</a> worüber die meisten Übersetzungen organisiert sind. Sie können also auch dort mitmachen.</p>
+
+<h1>Wann wird die nächste Version freigegeben?</h1>
+<p>Wie bei den meisten Projekten „wenn sie fertig ist“. Seit 0.2.3 ist der Quellcode für FxIF <a href="http://code.google.com/p/fxif/">auf Google Code</a> zuhause und kann jederzeit <a href="http://code.google.com/p/fxif/source/checkout">über svn</a> ausgecheckt werden.</p>
+
+<h1>Was ist neu in 0.30</h1>
+<ul>
+	<li>Anzeige von GPS-Koordinaten</li>
+	<li>Dekodierung von binären IPTC-NAA- und XMP-Daten</li>
+	<li>Dekodierung von Ersteller, Tiel, Beschreibung und Copyright</li>
+	<li>Fähigkeit mit Bildern zu arbeiten die aus POP-Mailboxen, von News- und IMAP-Servern geöffnet wurden (im Falle von SeaMonkey)</li>
+  <li>Funktioniert auch mit Firefox >= 3 und SeaMonkey >= 2</li>
+  <li>Funktioniert auch mit Bildern die nicht gecached wurden.</li>
+</ul>
+<h1>Was ist neu in 0.3.1</h1>
+<ul>
+	<li>Funktioniert auch mit Firefox >= 3.6 mit dessen Einführung der Bildeigenschaften-Dialog entfernt wurde.</li>
+</ul>
+<h1>Was ist neu in 0.3.2</h1>
+<ul>
+	<li>Ein paar Bugfixes, darunter auch <a href="http://support.mozilla.com/en-US/forum/1/489394" target="_blank">All toolbars disappear on closing print preview</a>.</li>
+</ul>
+<h1>Was ist neu in 0.4</h1>
+<ul>
+	<li>Auch EXIF-Daten die im XMP-Format statt im binären Format vorliegen, können jetzt ausgewertet werden. Auch werden jetzt ein paar mehr Felder ausgewertet, vor allem solche zum Ort der Aufnahme. Intern werden jetzt mehr Felder berücksichtigt um die Lizenzangaben zu füllen.</li>
+	<li>Die Reihenfolge der Felder in der Anzeige wurde geändert, ein paar Bugs im XMP-Interpreter und dem Leser für binäre EXIF-Daten gefixt.</li>
+	<li>Das eigene EXIF-Fenster kann nun mittels ESC geschlossen werden und der Kopieren-Button hat jetzt einen Shorcut (Alt+C, Option+C am Mac).</li>
+	<li>Auch Bilder die komprimiert (z.B. mit "Content-Encoding: gzip") ausgeliefert werden können gelesen werden.</li>
+	<li>FxIF arbeitet nun mit Geoff Lankows <a href="https://addons.mozilla.org/de/firefox/addon/14228" target="_blank">Element properties</a>-Erweiterung zusammen und kann sich dort einhängen um wie in Firefox < 3.6 zu erscheinen.</li>
+	<li>Neue Übersetzung ins Russische durch Max Pozdeev. Alle Lokalisierungen wurden überholt, danke hierfür an die alten und neuen Übersetzer auf <a href="http://www.babelzilla.org" target="_blank">BabelZilla</a>.</li>
+</ul>
+<h1>Was ist neu in 0.4.1</h1>
+<ul>
+	<li>DateTime wird nur noch benutzt wenn DateTimeOriginal und DateTimeDigitized nicht vorhanden sind.</li>
+	<li>Die Erkennung des XMP-Datenblocks wurde etwas gelockert um einen Bug in mancher Grafiksoftware zu umgehen.</li>
+	<li>Nicht existierende Informationen zum Blitzeinsatz in den XMP-Daten führen jetzt nicht mehr zum Fehlschlagen der XMP-Auswertung.</li>
+	<li>Allgemein führt ein Problem in der Auswertung eines Datenblocks jetzt nicht mehr dazu dass überhaupt keine Daten mehr angezeigt werden. Stattdessen werden die bis zum Fehler gelesenen Daten des jeweiligen Blocks angezeigt und ein Hinweis auf einen Fehler und möglicherweise fehlende Daten eingeblendet.</li>
+	<li>Behebung eines Bugs durch den "chr" als Sprache genutzt wurde wenn das Pref intl.accept_language auf Default für den jeweiligen Browser gelassen wurde. (Danke an Hector Zhao)</li>
+	<li>Neue Übersetzung für Niederländisch, danke dafür an markh van BabelZilla.org.</li>
+</ul>
+</body>
+</html>
