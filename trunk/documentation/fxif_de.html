@@ -108,5 +108,11 @@ Da dieses Fenster mit Firefox 3.6 entfernt wurde, wird ab dieser Versioner ein e
 	<li>Behebung eines Bugs durch den "chr" als Sprache genutzt wurde wenn das Pref intl.accept_language auf Default für den jeweiligen Browser gelassen wurde. (Danke an Hector Zhao)</li>
 	<li>Neue Übersetzung für Niederländisch, danke dafür an markh van BabelZilla.org.</li>
 </ul>
+<h1>Was ist neu in 0.4.2</h1>
+<ul>
+	<li>Blitzdaten in XMP werden nun besser ausgewertet (nun auch in Child-Tags des Flash-Tags statt nur in seinen Attributen). Danke an Phil Lattimore für die Rückmeldung.</li>
+  <li>Zumindest eine Software hängt ein Nullbyte and das XMP-Dokument an und der Mozilla XML-Parser mag das überhaupt nicht. Ich habe einen Workaround für diesen Fall eingefügt der das Dokument um ein Byte kürzt.</li>
+</ul>
+
 </body>
 </html>

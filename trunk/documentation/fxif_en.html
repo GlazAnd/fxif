@@ -16,16 +16,15 @@ Since this window has been removed with Firefox 3.6 I’ve added my own one acce
 
 <h1>In detail</h1>
 
-<h2>What can it display</h2>
-<p>Meta data that’s contained in JPEG image files in three
-forms:</p>
+<h2>What can it display?</h2>
+<p>Meta data that’s contained in JPEG image files in three forms:</p>
 <ul>
 	<li>binary EXIF data. This is added by most cameras automatically and contains technical informations on the camera model and manufacturer, date and time the image was taken, aperture and shutter speed used, focal length and much much more.</li>
 	<li>IPTC-NAA data in a binary structure (IIM). IPTC-NAA comprises a standardized set of fields focusing on informations as the name of the photographer, caption and title for the image, copyright informations, keywords a.s.o.</li>
 	<li>XMP (Extensible Metadata Platform). In contrast to aforementioned this data isn’t stored binary but as an XML document within the image and isn’t restricted to only camera or image informations but can hold both and even more. It’s developed by Adobe and pushed by their applications including Photoshop. As said, XMP can hold various informations as all the EXIF data mentioned above and also those from IPTC-NAA as well as application specific.<br/>
-  Its advantage is the use of UTF-8 encoding&ndash;so data can be added in every language available&ndash;and also the possibility to hold an information in more than one language simultaneously.</li>
+  Its advantage is the use of UTF-8 encoding&mdash;so data can be added in every language available&mdash;and also the possibility to hold an information in more than one language simultaneously.</li>
 </ul>
-<p>Out of the camera most images will only contain binary EXIF data but this may change in future and there’s much software for adding the other informations by you. And software like Photoshop will at least duplicate the EXIF information into XMP data and add data of its own to your image if you just save it&ndash;or at least if you don’t do <em>Save for Web</em>.</p>
+<p>Out of the camera most images will only contain binary EXIF data but this may change in future and there’s much software for adding the other informations by you. And software like Photoshop will at least duplicate the EXIF information into XMP data and add data of its own to your image if you just save it&mdash;or at least if you don’t do <em>Save for Web</em>.</p>
 
 <h2>And which fields in detail?</h2>
 <p>In detail you can view the following EXIF fields: ImageDescription, Make, Model, Orientation, ModifyDate/DateTimeOriginal/DateTimeDigitized, Artist, Copyright, ExposureTime., FNumber, ExposureProgram, GPSInfo, ISO, ShutterSpeedValue, ExposureCompensation, MaxApertureValue, SubjectDistance, MeteringMode, LightSource, Flash, FocalLength, UserComment, ExifImageWidth, ExifImageLength, FocalPlaneXResolution, FocalPlaneResolutionUnit. ExposureMode, WhiteBalance, DigitalZoomRatio, FocalLengthIn35mmFormat, ColorSpace</p>
@@ -40,20 +39,21 @@ forms:</p>
 
 <h2>And why only in JPEG images?</h2>
 <p>That image format is by far the most common and concentrating on it keeps the extension simple.</p>
-<h2>Where is it supposed to run on</h2>
+
+<h2>Where is it supposed to run on?</h2>
 <p>As mentioned earlier it’s written in JavaScript and XUL, so it should run in combination with the GRE (Gecko Runtime Environment) everywhere GRE runs.</p>
 <p>Out of the box the extension is made for the Firefox browser from version 0.10 on, the Mozilla Application suite from version 1.7 on and its successor SeaMonkey from version 1.0 on.</p>
 
 <h2>How much does it cost?</h2>
-<p>Nothing. It’s free software in terms of the Free Software Foundations. It’s triple licensed as MPL 1.1, GPL 2.0, LGPL 2.1 and like most extensions for the Mozilla platform comes with the source code in the XPI file itself.</p>
+<p>Nothing. It’s free software in terms of the Free Software Foundation. It’s triple licensed as MPL 1.1, GPL 2.0, LGPL 2.1 and like most extensions for the Mozilla platform comes with the source code in the XPI file itself.</p>
 
 <h1>Configure me</h1>
-<p>Since likings are different we decided to make two functions configurable. You can do this via the options dialog on the Add-On manager (available in Firefox and SeaMonkey 2) or by directly manipulating the respective pref.</p>
+<p>Since likings are different we decided to make two functions configurable. You can do this via the options dialog on the Add-on Manager (available in Firefox and SeaMonkey 2) or by directly manipulating the respective pref.</p>
 <p>First option is to choose the format used for displaying coordinates. This is either Degrees Minutes Seconds (DMS) like 40&deg;&nbsp;43&prime;&nbsp;20.7&Prime;&nbsp;N, 74&deg;&nbsp;02&prime;&nbsp;47.2&Prime;&nbsp;W or decimal degree (DD) like 40.722417&deg;&nbsp;N, 74.046444&deg;&nbsp;W. Any informations are rounded to two decimal places in DMS and six decimal places in DD format. The associated pref is <code>extensions.fxif.gpsFormat</code> where 0 means DMS and 1 DD.</p>
 <p>The other option is the map provider to use for the weblink. The default (when the pref isn’t available or empty) is to use <code>openstreetmap.org</code>, but as I wrote, likings are different.</p>
 <p>So to change it, insert any URL into the field (or pref). You can use really any URL, but to have the respective coordinates used, put a <code>%lat%</code> anywhere the latitude shall be inserted and <code>%lon%</code> anywhere the longitude shall be inserted.</p>
 <p>So the default is</p>
-<p><code>http://www.openstreetmap.org/?lat=%mlat%&amp;mlon=%lon%&amp</code></p>
+<p><code>http://www.openstreetmap.org/?lat=%mlat%&amp;mlon=%lon%&amp;layers=B000FTF</code></p>
 <p>but if you want to use Google as a map provider, insert for example</p>
 <p><code>http://maps.google.com/maps?ll=%lat%,%lon%&amp;q=%lat%,%lon%&amp;z=10&amp;hl=%lang%</code></p>
 <p>or for Yahoo use</p>
@@ -65,7 +65,7 @@ forms:</p>
 <p>The associated pref is <code>extensions.fxif.mapProvider</code>.</p>
 
 <h1>Are there localized versions?</h1>
-<p>FxIF is already available in Chinese (simplified as well as traditional), Czech, English, French, German, Italian, Japanese, Polish, Russian and Spanish. The one used depends on the browsers locale.</p>
+<p>FxIF is already available in Brazilian Portuguese, Chinese (simplified as well as traditional), Czech, Dutch, English, French, German, Italian, Japanese, Polish, Russian and Spanish. The one used depends on the browsers locale.</p>
 <p>If you don’t find your language in the list, you’re welcome to do a translation and donate it. You can get the <a href="http://code.google.com/p/fxif/source/browse/trunk/locale/en-US">english version .dtd and .properties files</a> from the FxIF repository and mail us the translated file for inclusion. Also fixes for errors in translations are welcome.</p>
 <p>FxIF also has a page on <a href="http://www.babelzilla.org/index.php?option=com_wts&extension=5292&type=show" target="_blank">BabelZilla.org</a> where translations are organized. You can add translations there as well.</p>
 
@@ -80,7 +80,6 @@ forms:</p>
 	<li>Ability to operate on images opened from mailbox, news and imap</li>
   <li>Also works with Firefox >= 3 and SeaMonkey >= 2</li>
   <li>Also works with images that aren’t cached.</li>
-  <li>Also works with images from mailbox, news or imap addresses</li>
 </ul>
 <h1>What’s new in 0.3.1</h1>
 <ul>
@@ -93,20 +92,25 @@ forms:</p>
 <h1>What’s new in 0.4</h1>
 <ul>
 	<li>Added interpretation of EXIF values that are contained in XMP format rather than in old binary format. Added some fields mainly regarding the location of the subject. Internally more fields are inspected to fill the license field.</li>
-  <li>Also rearranged the order of the field listing, fixed some bugs in the XMP interpreter and the binary EXIF reader.</li>
-  <li>Own EXIF window is now closable with ESC and the Copy button has an Alt+C (Option+C on Mac) shortcut.</li>
-  <li>Can now cope with images delivered compressed (e.g. "Content-Encoding: gzip")</li>
-  <li>Enabled overlaying of the properties window that’s being readded by Geoff Lankows <a href="https://addons.mozilla.org/de/firefox/addon/14228" target="_blank">Element properties</a></li>
-  <li>Added new translation for Russian thanks to Max Pozdeev. All localizations have been overhauled, thanks to old and new contributors on <a href="http://www.babelzilla.org" target="_blank">BabelZilla</a>.</li>
+	<li>Also rearranged the order of the field listing, fixed some bugs in the XMP interpreter and the binary EXIF reader.</li>
+	<li>Own EXIF window is now closable with ESC and the Copy button has an Alt+C (Option+C on Mac) shortcut.</li>
+	<li>Can now cope with images delivered compressed (e.g. "Content-Encoding: gzip")</li>
+	<li>Enabled overlaying of the properties window that’s being readded by Geoff Lankows <a href="https://addons.mozilla.org/de/firefox/addon/14228" target="_blank">Element properties</a></li>
+	<li>Added new translation for Russian thanks to Max Pozdeev. All localizations have been overhauled, thanks to old and new contributors on <a href="http://www.babelzilla.org" target="_blank">BabelZilla</a>.</li>
 </ul>
 <h1>What’s new in 0.4.1</h1>
 <ul>
-  <li>Only use DateTime if no DateTimeOriginal or DateTimeDigitized are available.</li>
+	<li>Only use DateTime if no DateTimeOriginal or DateTimeDigitized are available.</li>
 	<li>Relaxed detection of XMP data a bit to work around a bug in some photo software.</li>
 	<li>Not existing flash information in XMP data doesn’t cause fail of XMP evaluation anymore.</li>
-  <li>Made evaluation of following data not fail if some error occurs. Instead a note is placed in the window that evaluation stopped and data shown might be incomplete.</li>
-  <li>Fixed a bug where "chr" was used as language if intl.accept_language was left at the default for the browser. (Thanks to Hector Zhao)</li>
-  <li>Added new translation for Dutch thanks to markh van BabelZilla.org.</li>
+	<li>Made evaluation of following data not fail if some error occurs. Instead a note is placed in the window that evaluation stopped and data shown might be incomplete.</li>
+	<li>Fixed a bug where "chr" was used as language if the pref intl.accept_language was left at the default for the browser. (Thanks to Hector Zhao)</li>
+	<li>Added new translation for Dutch thanks to markh van BabelZilla.org.</li>
+</ul>
+<h1>What’s new in 0.4.2</h1>
+<ul>
+	<li>Flash data from XMP is now better evaluated (also as child values of the Flash tag instead only attributes of it). Thanks to Phil Lattimore for reporting.</li>
+  <li>At least one software appends a null byte to the XMP document and the Mozilla XML parser doesn’t like this at all. I added a workaround for this case which shortens the document by one byte.</li>
 </ul>
 </body>
 </html>
