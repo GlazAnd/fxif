@@ -45,10 +45,15 @@ function xmpClass(stringBundle)
   this.parseXML = function (dataObj, xml)
   {
     var parser = new DOMParser();
-    var dom = parser.parseFromBuffer(xml, xml.length, 'text/xml');
+    // There is at least one programm which includes a null byte at the end of the document.
+    // The parser doesn't like this, so shorten the length by one byte of the last one is null.
+    var doclength = xml.length;
+    if (xml.length > 1 && xml[xml.length - 1] == 0)
+			doclength--;
+    var dom = parser.parseFromBuffer(xml, doclength, 'text/xml');
     if (dom.documentElement.nodeName == 'parsererror') {
-      alert("Error parsing XML");
-      return 'Parsing Error!';
+//      alert("Error parsing XML");
+      throw ("Error parsing XML");
     }
 
     var val;
@@ -210,11 +215,25 @@ function xmpClass(stringBundle)
     var redEyeMode = 0;
     var flashReturn = 0;
     if(el.length) {
-      flashFired = el[0].getAttributeNS("http://ns.adobe.com/exif/1.0/", "Fired");
-      flashFunction = el[0].getAttributeNS("http://ns.adobe.com/exif/1.0/", "Function");
-      flashMode = Number(el[0].getAttributeNS("http://ns.adobe.com/exif/1.0/", "Mode"));
-      redEyeMode = el[0].getAttributeNS("http://ns.adobe.com/exif/1.0/", "RedEyeMode");
-      flashReturn = Number(el[0].getAttributeNS("http://ns.adobe.com/exif/1.0/", "Return"));
+      // Flash values can occur in two ways, as attribute values of flash
+      // like <Flash Fired="True"/>
+      // and as child values, e.g. <Flash><Fired>True</Fired></Flash>
+      // We've to deal with both and also mixed as a bonus.
+      flashFired = getSubvalues(el[0], "http://ns.adobe.com/exif/1.0/", "Fired");
+      if (!flashFired)
+        flashFired = el[0].getAttributeNS("http://ns.adobe.com/exif/1.0/", "Fired");
+      flashFunction = getSubvalues(el[0], "http://ns.adobe.com/exif/1.0/", "Function");
+      if (!flashFunction)
+        flashFunction = el[0].getAttributeNS("http://ns.adobe.com/exif/1.0/", "Function");
+      flashMode = Number(getSubvalues(el[0], "http://ns.adobe.com/exif/1.0/", "Mode"));
+      if (!flashMode)
+        flashMode = Number(el[0].getAttributeNS("http://ns.adobe.com/exif/1.0/", "Mode"));
+      redEyeMode = getSubvalues(el[0], "http://ns.adobe.com/exif/1.0/", "RedEyeMode");
+      if (!redEyeMode)
+        redEyeMode = el[0].getAttributeNS("http://ns.adobe.com/exif/1.0/", "RedEyeMode");
+      flashReturn = Number(getSubvalues(el[0], "http://ns.adobe.com/exif/1.0/", "Return"));
+      if (!flashReturn)
+        flashReturn = Number(el[0].getAttributeNS("http://ns.adobe.com/exif/1.0/", "Return"));
 
       var fu;
       if(flashFired && flashFired.match(/^true$/i)) {
@@ -636,6 +655,21 @@ function xmpClass(stringBundle)
           val = entriesList[j].firstChild.nodeValue;
           break;
         }
+      }
+    }
+
+    return val;
+  }
+
+  function getSubvalues(dom, ns, property)
+  {
+    var val;
+    var list = dom.getElementsByTagNameNS(ns, property);
+    if(list.length) {
+      if (list[0].hasChildNodes()) {
+        var fc = list[0].firstChild;
+        if(fc.nodeType == NodeTypes.TEXT_NODE)
+          val = fc.nodeValue;
       }
     }
 

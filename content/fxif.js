@@ -163,8 +163,7 @@ function fxifClass ()
                   do
                   {
                     a = bis.readBytes(1);
-                    j++;
-                  } while(j < 5 && a == ' ');
+                  } while(++j < 5 && a == ' ');
                   if (a == '\0') {
                     var xmpData = bis.readByteArray(len - (28 + j));
                     try {
