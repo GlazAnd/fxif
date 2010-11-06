@@ -8,7 +8,7 @@
 <body>
 <h1>What’s it</h1>
 <p>FxIF (Firefox exIF) allows you to view meta information data contained in JPEG images from the convenience of your Firefox (or SeaMonkey or other compatible) browser. Most digital cameras add EXIF data to all images you take and much editing software adds or allows you to add more informations on the picture and you the creator.</p>
-<p>FxIF is written entirely in JavaScript, and as such should be portable to all platforms that Mozilla runs on.</p>
+<p>FxIF is written in JavaScript and XUL, and as such should be portable to all platforms that Mozilla runs on.</p>
 
 <h1>Usage</h1>
 <p>After installing FxIF, simply right click on an image, then click <code>Properties</code>. The meta data will be displayed in the properties window. This integration into the existing dialog keeps the interface simple.<br />
@@ -69,6 +69,9 @@ Since this window has been removed with Firefox 3.6 I’ve added my own one acce
 <p>If you don’t find your language in the list, you’re welcome to do a translation and donate it. You can get the <a href="http://code.google.com/p/fxif/source/browse/trunk/locale/en-US">english version .dtd and .properties files</a> from the FxIF repository and mail us the translated file for inclusion. Also fixes for errors in translations are welcome.</p>
 <p>FxIF also has a page on <a href="http://www.babelzilla.org/index.php?option=com_wts&extension=5292&type=show" target="_blank">BabelZilla.org</a> where translations are organized. You can add translations there as well.</p>
 
+<h1>I’ve found a bug</h1>
+<p>That happens. You can send <a href="mailto:ch.ey@gmx.net">me</a> a mail about it. Or add an issue on the <a href="http://code.google.com/p/fxif/issues/list" target="_blank">Google Code project</a>. I’ll look into it then.</p>
+
 <h1>When will the next version be released?</h1>
 <p>Like most projects “when it’s done”. Since 0.2.3 the FxIF code has its <a href="http://code.google.com/p/fxif/">home at Google Code</a> and the source kept online can be <a href="http://code.google.com/p/fxif/source/checkout">checked out via svn</a>.</p>
 
@@ -101,16 +104,25 @@ Since this window has been removed with Firefox 3.6 I’ve added my own one acce
 <h1>What’s new in 0.4.1</h1>
 <ul>
 	<li>Only use DateTime if no DateTimeOriginal or DateTimeDigitized are available.</li>
-	<li>Relaxed detection of XMP data a bit to work around a bug in some photo software.</li>
+	<li>Fixed <a href="http://code.google.com/p/fxif/issues/detail?id=3" target="_blank">Issue 3</a>: Relaxed detection of XMP data a bit to work around a bug in some photo software.</li>
 	<li>Not existing flash information in XMP data doesn’t cause fail of XMP evaluation anymore.</li>
 	<li>Made evaluation of following data not fail if some error occurs. Instead a note is placed in the window that evaluation stopped and data shown might be incomplete.</li>
-	<li>Fixed a bug where "chr" was used as language if the pref intl.accept_language was left at the default for the browser. (Thanks to Hector Zhao)</li>
+	<li>Fixed <a href="http://code.google.com/p/fxif/issues/detail?id=2" target="_blank">Issue 2</a>: a bug where "chr" was used as language if the pref intl.accept_language was left at the default for the browser. (Thanks to Hector Zhao)</li>
 	<li>Added new translation for Dutch thanks to markh van BabelZilla.org.</li>
 </ul>
 <h1>What’s new in 0.4.2</h1>
 <ul>
 	<li>Flash data from XMP is now better evaluated (also as child values of the Flash tag instead only attributes of it). Thanks to Phil Lattimore for reporting.</li>
   <li>At least one software appends a null byte to the XMP document and the Mozilla XML parser doesn’t like this at all. I added a workaround for this case which shortens the document by one byte.</li>
+</ul>
+<h1>What’s new in 0.4.3</h1>
+<ul>
+	<li>Fixed some reads which were to optimistic on the bytes contained in a JPEG marker which could lead to negative byte counts tried to be read (and causing the stream reader to bail out). Thanks to Jemini for reporting.</li>
+	<li>Fixed a bug preventing to catch and report it the aforementioned bug correctly to the user.</li>
+  <li>Fixed <a href="http://code.google.com/p/fxif/issues/detail?id=4" target="_blank">Issue 4</a>: ”Copy“ button does not copy GPS coords.</li>
+  <li>Fixed <a href="http://code.google.com/p/fxif/issues/detail?id=5" target="_blank">Issue 5</a>: EXIF tag Orientation with unknown value caused FxIF to bail out.</li>
+  <li>Fixed <a href="http://code.google.com/p/fxif/issues/detail?id=6" target="_blank">Issue 6</a>: Dates from binary EXIFs where copied verbatim containing colons as separators. These are now replaced by hyphens to match the date formatting for binary IPTC and XMP dates (YYYY-MM-DD as recommended in ISO 8601).</li>
+  <li>Also dates comming from binary EXIF don’t carry timezone informations. This is now mentioned.</li>
 </ul>
 </body>
 </html>

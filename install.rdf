@@ -5,11 +5,11 @@
   <RDF:Description RDF:about="urn:mozilla:install-manifest"
                    em:id="{11483926-db67-4190-91b1-ef20fcec5f33}"
                    em:name="FxIF"
-                   em:version="0.4.2"
+                   em:version="0.4.3"
                    em:creator="Ted Mielczarek"
                    em:description="View EXIF data in image properties"
                    em:homepageURL="http://christian-eyrich.de/mozilla/fxif/"
-                   em:iconURL="chrome://fxif/content/fxif_small.gif"
+                   em:iconURL="chrome://fxif/content/fxif_small.png"
                    em:optionsURL="chrome://fxif/content/fxifOptions.xul">
     <em:developer>Christian Eyrich – GPS, IPTC, XMP and current maintainer</em:developer>
     <em:contributor>Matthias Wandel (JHead developer)</em:contributor>
@@ -25,6 +25,7 @@
     <em:translator>Tomasz Tracz - Polish (pl)</em:translator>
     <em:translator>Edgard Dias Magalhães (edgard.magalhaes@gmail.com) - Brazilian Portuguese (pt-BR)</em:translator>
     <em:translator>Max Pozdeev - Russian (ru)</em:translator>
+    <em:translator>Jan Kardell - Swedish (sv-SE)</em:translator>
     <em:translator>Hector Zhao - simplified Chinese (zh-CN)</em:translator>
     <em:translator>Cola99 - initial traditional Chinese (zh-TW)</em:translator>
     <em:targetApplication RDF:resource="rdf:#$QPBnF1"/>
@@ -45,6 +46,7 @@
     <em:locale>locale/pl/</em:locale>
     <em:locale>locale/pt-BR/</em:locale>
     <em:locale>locale/ru/</em:locale>
+    <em:locale>locale/sv-SE/</em:locale>
     <em:locale>locale/zh-CN/</em:locale>
     <em:locale>locale/zh-TW/</em:locale>
   </RDF:Description>

@@ -127,7 +127,7 @@ function fxifClass ()
             // length includes the length bytes
             len = bis.read16() - 2;
 
-            if(marker == APP1_MARKER) {
+            if(marker == APP1_MARKER && len >= 6) {
               // for EXIF the first 6 bytes should be 'Exif\0\0'
               var header = bis.readBytes(6);
               // Is it EXIF?
@@ -151,40 +151,47 @@ function fxifClass ()
                 fxifUtils.exifDone = true;
               }
               else {
-                // Maybe it's XMP. If it is, it starts with the XMP namespace URI
-                // 'http://ns.adobe.com/xap/1.0/\0'.
-                // see http://partners.adobe.com/public/developer/en/xmp/sdk/XMPspecification.pdf
-                header += bis.readBytes(22);  // 6 bytes read means 22 more to go
-                if(header == 'http://ns.adobe.com/xap/1.0/') {
-                  // There is at least one programm which writes spaces behind the namespace URI.
-                  // Overread up to 5 bytes of such garbage until a '\0'. I deliberately don't read
-                  // until reaching len bytes.
-                  var a; var j = 0;
-                  do
-                  {
-                    a = bis.readBytes(1);
-                  } while(++j < 5 && a == ' ');
-                  if (a == '\0') {
-                    var xmpData = bis.readByteArray(len - (28 + j));
-                    try {
-                      var xmpReader = new xmpClass(stringBundle);
-                      xmpReader.parseXML(dataObj, xmpData);
+                if(len > 28)
+                {
+                  // Maybe it's XMP. If it is, it starts with the XMP namespace URI
+                  // 'http://ns.adobe.com/xap/1.0/\0'.
+                  // see http://partners.adobe.com/public/developer/en/xmp/sdk/XMPspecification.pdf
+                  header += bis.readBytes(22);  // 6 bytes read means 22 more to go
+                  if(header == 'http://ns.adobe.com/xap/1.0/') {
+                    // There is at least one programm which writes spaces behind the namespace URI.
+                    // Overread up to 5 bytes of such garbage until a '\0'. I deliberately don't read
+                    // until reaching len bytes.
+                    var a; var j = 0;
+                    do
+                    {
+                      a = bis.readBytes(1);
+                    } while(++j < 5 && a == ' ');
+                    if (a == '\0') {
+                      var xmpData = bis.readByteArray(len - (28 + j));
+                      try {
+                        var xmpReader = new xmpClass(stringBundle);
+                        xmpReader.parseXML(dataObj, xmpData);
+                      }
+                      catch(ex) {
+                        pushError(dataObj, "XMP");
+                      }
+                      fxifUtils.xmpDone = true;
                     }
-                    catch(ex) {
-                      pushError(dataObj, "XMP");
-                    }
-                    fxifUtils.xmpDone = true;
+                    else
+                      bis.readBytes(len - (28 + j));
                   }
                   else
-                    bis.readBytes(len - (28 + j));
+                    bis.readBytes(len - 28);
                 }
                 else
-                  bis.readBytes(len - 28);
+                {
+                    bis.readBytes(len - 6);                  
+                }
               }
             }
             else
               // Or is it IPTC-NAA record as IIM?
-              if(marker == APP13_MARKER) {
+              if(marker == APP13_MARKER && len > 14) {
                 // 6 bytes, 'Photoshop 3.0\0'
                 var psString = bis.readBytes(14);
                 var psData = bis.readByteArray(len - 14);
@@ -213,7 +220,6 @@ function fxifClass ()
       catch(ex) {
         dump(ex + '\n');
         dataObj.error = stringBundle.getString("generalError");
-        return null;
       }
     }
 
@@ -363,12 +369,14 @@ function fxifClass ()
   {
     try {
       var data = "";
-      // get all values first
-      var lbls = document.getElementById("exif-sec").getElementsByTagName("grid")[0].getElementsByTagName("label");
-      for(var i=0; i<lbls.length; i++) {
-        var val = lbls[i].nextSibling.value;
+      // Get all label/value combinations.
+      // Relies on each line having one label and one textbox element.
+      var labels = document.getElementById("exif-sec").getElementsByTagName("grid")[0].getElementsByTagName("label");
+      var values = document.getElementById("exif-sec").getElementsByTagName("grid")[0].getElementsByTagName("textbox");
+      for(var i=0; i<labels.length; i++) {
+        var val = values[i].value;
         if(val) {
-          data += lbls[i].value + " " + val + "\r\n";
+          data += labels[i].value + " " + val + "\r\n";
         }
       }
 

@@ -1,0 +1,44 @@
+<!ENTITY contextMenu.label "EXIF-data">
+<!ENTITY EXIFData "EXIF-data">
+<!ENTITY Copy "Kopiera">
+<!ENTITY CameraMake "Kameramärke:">
+<!ENTITY CameraModel "Kameramodell:">
+<!ENTITY CameraLens "Objektiv:">
+<!ENTITY ImageDate "Bilddatum:">
+<!ENTITY ImageOrientation "Orientering:">
+<!ENTITY ImageBW "Svartvitt:">
+<!ENTITY FlashUsed "Blixt använd:">
+<!ENTITY FocalLength "Brännvidd:">
+<!ENTITY DigitalZoom "Digital zoom:">
+<!ENTITY CCDWidth "CCD-bredd:">
+<!ENTITY ExposureTime "Exponeringstid:">
+<!ENTITY Aperture "Bländare:">
+<!ENTITY FocusDist "Fukuseringsavstånd:">
+<!ENTITY ISOequiv "ISO:">
+<!ENTITY ExposureBias "Exponeringskompensation:">
+<!ENTITY WhiteBalance "Vitbalans:">
+<!ENTITY LightSource "Ljuskälla:">
+<!ENTITY MeteringMode "Ljusmätning:">
+<!ENTITY ExposureProgram "Exponering:">
+<!ENTITY ExposureMode "Exponeringsmod:">
+<!ENTITY ImageColorSpace "Färgmodell:">
+<!ENTITY GPSCoord "GPS-position:">
+<!ENTITY MapLink "Kartlänk">
+<!ENTITY GPSAlt "GPS-höjd:">
+<!ENTITY Photographer "Fotograf:">
+<!ENTITY City "Ort:">
+<!ENTITY Sublocation "Motivplats:">
+<!ENTITY ProvinceState "Delstat:">
+<!ENTITY CountryName "Land:">
+<!ENTITY Copyright "Upphovsrätt:">
+<!ENTITY Title "Titel:">
+<!ENTITY Caption "Beskrivning:">
+<!ENTITY Comment "Kommentar:">
+<!ENTITY Instructions "Anvisning:">
+<!ENTITY NoData "Inget metadata hittat">
+<!-- Options dialog -->
+<!ENTITY OptionsDialogTitle "FxIF Inställningar">
+<!ENTITY GPSFormat "Koordinatformat:">
+<!ENTITY DD.label "Grader decimalt">
+<!ENTITY DMS.label "Grader, minuter och sekunder">
+<!ENTITY OverrideMapProvider "Karttjänst:">
