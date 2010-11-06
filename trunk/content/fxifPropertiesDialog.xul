@@ -71,144 +71,144 @@
       <label id="error-label" value="" style="color:red !important;"/>
     </hbox>
     <grid id="data-list">
-  <columns>
-    <column/>
-    <column flex="1"/>
-  </columns>
-  <rows>
-    <row id="camera-make">
-      <label value="&CameraMake;"/>
-      <textbox id="camera-make-text" readonly="true"/>
-    </row>
-    <row id="camera-model">
-      <label value="&CameraModel;"/>
-      <textbox id="camera-model-text" readonly="true"/>
-    </row>
-    <row id="camera-lens">
-      <label value="&CameraLens;"/>
-      <textbox id="camera-lens-text" readonly="true"/>
-    </row>
-    <row id="image-date">
-      <label value="&ImageDate;"/>
-      <textbox id="image-date-text" readonly="true"/>
-    </row>
-    <row id="image-focallen">
-      <label value="&FocalLength;"/>
-      <textbox id="image-focallen-text" readonly="true"/>
-    </row>
-    <row id="image-digitalzoom">
-      <label value="&DigitalZoom;"/>
-      <textbox id="image-digitalzoom-text" readonly="true"/>
-    </row>
-    <row id="image-focusdist">
-      <label value="&FocusDist;"/>
-      <textbox id="image-focusdist-text" readonly="true"/>
-    </row>
-    <row id="image-aperture">
-      <label value="&Aperture;"/>
-      <textbox id="image-aperture-text" readonly="true"/>
-    </row>
-    <row id="image-exposuretime">
-      <label value="&ExposureTime;"/>
-      <textbox id="image-exposuretime-text" readonly="true"/>
-    </row>
-    <row id="image-isoequiv">
-      <label value="&ISOequiv;"/>
-      <textbox id="image-isoequiv-text" readonly="true"/>
-    </row>
-    <row id="image-exposurebias">
-      <label value="&ExposureBias;"/>
-      <textbox id="image-exposurebias-text" readonly="true"/>
-    </row>
-    <row id="image-meteringmode">
-      <label value="&MeteringMode;"/>
-      <textbox id="image-meteringmode-text" readonly="true"/>
-    </row>
-    <row id="image-exposureprogram">
-      <label value="&ExposureProgram;"/>
-      <textbox id="image-exposureprogram-text" readonly="true"/>
-    </row>
-    <row id="image-exposuremode">
-      <label value="&ExposureMode;"/>
-      <textbox id="image-exposuremode-text" readonly="true"/>
-    </row>
-    <row id="image-whitebalance">
-      <label value="&WhiteBalance;"/>
-      <textbox id="image-whitebalance-text" readonly="true"/>
-    </row>
-    <row id="image-lightsource">
-      <label value="&LightSource;"/>
-      <textbox id="image-lightsource-text" readonly="true"/>
-    </row>
-    <row id="image-flash">
-      <label value="&FlashUsed;"/>
-      <textbox id="image-flash-text" readonly="true"/>
-    </row>
-    <row id="image-orientation"> 
-      <label value="&ImageOrientation;"/>
-      <textbox id="image-orientation-text" readonly="true"/>
-    </row>
-    <row id="image-colorspace">
-      <label value="&ImageColorSpace;"/>
-      <textbox id="image-colorspace-text" readonly="true"/>
-    </row>
-    <row id="image-bw">
-      <label value="&ImageBW;"/>
-      <textbox id="image-bw-text" readonly="true"/>
-    </row>
-    <row id="image-gpscoord">
-      <label value="&GPSCoord;"/>
-      <hbox>
-        <textbox id="image-gpscoord-text" readonly="true" style="min-width:29ex;" flex="1"/>
-        <!-- Don't just use plain HTML here because of bug 263433 -->
-        <hbox><html:a id="maplink-href" onclick="fxifObj.loadInBrowser(this.getAttribute('href'), event); return false;" style="text-decoration:underline; cursor:pointer;">&MapLink;</html:a></hbox>
-      </hbox>
-    </row>
-    <row id="image-gpsalt">
-      <label value="&GPSAlt;"/>
-      <textbox id="image-gpsalt-text" readonly="true"/>
-    </row>
-    <row id="image-photographer">
-      <label value="&Photographer;"/>
-      <textbox id="image-photographer-text" readonly="true"/>
-    </row>
-    <row id="image-city">
-      <label value="&City;"/>
-      <textbox id="image-city-text" readonly="true"/>
-    </row>
-    <row id="image-sublocation">
-      <label value="&Sublocation;"/>
-      <textbox id="image-sublocation-text" readonly="true"/>
-    </row>
-    <row id="image-provincestate">
-      <label value="&ProvinceState;"/>
-      <textbox id="image-provincestate-text" readonly="true"/>
-    </row>
-    <row id="image-countryname">
-      <label value="&CountryName;"/>
-      <textbox id="image-countryname-text" readonly="true"/>
-    </row>
-    <row id="image-copyright">
-      <label value="&Copyright;"/>
-      <textbox id="image-copyright-text" multiline="true" readonly="true"/>
-    </row>
-    <row id="image-title">
-      <label value="&Title;"/>
-      <textbox id="image-title-text" readonly="true"/>
-    </row>
-    <row id="image-caption">
-      <label value="&Caption;"/>
-      <textbox id="image-caption-text" multiline="true" readonly="true"/>
-    </row>
-    <row id="image-comment">
-      <label value="&Comment;"/>
-      <textbox id="image-comment-text" multiline="true" readonly="true"/>
-    </row>
-    <row id="image-instructions">
-      <label value="&Instructions;"/>
-      <textbox id="image-instructions-text" multiline="true" readonly="true"/>
-    </row>
-  </rows>
+      <columns>
+        <column/>
+        <column flex="1"/>
+      </columns>
+      <rows>
+        <row id="camera-make">
+          <label value="&CameraMake;"/>
+          <textbox id="camera-make-text" readonly="true"/>
+        </row>
+        <row id="camera-model">
+          <label value="&CameraModel;"/>
+          <textbox id="camera-model-text" readonly="true"/>
+        </row>
+        <row id="camera-lens">
+          <label value="&CameraLens;"/>
+          <textbox id="camera-lens-text" readonly="true"/>
+        </row>
+        <row id="image-date">
+          <label value="&ImageDate;"/>
+          <textbox id="image-date-text" readonly="true"/>
+        </row>
+        <row id="image-focallen">
+          <label value="&FocalLength;"/>
+          <textbox id="image-focallen-text" readonly="true"/>
+        </row>
+        <row id="image-digitalzoom">
+          <label value="&DigitalZoom;"/>
+          <textbox id="image-digitalzoom-text" readonly="true"/>
+        </row>
+        <row id="image-focusdist">
+          <label value="&FocusDist;"/>
+          <textbox id="image-focusdist-text" readonly="true"/>
+        </row>
+        <row id="image-aperture">
+          <label value="&Aperture;"/>
+          <textbox id="image-aperture-text" readonly="true"/>
+        </row>
+        <row id="image-exposuretime">
+          <label value="&ExposureTime;"/>
+          <textbox id="image-exposuretime-text" readonly="true"/>
+        </row>
+        <row id="image-isoequiv">
+          <label value="&ISOequiv;"/>
+          <textbox id="image-isoequiv-text" readonly="true"/>
+        </row>
+        <row id="image-exposurebias">
+          <label value="&ExposureBias;"/>
+          <textbox id="image-exposurebias-text" readonly="true"/>
+        </row>
+        <row id="image-meteringmode">
+          <label value="&MeteringMode;"/>
+          <textbox id="image-meteringmode-text" readonly="true"/>
+        </row>
+        <row id="image-exposureprogram">
+          <label value="&ExposureProgram;"/>
+          <textbox id="image-exposureprogram-text" readonly="true"/>
+        </row>
+        <row id="image-exposuremode">
+          <label value="&ExposureMode;"/>
+          <textbox id="image-exposuremode-text" readonly="true"/>
+        </row>
+        <row id="image-whitebalance">
+          <label value="&WhiteBalance;"/>
+          <textbox id="image-whitebalance-text" readonly="true"/>
+        </row>
+        <row id="image-lightsource">
+          <label value="&LightSource;"/>
+          <textbox id="image-lightsource-text" readonly="true"/>
+        </row>
+        <row id="image-flash">
+          <label value="&FlashUsed;"/>
+          <textbox id="image-flash-text" readonly="true"/>
+        </row>
+        <row id="image-orientation"> 
+          <label value="&ImageOrientation;"/>
+          <textbox id="image-orientation-text" readonly="true"/>
+        </row>
+        <row id="image-colorspace">
+          <label value="&ImageColorSpace;"/>
+          <textbox id="image-colorspace-text" readonly="true"/>
+        </row>
+        <row id="image-bw">
+          <label value="&ImageBW;"/>
+          <textbox id="image-bw-text" readonly="true"/>
+        </row>
+        <row id="image-gpscoord">
+          <label value="&GPSCoord;"/>
+          <hbox>
+            <textbox id="image-gpscoord-text" readonly="true" style="min-width:29ex;" flex="1"/>
+            <!-- Don't just use plain HTML here because of bug 263433 -->
+            <hbox><html:a id="maplink-href" onclick="fxifObj.loadInBrowser(this.getAttribute('href'), event); return false;" style="text-decoration:underline; cursor:pointer;">&MapLink;</html:a></hbox>
+          </hbox>
+        </row>
+        <row id="image-gpsalt">
+          <label value="&GPSAlt;"/>
+          <textbox id="image-gpsalt-text" readonly="true"/>
+        </row>
+        <row id="image-photographer">
+          <label value="&Photographer;"/>
+          <textbox id="image-photographer-text" readonly="true"/>
+        </row>
+        <row id="image-city">
+          <label value="&City;"/>
+          <textbox id="image-city-text" readonly="true"/>
+        </row>
+        <row id="image-sublocation">
+          <label value="&Sublocation;"/>
+          <textbox id="image-sublocation-text" readonly="true"/>
+        </row>
+        <row id="image-provincestate">
+          <label value="&ProvinceState;"/>
+          <textbox id="image-provincestate-text" readonly="true"/>
+        </row>
+        <row id="image-countryname">
+          <label value="&CountryName;"/>
+          <textbox id="image-countryname-text" readonly="true"/>
+        </row>
+        <row id="image-copyright">
+          <label value="&Copyright;"/>
+          <textbox id="image-copyright-text" multiline="true" readonly="true"/>
+        </row>
+        <row id="image-title">
+          <label value="&Title;"/>
+          <textbox id="image-title-text" readonly="true"/>
+        </row>
+        <row id="image-caption">
+          <label value="&Caption;"/>
+          <textbox id="image-caption-text" multiline="true" readonly="true"/>
+        </row>
+        <row id="image-comment">
+          <label value="&Comment;"/>
+          <textbox id="image-comment-text" multiline="true" readonly="true"/>
+        </row>
+        <row id="image-instructions">
+          <label value="&Instructions;"/>
+          <textbox id="image-instructions-text" multiline="true" readonly="true"/>
+        </row>
+      </rows>
     </grid>
     <hbox id="no-data">
       <spacer width="20"/>

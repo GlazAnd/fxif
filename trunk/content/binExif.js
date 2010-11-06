@@ -254,8 +254,8 @@ function exifClass(stringBundle)
     var numEntries = fxifUtils.read16(data, dirstart, swapbytes);
     var interopIndex = "";
     var colorSpace = 0;
-    var dateTime = 0;
-    var dateTimeOrig = 0;
+    var exifDateTime = 0;
+    var exifDateTimeOrig = 0;
     for(var i=0; i<numEntries; i++) {
       var entry = dir_entry_addr(dirstart, i);
       var tag = fxifUtils.read16(data, entry, swapbytes);
@@ -288,12 +288,12 @@ function exifClass(stringBundle)
         break;
 
       case TAG_DATETIME_ORIGINAL:
-          dateTimeOrig = val;
+          exifDateTimeOrig = val;
         break;
 
       case TAG_DATETIME_DIGITIZED:
       case TAG_DATETIME:
-          dateTime = val;
+          exifDateTime = val;
         break;
 
       case TAG_USERCOMMENT:
@@ -433,8 +433,11 @@ function exifClass(stringBundle)
         break;
 
       case TAG_ORIENTATION:
-        if(!dataObj.Orientation && val > 1) {
-          dataObj.Orientation = stringBundle.getString("orientation" + val);
+        if(!dataObj.Orientation && val > 0) {
+          if(val <= 8)
+            dataObj.Orientation = stringBundle.getString("orientation" + val);
+          else
+            dataObj.Orientation = stringBundle.getString("unknown") + " (" + val + ")";
         }
         break;
   /*
@@ -684,10 +687,13 @@ function exifClass(stringBundle)
 
     if(!dataObj.Date)
     {
-      if(dateTimeOrig)
-        dataObj.Date = dateTimeOrig;
-      else if(dateTime)
-        dataObj.Date = dateTime;
+      if(exifDateTimeOrig)
+        dataObj.Date = exifDateTimeOrig;
+      else if(exifDateTime)
+        dataObj.Date = exifDateTime;
+
+      if (dataObj.Date)
+        dataObj.Date = dataObj.Date.replace(/:(\d{2}):/, "-$1-") + " " + stringBundle.getString("noTZ");
     }
 
     if(colorSpace != 0)

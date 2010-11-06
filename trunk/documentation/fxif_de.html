@@ -9,7 +9,7 @@
 <h1>Um was geht’s?</h1>
 <p>FxIF (Firefox exIF) erlaubt es Ihnen, in JPEG-Bildern enthaltene Metainformationen bequem in Firefox (oder SeaMonkey oder anderen kompatiblen Browsern) anzeigen zu lassen. Die meisten Digitalkameras speichern EXIF-Daten in allen Bildern die sie machen und viele Bearbeitungsprogramme fügen diese hinzu oder erlauben Ihnen Informationen zum Bild oder sich, dem Fotografen, hinzuzufügen.</p>
 
-<p>FxIF ist komplett in JavaScript geschrieben und sollte als solches portabel sein und auf jeder Plattform laufen auf der Mozilla läuft.</p>
+<p>FxIF ist in JavaScript und XUL geschrieben und sollte als solches portabel sein und auf jeder Plattform laufen auf der Mozilla läuft.</p>
 
 <h1>Nutzung</h1>
 <p>Machen Sie nach der Installation von FxIF einfach einen Rechtsklick auf ein Bild und wählen Sie dann <code>Eigenschaften</code>. Die Metadaten werden im Eigenschaften-Fenster eingeblendet. Diese Integration in den vorhandenen Dialog hält die Oberfläche einfach.<br />
@@ -70,6 +70,9 @@ Da dieses Fenster mit Firefox 3.6 entfernt wurde, wird ab dieser Versioner ein e
 <p>Sollten Sie Ihre Sprache nicht in der Liste finden, sind Sie eingeladen eine Übersetzung dafür beizusteueren. Sie können die <a href="http://code.google.com/p/fxif/source/browse/trunk/locale/de">deutsche Version der .dtd- und .properties-Dateien</a> aus dem FxIF-Repository herunterladen und mir die übersetzte Version zumailen. Ebenso bin ich dankbar für Fehlerbehebungen in Übersetzungen.</p>
 <p>FxIF hat auch eine Seite auf <a href="http://www.babelzilla.org/index.php?option=com_wts&extension=5292&type=show" target="_blank">BabelZilla.org</a> worüber die meisten Übersetzungen organisiert sind. Sie können also auch dort mitmachen.</p>
 
+<h1>Ich habe einen Fehler gefunden</h1>
+<p>Das kommt vor. Sie können <a href="mailto:ch.ey@gmx.net">mir</a> darüber eine Mail schreiben. Oder im <a href="http://code.google.com/p/fxif/issues/list" target="_blank">Google-Code-Projekt</a> den Fehler eintragen. Ich werde mich dann darum kümmern.</p>
+
 <h1>Wann wird die nächste Version freigegeben?</h1>
 <p>Wie bei den meisten Projekten „wenn sie fertig ist“. Seit 0.2.3 ist der Quellcode für FxIF <a href="http://code.google.com/p/fxif/">auf Google Code</a> zuhause und kann jederzeit <a href="http://code.google.com/p/fxif/source/checkout">über svn</a> ausgecheckt werden.</p>
 
@@ -102,10 +105,10 @@ Da dieses Fenster mit Firefox 3.6 entfernt wurde, wird ab dieser Versioner ein e
 <h1>Was ist neu in 0.4.1</h1>
 <ul>
 	<li>DateTime wird nur noch benutzt wenn DateTimeOriginal und DateTimeDigitized nicht vorhanden sind.</li>
-	<li>Die Erkennung des XMP-Datenblocks wurde etwas gelockert um einen Bug in mancher Grafiksoftware zu umgehen.</li>
+	<li><a href="http://code.google.com/p/fxif/issues/detail?id=3" target="_blank">Issue 3</a> behoben: Die Erkennung des XMP-Datenblocks wurde etwas gelockert um einen Bug in mancher Grafiksoftware zu umgehen.</li>
 	<li>Nicht existierende Informationen zum Blitzeinsatz in den XMP-Daten führen jetzt nicht mehr zum Fehlschlagen der XMP-Auswertung.</li>
 	<li>Allgemein führt ein Problem in der Auswertung eines Datenblocks jetzt nicht mehr dazu dass überhaupt keine Daten mehr angezeigt werden. Stattdessen werden die bis zum Fehler gelesenen Daten des jeweiligen Blocks angezeigt und ein Hinweis auf einen Fehler und möglicherweise fehlende Daten eingeblendet.</li>
-	<li>Behebung eines Bugs durch den "chr" als Sprache genutzt wurde wenn das Pref intl.accept_language auf Default für den jeweiligen Browser gelassen wurde. (Danke an Hector Zhao)</li>
+	<li><a href="http://code.google.com/p/fxif/issues/detail?id=2" target="_blank">Issue 2</a> behoben: ein Bug durch den "chr" als Sprache genutzt wurde wenn das Pref intl.accept_language auf Default für den jeweiligen Browser gelassen wurde. (Danke an Hector Zhao)</li>
 	<li>Neue Übersetzung für Niederländisch, danke dafür an markh van BabelZilla.org.</li>
 </ul>
 <h1>Was ist neu in 0.4.2</h1>
@@ -113,6 +116,14 @@ Da dieses Fenster mit Firefox 3.6 entfernt wurde, wird ab dieser Versioner ein e
 	<li>Blitzdaten in XMP werden nun besser ausgewertet (nun auch in Child-Tags des Flash-Tags statt nur in seinen Attributen). Danke an Phil Lattimore für die Rückmeldung.</li>
   <li>Zumindest eine Software hängt ein Nullbyte and das XMP-Dokument an und der Mozilla XML-Parser mag das überhaupt nicht. Ich habe einen Workaround für diesen Fall eingefügt der das Dokument um ein Byte kürzt.</li>
 </ul>
-
+<h1>Was ist neu in 0.4.3</h1>
+<ul>
+	<li>An ein paar Stellen war ich zu optimistisch bezüglich der Anzahl Bytes in einem JPEG-Marker. Das konnte dazu führen dass ich eine negative Anzahl Bytes lesen wollte was Mozillas Streamreader nicht so sehr gefiel. Danke an Jemini für die Meldung.</li>
+	<li>Behebung eines Bugs der dazu führte das der vorgenannte Abbruch nicht sauber dem Benutzer gemeldet wurde.</li>
+  <li><a href="http://code.google.com/p/fxif/issues/detail?id=4" target="_blank">Issue 4</a> behoben: Der Button „Kopieren“ kopiert keine GPS-Koordinaten.</li>
+  <li><a href="http://code.google.com/p/fxif/issues/detail?id=5" target="_blank">Issue 5</a> behoben: Enthielt das EXIF-Tag Orientation einen unbekannten Wert brach FxIF ab.</li>
+  <li><a href="http://code.google.com/p/fxif/issues/detail?id=6" target="_blank">Issue 6</a> behoben: Daten aus dem binären EXIF-Block wurden einfach kopiert und enthalten per Konvention Doppelpunkte als Trenner. Diese werden nun durch Bindestriche ersetzt um der Formatierung von Daten aus IPTC und XMP zu entsprechen (JJJJ-MM-TT wie in ISO 8601 empfohlen).</li>
+  <li>Außerdem enthalten Daten im binären EXIF-Block keine Zeitzoneninformationen. Dies wird nun bei der Ausgabe erwähnt.</li>
+</ul>
 </body>
 </html>

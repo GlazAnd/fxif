@@ -270,8 +270,12 @@ function xmpClass(stringBundle)
     }
 
     val = getXMPValue(dom, "http://ns.adobe.com/tiff/1.0/", "Orientation");
-    if(!dataObj.Orientation && val && val > 1)
-      dataObj.Orientation = stringBundle.getString("orientation" + val);
+    if(!dataObj.Orientation && val && val > 0) {
+        if(val <= 8)
+          dataObj.Orientation = stringBundle.getString("orientation" + val);
+        else
+          dataObj.Orientation = stringBundle.getString("unknown") + " (" + val + ")";
+    }
 
     val = getXMPValue(dom, "http://ns.adobe.com/tiff/1.0/", "ImageHeight");
     if(val)
@@ -572,7 +576,6 @@ function xmpClass(stringBundle)
   // Outputformat is YYYY:MM:DD HH:MM:SS [+/-HH:MM]
   function readAndFormatISODate(datestring)
   {
-  //  var exploded_date = datestring.match(/^(\d{4})-(\d{2})-(\d{2})[T ](\d{2}):(\d{2}):(\d{2})(?:.\d{2})?(?:([+-])(\d{2}):(\d{2}))?$/);
     var exploded_date = datestring.match(/^(\d{4}-\d{2}-\d{2})[T ](\d{2}:\d{2}:\d{2})(?:.\d{2})?(?:([+-])(\d{2}):(\d{2}))?$/);
     if (exploded_date)
     {
