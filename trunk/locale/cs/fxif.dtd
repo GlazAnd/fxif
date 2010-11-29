@@ -40,5 +40,6 @@
 <!ENTITY OptionsDialogTitle "Možnosti FxIF">
 <!ENTITY GPSFormat "Formát souøadnic GPS:">
 <!ENTITY DD.label "Desetiny stupòù">
+<!ENTITY DM.label "stupòù minut">
 <!ENTITY DMS.label "stupòù minut sekund">
 <!ENTITY OverrideMapProvider "Dodavatel map:">

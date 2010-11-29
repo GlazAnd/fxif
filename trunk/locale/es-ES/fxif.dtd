@@ -41,5 +41,6 @@
 <!ENTITY OptionsDialogTitle "Preferencias de FxIF">
 <!ENTITY GPSFormat "Formato de coordenadas:">
 <!ENTITY DD.label "Grados decimales">
+<!ENTITY DM.label "Grados y minutos">
 <!ENTITY DMS.label "Grados, minutos y segundos">
 <!ENTITY OverrideMapProvider "Servicio de mapas online:">

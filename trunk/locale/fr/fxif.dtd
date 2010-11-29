@@ -40,5 +40,6 @@
 <!ENTITY OptionsDialogTitle "Paramètres de FxIF">
 <!ENTITY GPSFormat "Format des coordonnées :">
 <!ENTITY DD.label "Degré décimal">
+<!ENTITY DM.label "Degrés minutes">
 <!ENTITY DMS.label "Degrés minutes secondes">
 <!ENTITY OverrideMapProvider "Service de carte :">

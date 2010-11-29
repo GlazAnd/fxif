@@ -1,0 +1,39 @@
+<!ENTITY contextMenu.label "EXIF 정보">
+<!ENTITY EXIFData "EXIF 정보">
+<!ENTITY Copy "복사">
+<!ENTITY CameraMake "카메라 제조사:">
+<!ENTITY CameraModel "카메라 모델:">
+<!ENTITY CameraLens "렌즈:">
+<!ENTITY ImageDate "촬영 일시:">
+<!ENTITY ImageBW "흑백:">
+<!ENTITY FlashUsed "플래시 여부:">
+<!ENTITY FocalLength "초점 거리:">
+<!ENTITY DigitalZoom "디지털 줌:">
+<!ENTITY CCDWidth "CCD 폭:">
+<!ENTITY ExposureTime "노출 시간:">
+<!ENTITY Aperture "조리개:">
+<!ENTITY FocusDist "초점 거리:">
+<!ENTITY ISOequiv "ISO 대응:">
+<!ENTITY ExposureBias "노출 성향:">
+<!ENTITY WhiteBalance "화이트 밸런스:">
+<!ENTITY LightSource "광원:">
+<!ENTITY MeteringMode "측량 모드:">
+<!ENTITY ExposureProgram "노출:">
+<!ENTITY ExposureMode "노출 방식:">
+<!ENTITY ImageColorSpace "색 공간:">
+<!ENTITY GPSCoord "GPS 좌표:">
+<!ENTITY MapLink "맵 링크">
+<!ENTITY GPSAlt "GPS 고도:">
+<!ENTITY Photographer "사진사:">
+<!ENTITY City "도시:">
+<!ENTITY Sublocation "하위 주소:">
+<!ENTITY ProvinceState "도/주:">
+<!ENTITY CountryName "국가:">
+<!ENTITY Copyright "저작권:">
+<!ENTITY Title "제목:">
+<!ENTITY Caption "머리말:">
+<!ENTITY Comment "설명:">
+<!ENTITY NoData "메타 정보를 찾을 수 없음">
+<!ENTITY OptionsDialogTitle "FxIF 환경설정">
+<!ENTITY GPSFormat "좌표 형식 사용:">
+<!ENTITY OverrideMapProvider "지도 제공자:">

@@ -40,5 +40,6 @@
 <!ENTITY OptionsDialogTitle "Opzioni di FxIF">
 <!ENTITY GPSFormat "Formato delle coordinate geografiche">
 <!ENTITY DD.label "Gradi decimali">
+<!ENTITY DM.label "Gradi e minuti">
 <!ENTITY DMS.label "Gradi, minuti e secondi">
 <!ENTITY OverrideMapProvider "Fornitore della mappa">
