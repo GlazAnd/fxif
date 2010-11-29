@@ -210,12 +210,18 @@ function exifClass(stringBundle)
     var degFormat = "dms";
     var degFormatter = fxifUtils.dd2dms;
     try {
-      // 0 = DMS, 1 = DD
-      if (fxifUtils.getPreferences().getIntPref("gpsFormat"))
+      // 0 = DMS, 1 = DD, 2 = DM
+      if (fxifUtils.getPreferences().getIntPref("gpsFormat") == 1)
       {
         // but dd if the user wants that
         degFormat = "dd";
         degFormatter = fxifUtils.dd2dd;
+      }
+      else if (fxifUtils.getPreferences().getIntPref("gpsFormat") == 2)
+      {
+        // but dd if the user wants that
+        degFormat = "dm";
+        degFormatter = fxifUtils.dd2dm;
       }
     } catch(e){}
     // now output all existing values
@@ -349,85 +355,37 @@ function exifClass(stringBundle)
       case TAG_FLASH:
         if(val >= 0) {
           var fu;
-          if(val & 1) {
+          var addfunc = new Array();
+          if(val & 0x01) {
             fu = stringBundle.getString("yes");
 
-            switch(val) {
-              case 0x5:
-                fu += " (" + stringBundle.getString("nostrobe") + ")";
-                break;
-              case 0x7:
-                fu += " (" + stringBundle.getString("strobe") + ")";
-                break;
-              case 0x9:
-                fu += " (" + stringBundle.getString("manual") + ")";
-                break;
-              case 0xd:
-                fu += " (" + stringBundle.getString("manual") + ", "
-                  + stringBundle.getString("noreturnlight") + ")";
-                break;
-              case 0xf:
-                fu += " (" + stringBundle.getString("manual") + ", "
-                  + stringBundle.getString("returnlight") + ")";
-                break;
-              case 0x19:
-                fu += " (" + stringBundle.getString("auto") + ")";
-                break;
-              case 0x1d:
-                fu += " (" + stringBundle.getString("auto") + ", "
-                  + stringBundle.getString("noreturnlight") + ")";
-                break;
-              case 0x1f:
-                fu += " (" + stringBundle.getString("auto") + ", "
-                  + stringBundle.getString("returnlight") + ")";
-                break;
-              case 0x41:
-                fu += " (" + stringBundle.getString("redeye") + ")";
-                break;
-              case 0x45:
-                fu += " (" + stringBundle.getString("redeye")
-                  + stringBundle.getString("noreturnlight") + ")";
-                break;
-              case 0x47:
-                fu += " (" + stringBundle.getString("redeye")
-                  + stringBundle.getString("returnlight") + ")";
-                break;
-              case 0x49:
-                fu += " (" + stringBundle.getString("manual") + ", "
-                  + stringBundle.getString("redeye") + ")";
-                break;
-              case 0x4d:
-                fu += " (" + stringBundle.getString("manual")  + ", "
-                  + stringBundle.getString("redeye") + ", "
-                  + stringBundle.getString("noreturnlight") + ")";
-                break;
-              case 0x4f:
-                fu += " (" + stringBundle.getString("redeye")  + ", "
-                  + stringBundle.getString("redeye") + ", "
-                  + stringBundle.getString("returnlight") + ")";
-                break;
-              case 0x59:
-                fu += " (" + stringBundle.getString("auto") + ", "
-                  + stringBundle.getString("redeye") + ")";
-                break;
-              case 0x5d:
-                fu += " (" + stringBundle.getString("auto")  + ", "
-                  + stringBundle.getString("redeye") + ", "
-                  + stringBundle.getString("noreturnlight") + ")";
-                break;
-              case 0x5f:
-                fu += " (" + stringBundle.getString("auto")  + ", "
-                  + stringBundle.getString("redeye") + ", "
-                  + stringBundle.getString("returnlight") + ")";
-                break;
-            }
+            if(val & 0x18)
+              addfunc.push(stringBundle.getString("auto"));
+            else if(val & 0x8)
+              addfunc.push(stringBundle.getString("enforced"));
+
+            if(val & 0x40)
+              addfunc.push(stringBundle.getString("redeye"));
+
+            if(val & 0x06)
+              addfunc.push(stringBundle.getString("returnlight"));
+            else if(val & 0x04)
+              addfunc.push(stringBundle.getString("noreturnlight"));
           }
           else {
             fu = stringBundle.getString("no");
-            switch (val) {
-              case 0x18: fu += " (" + stringBundle.getString("auto") + ")"; break;
-            }
+
+            if(val & 0x20)
+              addfunc.push(stringBundle.getString("noflash"));
+            else if(val & 0x18)
+              addfunc.push(stringBundle.getString("auto"));
+            else if(val & 0x10)
+              addfunc.push(stringBundle.getString("enforced"));
           }
+
+          if (addfunc.length)
+            fu += " (" + addfunc.join(", ") + ")";
+
           dataObj.FlashUsed = fu;
         }
         break;

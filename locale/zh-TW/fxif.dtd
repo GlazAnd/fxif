@@ -3,7 +3,6 @@
 <!ENTITY Copy "複製">
 <!ENTITY CameraMake "製造廠商:">
 <!ENTITY CameraModel "相機型號:">
-<!ENTITY CameraLens "Lens:">
 <!ENTITY ImageDate "拍攝時間:">
 <!ENTITY ImageOrientation "方位:">
 <!ENTITY ImageBW "黑白照:">
@@ -21,8 +20,6 @@
 <!ENTITY MeteringMode "測光模式:">
 <!ENTITY ExposureProgram "曝光:">
 <!ENTITY ExposureMode "曝光模式:">
-<!ENTITY ImageColorSpace "Color Space:">
-<!ENTITY GPSCoord "GPS Coordinate:">
 <!ENTITY MapLink "地圖 链接">
 <!ENTITY GPSAlt "GPS 高度:">
 <!ENTITY Photographer "攝影師:">
@@ -31,10 +28,4 @@
 <!ENTITY Caption "描述:">
 <!ENTITY Comment "註解:">
 <!ENTITY NoData "沒有元數據發現">
-
 <!-- Options dialog -->
-<!ENTITY OptionsDialogTitle "FxIF Preferences">
-<!ENTITY GPSFormat "Coordinates format to use:">
-<!ENTITY DD.label "Decimal degrees">
-<!ENTITY DMS.label "Degree Minutes Seconds">
-<!ENTITY OverrideMapProvider "Map provider:">

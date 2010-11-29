@@ -41,5 +41,6 @@
 <!ENTITY OptionsDialogTitle "Настройки FxIF">
 <!ENTITY GPSFormat "Формат координат GPS:">
 <!ENTITY DD.label "Десятичные градусы">
+<!ENTITY DM.label "Градусы Минуты">
 <!ENTITY DMS.label "Градусы Минуты Секунды">
 <!ENTITY OverrideMapProvider "Поставщик карт:">

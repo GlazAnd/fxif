@@ -236,17 +236,17 @@ function xmpClass(stringBundle)
         flashReturn = Number(el[0].getAttributeNS("http://ns.adobe.com/exif/1.0/", "Return"));
 
       var fu;
+      var addfunc = new Array();
       if(flashFired && flashFired.match(/^true$/i)) {
         fu = stringBundle.getString("yes");
 
-        var addfunc = new Array();
         if(flashMode == 3)
           addfunc.push(stringBundle.getString("auto"));
         else
           if(flashMode == 1)
-            addfunc.push(stringBundle.getString("manual"));
+            addfunc.push(stringBundle.getString("enforced"));
 
-        if(redEyeMode.match(/^true$/i))
+        if(redEyeMode && redEyeMode.match(/^true$/i))
           addfunc.push(stringBundle.getString("redeye"));
 
         if(flashReturn == 3)
@@ -254,18 +254,22 @@ function xmpClass(stringBundle)
         else
           if(flashReturn == 2)
             addfunc.push(stringBundle.getString("noreturnlight"));
-
-        if (addfunc.length)
-          fu += " (" + addfunc.join(", ") + ")";
       }
       else {
         fu = stringBundle.getString("no");
-        if(flashMode == 2)
-          fu += " (" + stringBundle.getString("manual") + ")";
+        if(flashFunction && flashFunction.match(/^true$/i))
+            addfunc.push(stringBundle.getString("noflash"));
         else
-          if(flashMode == 3)
-            fu += " (" + stringBundle.getString("auto") + ")";
+          if(flashMode == 2)
+            addfunc.push(stringBundle.getString("enforced"));
+          else
+            if(flashMode == 3)
+              addfunc.push(stringBundle.getString("auto"));
       }
+
+      if (addfunc.length)
+        fu += " (" + addfunc.join(", ") + ")";
+
       dataObj.FlashUsed = fu;
     }
 
@@ -510,12 +514,18 @@ function xmpClass(stringBundle)
     var degFormat = "dms";
     var degFormatter = fxifUtils.dd2dms;
     try {
-      // 0 = DMS, 1 = DD
-      if (fxifUtils.getPreferences().getIntPref("gpsFormat"))
+      // 0 = DMS, 1 = DD, 2 = DM
+      if (fxifUtils.getPreferences().getIntPref("gpsFormat") == 1)
       {
         // but dd if the user wants that
         degFormat = "dd";
         degFormatter = fxifUtils.dd2dd;
+      }
+      else if (fxifUtils.getPreferences().getIntPref("gpsFormat") == 2)
+      {
+        // but dd if the user wants that
+        degFormat = "dm";
+        degFormatter = fxifUtils.dd2dm;
       }
     } catch(e){}
 

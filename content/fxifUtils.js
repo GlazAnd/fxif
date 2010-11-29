@@ -78,6 +78,17 @@ function fxifUtilsClass ()
     return new Array(gpsDeg, gpsMin, gpsSec);
   }
 
+  this.dd2dm = function (gpsval)
+  {
+    // a bit unconventional calculation to get input edge cases
+    // like 0x31 / 0x01, 0x0a / 0x01, 0x3c / 0x01 to 49°11'0" instead of 49°10'60"
+    var gpsDeg = Math.floor(gpsval / 3600);
+    gpsval -= gpsDeg * 3600.0;
+    // round to 2 digits after the comma
+    var gpsMin = (gpsval / 60).toFixed(2);
+    return new Array(gpsDeg, gpsMin);
+  }
+
   this.dd2dd = function (gpsval)
   {
     // round to 6 digits after the comma

@@ -17,10 +17,13 @@
     <em:translator>Tomáš Marek - Czech (cs)</em:translator>
     <em:translator>Armin C. Schneider - initial German (de)</em:translator>
     <em:translator>Álvaro G. Vicario - Spanish (es-ES)</em:translator>
+    <em:translator>Oliverl - Estonian (et-EE)</em:translator>
+    <em:translator>Ilari Oras – Finnish (fi)</em:translator>
     <em:translator>Cédric Corazza – French (fr)</em:translator>
     <em:translator>MatrixIsAllOver – Italian (it)</em:translator>
     <em:translator>Takanori - initial Japanese (ja)</em:translator>
     <em:translator>Hisateru Tanaka - new Japanese (ja)</em:translator>
+    <em:translator>wtspout - Korean (ko-KR)</em:translator>
     <em:translator>markh van BabelZilla.org - Dutch (nl)</em:translator>
     <em:translator>Tomasz Tracz - Polish (pl)</em:translator>
     <em:translator>Edgard Dias Magalhães (edgard.magalhaes@gmail.com) - Brazilian Portuguese (pt-BR)</em:translator>
@@ -39,9 +42,12 @@
     <em:locale>locale/de/</em:locale>
     <em:locale>locale/en-US/</em:locale>
     <em:locale>locale/es-ES/</em:locale>
+    <em:locale>locale/et-EE/</em:locale>
+    <em:locale>locale/fi/</em:locale>
     <em:locale>locale/fr/</em:locale>
     <em:locale>locale/it/</em:locale>
     <em:locale>locale/ja/</em:locale>
+    <em:locale>locale/ko-KR/</em:locale>
     <em:locale>locale/nl/</em:locale>
     <em:locale>locale/pl/</em:locale>
     <em:locale>locale/pt-BR/</em:locale>

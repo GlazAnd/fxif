@@ -39,5 +39,6 @@
 <!ENTITY OptionsDialogTitle "FxIF voorkeuren">
 <!ENTITY GPSFormat "Te gebruiken opmaak voor coördinaten:">
 <!ENTITY DD.label "Decimale graden">
+<!ENTITY DM.label "Graden Minuten">
 <!ENTITY DMS.label "Graden Minuten Seconden">
 <!ENTITY OverrideMapProvider "Kaartaanbieder:">

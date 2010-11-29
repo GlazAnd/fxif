@@ -1,0 +1,46 @@
+<!ENTITY contextMenu.label "EXIF Tiedot">
+<!ENTITY EXIFData "EXIF Tiedot">
+<!ENTITY Copy "Kopioi">
+<!ENTITY CameraMake "Kameran valmistaja:">
+<!ENTITY CameraModel "Kameran malli:">
+<!ENTITY CameraLens "Linssi:">
+<!ENTITY ImageDate "Kuvan päiväys:">
+<!ENTITY ImageOrientation "Suunta:">
+<!ENTITY ImageBW "Mustavalkoinen:">
+<!ENTITY FlashUsed "Salama välähtänyt:">
+<!ENTITY FocalLength "Polttoväli:">
+<!ENTITY DigitalZoom "Digitaalinen zoom:">
+<!ENTITY CCDWidth "CCDn leveys:">
+<!ENTITY ExposureTime "Valotusaika:">
+<!ENTITY Aperture "Aukko:">
+<!ENTITY FocusDist "Tarkennusetäisyys:">
+<!ENTITY ISOequiv "ISO-arvo:">
+<!ENTITY ExposureBias "Valotuksen korjaus:">
+<!ENTITY WhiteBalance "Valkotasapaino:">
+<!ENTITY LightSource "Valon lähde:">
+<!ENTITY MeteringMode "Mittaustapa:">
+<!ENTITY ExposureProgram "Valotus:">
+<!ENTITY ExposureMode "Valotustila:">
+<!ENTITY ImageColorSpace "Väriavaruus:">
+<!ENTITY GPSCoord "GPS-koordinaatit:">
+<!ENTITY MapLink "Karttalinkki">
+<!ENTITY GPSAlt "GPSn korkeus:">
+<!ENTITY Photographer "Valokuvaaja:">
+<!ENTITY City "Kaupunki:">
+<!ENTITY Sublocation "Tarkempi sijainti:">
+<!ENTITY ProvinceState "Lääni/Osavaltio:">
+<!ENTITY CountryName "Maa:">
+<!ENTITY Copyright "Tekijänoikeudet:">
+<!ENTITY Title "Nimi:">
+<!ENTITY Caption "Kuvaus:">
+<!ENTITY Comment "Kommentti:">
+<!ENTITY Instructions "Käyttöohje:">
+<!ENTITY NoData "Metadataa ei löytynyt">
+
+<!-- Options dialog -->
+<!ENTITY OptionsDialogTitle "FxIF Asetukset">
+<!ENTITY GPSFormat "Käytettävä koordinaattien ilmaisutapa:">
+<!ENTITY DD.label "Desimaaliasteet">
+<!ENTITY DM.label "Asteet, minuutit">
+<!ENTITY DMS.label "Asteet, minuutit, sekuntit">
+<!ENTITY OverrideMapProvider "Kartan tarjoaja:">

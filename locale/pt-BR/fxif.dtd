@@ -39,5 +39,6 @@
 <!ENTITY OptionsDialogTitle "Preferências do FxIF">
 <!ENTITY GPSFormat "Formato das coordenadas:">
 <!ENTITY DD.label "Graus decimais">
+<!ENTITY DM.label "Graus Minutos">
 <!ENTITY DMS.label "Graus Minutos Segundos">
 <!ENTITY OverrideMapProvider "Fornecedor do Mapa:">

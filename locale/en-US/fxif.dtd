@@ -41,5 +41,6 @@
 <!ENTITY OptionsDialogTitle "FxIF Preferences">
 <!ENTITY GPSFormat "Coordinates format to use:">
 <!ENTITY DD.label "Decimal degrees">
+<!ENTITY DM.label "Degree Minutes">
 <!ENTITY DMS.label "Degree Minutes Seconds">
 <!ENTITY OverrideMapProvider "Map provider:">

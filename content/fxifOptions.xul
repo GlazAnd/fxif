@@ -54,6 +54,7 @@
     <caption label="&GPSFormat;"/>
       <radiogroup id="gpsFormat" orient="horizontal">
         <radio value="0" label="&DMS.label;" selected="true"/>
+        <radio value="2" label="&DM.label;"/>
         <radio value="1" label="&DD.label;"/>
       </radiogroup>
     </groupbox>
