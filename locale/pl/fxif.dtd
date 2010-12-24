@@ -36,11 +36,10 @@
 <!ENTITY Comment "Komentarz:">
 <!ENTITY Instructions "Instrukcje:">
 <!ENTITY NoData "Brak danych EXIF">
-
 <!-- Options dialog -->
 <!ENTITY OptionsDialogTitle "Preferencje FxIF">
 <!ENTITY GPSFormat "Współrzędne w formacie do wykorzystania:">
 <!ENTITY DD.label "Stopnie dziesiętne">
-<!ENTITY DMS.label "Stopnie, minuty">
+<!ENTITY DM.label "Stopnie, minuty">
 <!ENTITY DMS.label "Stopnie, minuty, sekundy">
 <!ENTITY OverrideMapProvider "Dostawca mapy:">

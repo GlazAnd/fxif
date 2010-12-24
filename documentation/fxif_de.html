@@ -114,7 +114,7 @@ Da dieses Fenster mit Firefox 3.6 entfernt wurde, wird ab dieser Versioner ein e
 <h1>Was ist neu in 0.4.2</h1>
 <ul>
 	<li>Blitzdaten in XMP werden nun besser ausgewertet (nun auch in Child-Tags des Flash-Tags statt nur in seinen Attributen). Danke an Phil Lattimore für die Rückmeldung.</li>
-  <li>Zumindest eine Software hängt ein Nullbyte and das XMP-Dokument an und der Mozilla XML-Parser mag das überhaupt nicht. Ich habe einen Workaround für diesen Fall eingefügt der das Dokument um ein Byte kürzt.</li>
+  <li>Zumindest eine Software hängt ein Nullbyte and das XMP-Dokument an und der Mozilla-XML-Parser mag das überhaupt nicht. Ich habe einen Workaround für diesen Fall eingefügt der das Dokument um ein Byte kürzt.</li>
 </ul>
 <h1>Was ist neu in 0.4.3</h1>
 <ul>
@@ -127,6 +127,8 @@ Da dieses Fenster mit Firefox 3.6 entfernt wurde, wird ab dieser Versioner ein e
   <li><a href="http://code.google.com/p/fxif/issues/detail?id=8" target="_blank">Issue 8</a> behoben: Unterstützung für die Formatierung von GPS-Position als Grad und Minuten.</li>
   <li>Die Auswertung der Blitzinformationen und Stringgenerierung wurde auf Basis eines Patch von Max Pozdeev überarbeitet.</li>
   <li>Neue Übersetzungen ins Schwedische durch Jan Kardell (über BabelZilla.org) und ins Finnische durch Ilari Oras (was <a href="http://code.google.com/p/fxif/issues/detail?id=9" target="_blank">Issue 9</a> behebt).</li>
+  <li>Die polnische Übersetzung ist leider nicht enthalten da zwei neue Strings nicht übersetzt wurden.</li>
+  <li><a href="http://code.google.com/p/fxif/issues/detail?id=10" target="_blank">Issue 10</a> behoben: Endlose Rekursionen wenn der Exif Interoperability Offset oder Exif Offset auf den eigenen Startoffset zeigen. Das ist ein Fehler in den Daten.</li>
 </ul>
 </body>
 </html>

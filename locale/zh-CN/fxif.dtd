@@ -40,5 +40,6 @@
 <!ENTITY OptionsDialogTitle "FxIF 首选项">
 <!ENTITY GPSFormat "使用坐标格式:">
 <!ENTITY DD.label "十进制度">
+<!ENTITY DM.label "度、分">
 <!ENTITY DMS.label "度、分、秒">
 <!ENTITY OverrideMapProvider "地图提供商:">

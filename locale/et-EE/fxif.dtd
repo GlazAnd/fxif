@@ -7,38 +7,13 @@
 <!ENTITY ImageDate "Pildi Kuupäev:">
 <!ENTITY ImageOrientation "Orientatsioon:">
 <!ENTITY ImageBW "Must ja Valge:">
-<!ENTITY FlashUsed "">
-<!ENTITY FocalLength "">
-<!ENTITY DigitalZoom "">
-<!ENTITY CCDWidth "">
-<!ENTITY ExposureTime "">
 <!ENTITY Aperture "Ava:">
-<!ENTITY FocusDist "">
-<!ENTITY ISOequiv "">
-<!ENTITY ExposureBias "">
 <!ENTITY WhiteBalance "Valge Tasakaal:">
 <!ENTITY LightSource "Valgusallikas:">
-<!ENTITY MeteringMode "">
-<!ENTITY ExposureProgram "">
-<!ENTITY ExposureMode "">
-<!ENTITY ImageColorSpace "">
-<!ENTITY GPSCoord "">
-<!ENTITY MapLink "">
-<!ENTITY GPSAlt "">
-<!ENTITY Photographer "">
 <!ENTITY City "Linn:">
-<!ENTITY Sublocation "">
-<!ENTITY ProvinceState "">
 <!ENTITY CountryName "Riik:">
 <!ENTITY Copyright "Autoriõigus:">
 <!ENTITY Title "Pealkiri:">
-<!ENTITY Caption "">
 <!ENTITY Comment "Kommentaar:">
 <!ENTITY Instructions "Juhised:">
-<!ENTITY NoData "">
-<!---->
-<!ENTITY OptionsDialogTitle "">
-<!ENTITY GPSFormat "">
-<!ENTITY DD.label "">
-<!ENTITY DMS.label "">
-<!ENTITY OverrideMapProvider "">
+<!ENTITY DM.label "Kraadi Minutis">

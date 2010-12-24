@@ -40,5 +40,6 @@
 <!ENTITY OptionsDialogTitle "FxIF 設定">
 <!ENTITY GPSFormat "使用する位置情報の形式:">
 <!ENTITY DD.label "10進法">
+<!ENTITY DM.label "度分">
 <!ENTITY DMS.label "度分秒">
 <!ENTITY OverrideMapProvider "マップ提供元:">
