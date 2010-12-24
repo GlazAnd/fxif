@@ -5,6 +5,7 @@
 <!ENTITY CameraModel "카메라 모델:">
 <!ENTITY CameraLens "렌즈:">
 <!ENTITY ImageDate "촬영 일시:">
+<!ENTITY ImageOrientation "사진방향:">
 <!ENTITY ImageBW "흑백:">
 <!ENTITY FlashUsed "플래시 여부:">
 <!ENTITY FocalLength "초점 거리:">
@@ -36,4 +37,7 @@
 <!ENTITY NoData "메타 정보를 찾을 수 없음">
 <!ENTITY OptionsDialogTitle "FxIF 환경설정">
 <!ENTITY GPSFormat "좌표 형식 사용:">
+<!ENTITY DD.label "도">
+<!ENTITY DM.label "분">
+<!ENTITY DMS.label "초">
 <!ENTITY OverrideMapProvider "지도 제공자:">

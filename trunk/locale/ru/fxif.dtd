@@ -21,7 +21,7 @@
 <!ENTITY MeteringMode "Замер экспозиции:">
 <!ENTITY ExposureProgram "Программа экспозиции:">
 <!ENTITY ExposureMode "Режим съемки:">
-<!ENTITY ImageColorSpace "Color Space:">
+<!ENTITY ImageColorSpace "Цветовое пространство:">
 <!ENTITY GPSCoord "Координаты GPS:">
 <!ENTITY MapLink "Ссылка на карту">
 <!ENTITY GPSAlt "Высота по GPS:">
@@ -36,7 +36,6 @@
 <!ENTITY Comment "Комментарий:">
 <!ENTITY Instructions "Инструкции:">
 <!ENTITY NoData "Данные не найдены">
-
 <!-- Options dialog -->
 <!ENTITY OptionsDialogTitle "Настройки FxIF">
 <!ENTITY GPSFormat "Формат координат GPS:">

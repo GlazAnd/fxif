@@ -353,13 +353,18 @@ function exifClass(stringBundle)
         break;
 
       case TAG_FLASH:
+        // Bit 0 indicates the flash firing status,
+        // bits 1 and 2 indicate the flash return status,
+        // bits 3 and 4 indicate the flash mode,
+        // bit 5 indicates whether the flash function is present,
+        // bit 6 indicates "red eye" mode.
         if(val >= 0) {
           var fu;
           var addfunc = new Array();
           if(val & 0x01) {
             fu = stringBundle.getString("yes");
 
-            if(val & 0x18)
+            if(val & 0x18 == 0x18)
               addfunc.push(stringBundle.getString("auto"));
             else if(val & 0x8)
               addfunc.push(stringBundle.getString("enforced"));
@@ -367,7 +372,7 @@ function exifClass(stringBundle)
             if(val & 0x40)
               addfunc.push(stringBundle.getString("redeye"));
 
-            if(val & 0x06)
+            if(val & 0x06 == 0x06)
               addfunc.push(stringBundle.getString("returnlight"));
             else if(val & 0x04)
               addfunc.push(stringBundle.getString("noreturnlight"));
@@ -377,7 +382,7 @@ function exifClass(stringBundle)
 
             if(val & 0x20)
               addfunc.push(stringBundle.getString("noflash"));
-            else if(val & 0x18)
+            else if(val & 0x18 == 0x18)
               addfunc.push(stringBundle.getString("auto"));
             else if(val & 0x10)
               addfunc.push(stringBundle.getString("enforced"));
@@ -597,7 +602,11 @@ function exifClass(stringBundle)
 
       case TAG_EXIF_OFFSET:
       case TAG_INTEROP_OFFSET:
-        ntags += this.readExifDir(dataObj, data, val, swapbytes);
+        // Prevent simple loops, it has happened that readExifDir()
+        // has been recursed hundrets of time because this tag pointed
+        // to its own start.
+        if (val != dirstart)
+          ntags += this.readExifDir(dataObj, data, val, swapbytes);
         break;
 
       case TAG_GPSINFO:

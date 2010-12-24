@@ -23,19 +23,15 @@ if(err >= SUCCESS) {
 	registerChrome(LOCALE | instFlags, jar, "locale/de/");
 	registerChrome(LOCALE | instFlags, jar, "locale/en-US/");
 	registerChrome(LOCALE | instFlags, jar, "locale/es-ES/");
-	registerChrome(LOCALE | instFlags, jar, "locale/et-EE/");
 	registerChrome(LOCALE | instFlags, jar, "locale/it/");
 	registerChrome(LOCALE | instFlags, jar, "locale/fi/");
 	registerChrome(LOCALE | instFlags, jar, "locale/fr/");
 	registerChrome(LOCALE | instFlags, jar, "locale/ja/");
-	registerChrome(LOCALE | instFlags, jar, "locale/ko-KR/");
 	registerChrome(LOCALE | instFlags, jar, "locale/nl/");
-	registerChrome(LOCALE | instFlags, jar, "locale/pl/");
 	registerChrome(LOCALE | instFlags, jar, "locale/pt-BR/");
 	registerChrome(LOCALE | instFlags, jar, "locale/ru/");
 	registerChrome(LOCALE | instFlags, jar, "locale/sv-SE/");
 	registerChrome(LOCALE | instFlags, jar, "locale/zh-CN/");
-	registerChrome(LOCALE | instFlags, jar, "locale/zh-TW/");
 	err = performInstall();
 	if(err >= SUCCESS) {
 		alert(APP_NAME + " " + APP_VERSION + " has been succesfully installed.\n"
