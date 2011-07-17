@@ -63,6 +63,9 @@
   </script>
 
   <keyset id="dialogKeys"/>
+  <keyset>
+    <key modifiers="accel" key="W" oncommand="window.close();"/>
+  </keyset>
 
   <stringbundle src="chrome://fxif/locale/fxif.properties" id="bundle_fxif"/>
   <vbox id="exif-sec">
@@ -158,11 +161,12 @@
         </row>
         <row id="image-gpscoord">
           <label value="&GPSCoord;"/>
-          <hbox>
+          <!-- div instead of hbox to prevent the warning "XUL box for hbox element contained an inline a child ..." -->
+          <div style="display:block">
             <textbox id="image-gpscoord-text" readonly="true" style="min-width:29ex;" flex="1"/>
             <!-- Don't just use plain HTML here because of bug 263433 -->
-            <hbox><html:a id="maplink-href" onclick="fxifObj.loadInBrowser(this.getAttribute('href'), event); return false;" style="text-decoration:underline; cursor:pointer;">&MapLink;</html:a></hbox>
-          </hbox>
+            <html:a id="maplink-href" onclick="fxifObj.loadInBrowser(this.getAttribute('href'), event); return false;" style="text-decoration:underline; cursor:pointer;">&MapLink;</html:a>
+          </div>
         </row>
         <row id="image-gpsalt">
           <label value="&GPSAlt;"/>
@@ -207,6 +211,10 @@
         <row id="image-instructions">
           <label value="&Instructions;"/>
           <textbox id="image-instructions-text" multiline="true" readonly="true"/>
+        </row>
+        <row id="image-software">
+          <label value="&Software;"/>
+          <textbox id="image-software-text" readonly="true"/>
         </row>
       </rows>
     </grid>

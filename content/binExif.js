@@ -51,6 +51,7 @@ function exifClass(stringBundle)
   const TAG_MAKE               = 0x010F;
   const TAG_MODEL              = 0x0110;
   const TAG_ORIENTATION        = 0x0112;
+  const TAG_SOFTWARE           = 0x0131;
   const TAG_DATETIME           = 0x0132;
   const TAG_ARTIST             = 0x013B;
   const TAG_THUMBNAIL_OFFSET   = 0x0201;
@@ -86,6 +87,9 @@ function exifClass(stringBundle)
   const TAG_DIGITALZOOMRATIO   = 0xa404;
   const TAG_FOCALLENGTH_35MM   = 0xa405;
   const TAG_LENS               = 0xfdea;
+  const TAG_LENSINFO           = 0xa432;
+  const TAG_LENSMAKE           = 0xa433;
+  const TAG_LENSMODEL          = 0xa434;
   const TAG_COLORSPACE         = 0xa001;
   const TAG_INTEROPINDEX       = 0x0001;
 
@@ -104,46 +108,57 @@ function exifClass(stringBundle)
     return start + 2 + 12*entry;
   }
 
-  function ConvertAnyFormat(data, format, offset, numbytes, swapbytes)
+  function ConvertAnyFormat(data, format, offset, components, numbytes, swapbytes)
   {
-      var value = 0;
+    var value = 0;
 
-      switch(format) {
-      case FMT_STRING:
-      case FMT_UNDEFINED: // treat as string
-        value = fxifUtils.bytesToString(data, offset, numbytes);
-        // strip trailing whitespace
-        value = value.replace(/\s+$/, '');
-        break;
+    switch(format) {
+    case FMT_STRING:
+    case FMT_UNDEFINED: // treat as string
+      value = fxifUtils.bytesToString(data, offset, numbytes);
+      // strip trailing whitespace
+      value = value.replace(/\s+$/, '');
+      break;
 
-      case FMT_SBYTE:     value = data[offset];  break;
-      case FMT_BYTE:      value = data[offset];  break;
+    case FMT_SBYTE:   value = data[offset];  break;
+    case FMT_BYTE:    value = data[offset];  break;
 
-      case FMT_USHORT:    value = fxifUtils.read16(data, offset, swapbytes);  break;
-      case FMT_ULONG:     value = fxifUtils.read32(data, offset, swapbytes);  break;
+    case FMT_USHORT:  value = fxifUtils.read16(data, offset, swapbytes);  break;
+    case FMT_ULONG:   value = fxifUtils.read32(data, offset, swapbytes);  break;
 
-      case FMT_URATIONAL:
-      case FMT_SRATIONAL:
-        {
-          var Num,Den;
-          Num = fxifUtils.read32(data, offset, swapbytes);
-          Den = fxifUtils.read32(data, offset+4, swapbytes);
-          if (Den == 0){
-            value = 0;
-          }else{
-            value = Num/Den;
-          }
-          break;
+    case FMT_URATIONAL:
+    case FMT_SRATIONAL:
+    {
+      // It sometimes happens that there are multiple rational contained.
+      // So go for multiple here and convert back later.
+      var values = new Array();
+
+      for (var i = 0; i < components; i++) {
+        var Num, Den;
+        Num = fxifUtils.read32(data, offset+i*8, swapbytes);
+        Den = fxifUtils.read32(data, offset+i*8+4, swapbytes);
+        if (Den == 0){
+          values[i] = 0;
+        }else{
+          values[i] = Num/Den;
         }
-
-      case FMT_SSHORT:    Value = fxifUtils.read16(data, offset, swapbytes); break;
-      case FMT_SLONG:     Value = fxifUtils.read32(data, offset, swapbytes); break;
-
-        // ignore, probably never used
-      case FMT_SINGLE:    value = 0; break;
-      case FMT_DOUBLE:    value = 0; break;
       }
-      return value;
+
+      if (components == 1)
+        value = values[0];
+      else
+        value = values;
+      break;
+    }
+
+    case FMT_SSHORT:  value = fxifUtils.read16(data, offset, swapbytes); break;
+    case FMT_SLONG:   value = fxifUtils.read32(data, offset, swapbytes); break;
+
+      // ignore, probably never used
+    case FMT_SINGLE:    value = 0; break;
+    case FMT_DOUBLE:    value = 0; break;
+    }
+    return value;
   }
 
   function readGPSDir(dataObj, data, dirstart, swapbytes)
@@ -153,7 +168,7 @@ function exifClass(stringBundle)
     var gpsLat, gpsLon, gpsAlt;
     var vals = new Array();
 
-    for(var i=0; i<numEntries; i++) {
+    for (var i = 0; i < numEntries; i++) {
       var entry = dir_entry_addr(dirstart, i);
       var tag = fxifUtils.read16(data, entry, swapbytes);
       var format = fxifUtils.read16(data, entry+2, swapbytes);
@@ -170,7 +185,7 @@ function exifClass(stringBundle)
       else
         valueoffset = fxifUtils.read32(data, entry + 8, swapbytes);
 
-      var val = ConvertAnyFormat(data, format, valueoffset, nbytes, swapbytes);
+      var val = ConvertAnyFormat(data, format, valueoffset, components, nbytes, swapbytes);
 
       switch(tag) {
       case TAG_GPS_LAT_REF:
@@ -191,9 +206,10 @@ function exifClass(stringBundle)
         // so we've to do another two ConvertAnyFormat() ourself
         // e.g. 0x0b / 0x01, 0x07 / 0x01, 0x011c4d / 0x0c92
         // but can also be only 0x31 / 0x01, 0x3d8ba / 0x2710, 0x0 / 0x01
-        var gpsval = val * 3600;
-        gpsval += ConvertAnyFormat(data, format, valueoffset+8, nbytes, swapbytes) * 60;
-        gpsval += ConvertAnyFormat(data, format, valueoffset+16, nbytes, swapbytes);
+        var gpsval = val[0] * 3600 + val[1] * 60 + val[2];
+//        var gpsval = val * 3600;
+//        gpsval += ConvertAnyFormat(data, format, valueoffset+8, nbytes, swapbytes) * 60;
+//        gpsval += ConvertAnyFormat(data, format, valueoffset+16, nbytes, swapbytes);
         vals[tag] = gpsval;
         break;
 
@@ -248,21 +264,25 @@ function exifClass(stringBundle)
     }
   }
 
-  /* Reads the actual EXIF tags.
-     Also extracts tags for textual informations like
-     By, Caption, Headline, Copyright.
-     But doesn't overwrite those fields when already populated
-     by IPTC-NAA or IPTC4XMP.
+  /* Reads the Canon Tags IFD.
+EOS60D_YIMG_0007.JPG
+0x927c at pos 0x22a
+Type undef (7)
+Components 0x1e2c
+Offset 0x0382
+Real MN-Offset: 0x038e
+
   */
-  this.readExifDir = function (dataObj, data, dirstart, swapbytes)
+  this.readCanonExifDir = function (dataObj, data, dirstart, swapbytes)
   {
+    // Canon EXIF tags
+    const TAG_CAMERA_INFO        = 0x000d;
+    const TAG_LENS_MODEL         = 0x0095;
+    const TAG_CANON_MODEL_ID     = 0x0010;
+
     var ntags = 0;
     var numEntries = fxifUtils.read16(data, dirstart, swapbytes);
-    var interopIndex = "";
-    var colorSpace = 0;
-    var exifDateTime = 0;
-    var exifDateTimeOrig = 0;
-    for(var i=0; i<numEntries; i++) {
+    for (var i = 0; i < numEntries; i++) {
       var entry = dir_entry_addr(dirstart, i);
       var tag = fxifUtils.read16(data, entry, swapbytes);
       var format = fxifUtils.read16(data, entry+2, swapbytes);
@@ -281,7 +301,133 @@ function exifClass(stringBundle)
         valueoffset = fxifUtils.read32(data, entry + 8, swapbytes);
       }
 
-      var val = ConvertAnyFormat(data, format, valueoffset, nbytes, swapbytes);
+      var val = ConvertAnyFormat(data, format, valueoffset, components, nbytes, swapbytes);
+
+      ntags++;
+      switch(tag) {
+      case TAG_CAMERA_INFO:
+        dataObj.CameraInfo = val;
+        break;
+      case TAG_CANON_MODEL_ID:
+        dataObj.ModelID = val;
+        break;
+      case TAG_LENS_MODEL:
+        dataObj.Lens = val;
+        break;
+      default:
+        ntags--;
+      }
+    }
+
+    /* List of Canon Model IDs
+       0x80000001 = EOS-1D
+       0x80000167 = EOS-1DS
+       0x80000168 = EOS 10D
+       0x80000169 = EOS-1D Mark III
+       0x80000170 = EOS Digital Rebel / 300D / Kiss Digital
+       0x80000174 = EOS-1D Mark II
+       0x80000175 = EOS 20D
+       0x80000176 = EOS Digital Rebel XSi / 450D / Kiss X2
+       0x80000188 = EOS-1Ds Mark II
+       0x80000189 = EOS Digital Rebel XT / 350D / Kiss Digital N
+       0x80000190 = EOS 40D
+       0x80000213 = EOS 5D
+       0x80000215 = EOS-1Ds Mark III
+       0x80000218 = EOS 5D Mark II
+       0x80000232 = EOS-1D Mark II N
+       0x80000234 = EOS 30D
+       0x80000236 = EOS Digital Rebel XTi / 400D / Kiss Digital X
+       0x80000250 = EOS 7D
+       0x80000252 = EOS Rebel T1i / 500D / Kiss X3
+       0x80000254 = EOS Rebel XS / 1000D / Kiss F
+       0x80000261 = EOS 50D
+       0x80000270 = EOS Rebel T2i / 550D / Kiss X4
+       0x80000281 = EOS-1D Mark IV
+       0x80000287 = EOS 60D
+     */
+
+    return ntags;
+  }
+
+/*
+D3S_141805.jpg
+0x927c at pos 0x24b
+Type undef (7)
+Components 0x8612
+Offset 0x0337
+Real MN-Offset: 0x0356
+
+  */
+
+  /* Offsets to Nikon Maker Notes point to the five bytes "Nikon" followed
+     by a null. This is followed by two bytes denoting the Exif Version as
+     text, e.g. 0x0210, followed by two null.
+     Then (after the above 0x0a bytes) a normal TIFF header follows with an IFD
+     and all the data. The data in this block is has its own byte order which
+     might be different from the one in the rest of the Exif header as denoted
+     in this TIFF header (which typically is Motorola byte order for Nikon).
+  */
+  this.readNikonExifDir = function (dataObj, data, dirstart, swapbytes)
+  {
+    // Is it really Nikon?
+    if(header == 'Nikon\0') {
+      // step over next four bytes denoting the version (e.g. 0x02100000)
+      // 8 byte TIFF header
+      var exifData = bis.readByteArray(len - 6);
+
+      // first two determine byte order
+      swapbytes = fxifUtils.read16(exifData, 0, false) == INTEL_BYTE_ORDER;
+
+      // next two bytes are always 0x002A
+      // offset to Image File Directory (includes the previous 8 bytes)
+      var ifd_ofs = fxifUtils.read32(exifData, 4, swapbytes);
+      var exifReader = new exifClass(stringBundle);
+      try {
+        exifReader.readExifDir(dataObj, exifData, ifd_ofs, swapbytes);
+      }
+      catch(ex) {
+        pushError(dataObj, "EXIF");
+      }
+      fxifUtils.exifDone = true;
+    }
+  }
+
+
+  /* Reads the actual EXIF tags.
+     Also extracts tags for textual informations like
+     By, Caption, Headline, Copyright.
+     But doesn't overwrite those fields when already populated
+     by IPTC-NAA or IPTC4XMP.
+  */
+  this.readExifDir = function (dataObj, data, dirstart, swapbytes)
+  {
+    var ntags = 0;
+    var numEntries = fxifUtils.read16(data, dirstart, swapbytes);
+    var interopIndex = "";
+    var colorSpace = 0;
+    var exifDateTime = 0;
+    var exifDateTimeOrig = 0;
+    var lensInfo;
+    for (var i = 0; i < numEntries; i++) {
+      var entry = dir_entry_addr(dirstart, i);
+      var tag = fxifUtils.read16(data, entry, swapbytes);
+      var format = fxifUtils.read16(data, entry+2, swapbytes);
+      var components = fxifUtils.read32(data, entry+4, swapbytes);
+
+      if(format >= BytesPerFormat.length)
+        continue;
+
+      var nbytes = components * BytesPerFormat[format];
+      var valueoffset;
+
+      if(nbytes <= 4) { // stored in the entry
+        valueoffset = entry + 8;
+      }
+      else {
+        valueoffset = fxifUtils.read32(data, entry + 8, swapbytes);
+      }
+
+      var val = ConvertAnyFormat(data, format, valueoffset, components, nbytes, swapbytes);
 
       ntags++;
       switch(tag) {
@@ -291,6 +437,10 @@ function exifClass(stringBundle)
 
       case TAG_MODEL:
         dataObj.Model = val;
+        break;
+
+      case TAG_SOFTWARE:
+        dataObj.Software = val;
         break;
 
       case TAG_DATETIME_ORIGINAL:
@@ -600,10 +750,22 @@ function exifClass(stringBundle)
         dataObj.FocalLength35mmEquiv = val;
         break;
 
+      case TAG_LENSINFO:
+        lensInfo = val;
+        break;
+
+      case TAG_LENSMAKE:
+        dataObj.LensMake = val;
+        break;
+
+      case TAG_LENSMODEL:
+        dataObj.LensModel = val;
+        break;
+
       case TAG_EXIF_OFFSET:
       case TAG_INTEROP_OFFSET:
         // Prevent simple loops, it has happened that readExifDir()
-        // has been recursed hundrets of time because this tag pointed
+        // has been recursed hundreds of time because this tag pointed
         // to its own start.
         if (val != dirstart)
           ntags += this.readExifDir(dataObj, data, val, swapbytes);
@@ -636,6 +798,20 @@ function exifClass(stringBundle)
           else
             colorSpace = val;
         }
+        break;
+
+      case TAG_MAKER_NOTE:
+          // Currently only Canon MakerNotes are supported, so filter for this
+          // maker.
+          if (dataObj.Make == 'Canon')
+          {
+	          // This tags format is given as undefined with some weird
+	          // big numbers as components. This makes the code before
+	          // this switch to write the following IFDs data as string
+	          // to val instead giving us the offset. Therefore use valueoffset
+	          // directly.
+            ntags += this.readCanonExifDir(dataObj, data, valueoffset, swapbytes);
+          }
         break;
 
       case TAG_INTEROPINDEX:
@@ -679,6 +855,43 @@ function exifClass(stringBundle)
       }
 
       dataObj.FocalLengthText = fl;
+    }
+
+    if(dataObj.LensMake) {
+      dataObj.Lens = dataObj.LensMake;
+    }
+
+    if (!dataObj.Lens)
+    {
+      if(dataObj.LensModel) {
+        if (dataObj.Lens)
+          dataObj.Lens += " ";
+        else
+          dataObj.Lens = "";
+
+        dataObj.Lens += dataObj.LensModel;
+      }
+      else
+        // 4 rationals giving focal and aperture ranges
+        if (lensInfo)
+        {
+          if (dataObj.Lens)
+            dataObj.Lens += " ";
+          else
+            dataObj.Lens = "";
+
+          dataObj.Lens += lensInfo[0];
+          if (lensInfo[1] > 0)
+            dataObj.Lens += "-" + lensInfo[1];
+          dataObj.Lens += "mm";
+
+          if (lensInfo[2] > 0)
+          {
+            dataObj.Lens += " f/" + lensInfo[2];
+            if (lensInfo[3] > 0)
+              dataObj.Lens += "-" + lensInfo[3];
+          }
+        }
     }
 
     return ntags;
