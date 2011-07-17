@@ -14,8 +14,11 @@
 <p>After installing FxIF, simply right click on an image, then click <code>Properties</code>. The meta data will be displayed in the properties window. This integration into the existing dialog keeps the interface simple.<br />
 Since this window has been removed with Firefox 3.6 I’ve added my own one accessible through the <code>EXIF data</code> entry for those versions.</p>
 
-<h1>In detail</h1>
+<h1>Doesn’t work?</h1>
+<p>I’d like my extension to work on your system as much as you do. Though sometimes it doesn’t work for you and for changing this I definitely need your help.</p>
+<p>For trouble shooting I prefer e-mail. What would be very helpful is where’s the problem exactly (no context menu entry?, no properties dialogue?, no data?, error message?), what other Add-ons you’ve installed, screenshot of the error, output from the Error Console and image you tried to get data from.</p>
 
+<h1>In detail</h1>
 <h2>What can it display?</h2>
 <p>Meta data that’s contained in JPEG image files in three forms:</p>
 <ul>
@@ -27,9 +30,9 @@ Since this window has been removed with Firefox 3.6 I’ve added my own one acce
 <p>Out of the camera most images will only contain binary EXIF data but this may change in future and there’s much software for adding the other informations by you. And software like Photoshop will at least duplicate the EXIF information into XMP data and add data of its own to your image if you just save it&mdash;or at least if you don’t do <em>Save for Web</em>.</p>
 
 <h2>And which fields in detail?</h2>
-<p>In detail you can view the following EXIF fields: ImageDescription, Make, Model, Orientation, ModifyDate/DateTimeOriginal/DateTimeDigitized, Artist, Copyright, ExposureTime., FNumber, ExposureProgram, GPSInfo, ISO, ShutterSpeedValue, ExposureCompensation, MaxApertureValue, SubjectDistance, MeteringMode, LightSource, Flash, FocalLength, UserComment, ExifImageWidth, ExifImageLength, FocalPlaneXResolution, FocalPlaneResolutionUnit. ExposureMode, WhiteBalance, DigitalZoomRatio, FocalLengthIn35mmFormat, ColorSpace</p>
+<p>In detail you can view the following EXIF fields: ImageDescription, Make, Model, LensInfo, LensMake, LensModel, Orientation, ModifyDate/DateTimeOriginal/DateTimeDigitized, Artist, Copyright, Software, ExposureTime., FNumber, ExposureProgram, GPSInfo, ISO, ShutterSpeedValue, ExposureCompensation, MaxApertureValue, SubjectDistance, MeteringMode, LightSource, Flash, FocalLength, UserComment, ExifImageWidth, ExifImageLength, FocalPlaneXResolution, FocalPlaneResolutionUnit. ExposureMode, WhiteBalance, DigitalZoomRatio, FocalLengthIn35mmFormat, ColorSpace</p>
 <p>Also following fields are taken from IPTC-NAA: By-line, Caption-Abstract, Headline, Instructions, CopyrightNotice, City, Sublocation, Province/State and Country</p>
-<p>And the following from XMP: dc:Creator, photoshop:Headline, dc:title, dc:description, dc:rights, xmpRights:UsageTerms, cc:license, photoshop:City, Iptc4xmpCore:Location, photoshop:State, photoshop:Country, tiff:Make, tiff:Model, aux:Lens, exif:DateTimeOriginal, exif:DateTimeDigitized, exif:FNumber, exif:ApertureValue, exif:FocalLength, exif:FocalLengthIn35mmFilm, exif:SubjectDistance, exif:ExposureTime, exif:Flash, tiff:Orientation, exif:ExposureBiasValue, exif:WhiteBalance, exif:LightSource, exif:MeteringMode, exif:ExposureProgram, exif:ExposureIndex, exif:ExposureMode, exif:ISOSpeedRatings, exif:DigitalZoomRatio, exif:GPSAltitude, exif:GPSAltitudeRef, exif:GPSLatitude, exif:GPSLongitude, exif:ColorSpace, photoshop:ICCProfile, photoshop:Instructions</p>
+<p>And the following from XMP: dc:Creator, photoshop:Headline, dc:title, dc:description, dc:rights, xmpRights:UsageTerms, cc:license, photoshop:City, Iptc4xmpCore:Location, photoshop:State, photoshop:Country, tiff:Make, tiff:Model, aux:Lens, exif:DateTimeOriginal, exif:DateTimeDigitized, exif:FNumber, exif:ApertureValue, exif:FocalLength, exif:FocalLengthIn35mmFilm, exif:SubjectDistance, exif:ExposureTime, exif:Flash, tiff:Orientation, exif:ExposureBiasValue, exif:WhiteBalance, exif:LightSource, exif:MeteringMode, exif:ExposureProgram, exif:ExposureIndex, exif:ExposureMode, exif:ISOSpeedRatings, exif:DigitalZoomRatio, exif:GPSAltitude, exif:GPSAltitudeRef, exif:GPSLatitude, exif:GPSLongitude, exif:ColorSpace, photoshop:ICCProfile, photoshop:Instructions, xap:CreatorTool</p>
 <p>That said, not all data is displayed always and at once. First not all files contain all fields. And second if fields that exist to hold the same information like the photographers name or description of the image are present in more than one structure, the information is only displayed once. The priority in which they’re used is XMP, IPTC-NAA, EXIF in descending order.</p>
 <p>Also for your convenience if GPS coordinates are available in the EXIF fields, a weblink to a map provider is displayed behind them. At least it is in Firefox 3 and SeaMonkey 2 because earlier don’t support the technique used. And be aware that these are the coordinates of the camera, not the object photographed which can differ significantly especially for tele photos.</p>
 
@@ -49,7 +52,7 @@ Since this window has been removed with Firefox 3.6 I’ve added my own one acce
 
 <h1>Configure me</h1>
 <p>Since likings are different we decided to make two functions configurable. You can do this via the options dialog on the Add-on Manager (available in Firefox and SeaMonkey 2) or by directly manipulating the respective pref.</p>
-<p>First option is to choose the format used for displaying coordinates. This is either Degrees Minutes Seconds (DMS) like 40&deg;&nbsp;43&prime;&nbsp;20.7&Prime;&nbsp;N, 74&deg;&nbsp;02&prime;&nbsp;47.2&Prime;&nbsp;W or decimal degree (DD) like 40.722417&deg;&nbsp;N, 74.046444&deg;&nbsp;W. Any informations are rounded to two decimal places in DMS and six decimal places in DD format. The associated pref is <code>extensions.fxif.gpsFormat</code> where 0 means DMS and 1 DD.</p>
+<p>First option is to choose the format used for displaying coordinates. This is either Degrees Minutes (DM), Degrees Minutes Seconds (DMS) like 40&deg;&nbsp;43&prime;&nbsp;20.7&Prime;&nbsp;N, 74&deg;&nbsp;02&prime;&nbsp;47.2&Prime;&nbsp;W or decimal degree (DD) like 40.722417&deg;&nbsp;N, 74.046444&deg;&nbsp;W. Any informations are rounded to two decimal places in DM/DMS and six decimal places in DD format. The associated pref is <code>extensions.fxif.gpsFormat</code> where 0 means DMS, 2 DM, and 1 DD.</p>
 <p>The other option is the map provider to use for the weblink. The default (when the pref isn’t available or empty) is to use <code>openstreetmap.org</code>, but as I wrote, likings are different.</p>
 <p>So to change it, insert any URL into the field (or pref). You can use really any URL, but to have the respective coordinates used, put a <code>%lat%</code> anywhere the latitude shall be inserted and <code>%lon%</code> anywhere the longitude shall be inserted.</p>
 <p>So the default is</p>
@@ -75,7 +78,8 @@ Since this window has been removed with Firefox 3.6 I’ve added my own one acce
 <h1>When will the next version be released?</h1>
 <p>Like most projects “when it’s done”. Since 0.2.3 the FxIF code has its <a href="http://code.google.com/p/fxif/">home at Google Code</a> and the source kept online can be <a href="http://code.google.com/p/fxif/source/checkout">checked out via svn</a>.</p>
 
-<h1>What’s new in 0.30</h1>
+<h1>Version history</h1>
+<h2>What’s new in 0.30</h1>
 <ul>
 	<li>Displaying of GPS coordinates</li>
 	<li>Decoding of IPTC-NAA and XMP data</li>
@@ -84,15 +88,15 @@ Since this window has been removed with Firefox 3.6 I’ve added my own one acce
   <li>Also works with Firefox >= 3 and SeaMonkey >= 2</li>
   <li>Also works with images that aren’t cached.</li>
 </ul>
-<h1>What’s new in 0.3.1</h1>
+<h2>What’s new in 0.3.1</h1>
 <ul>
 	<li>Also works in Firefox >= 3.6 where the properties dialogue has been removed.</li>
 </ul>
-<h1>What’s new in 0.3.2</h1>
+<h2>What’s new in 0.3.2</h1>
 <ul>
-	<li>A few bugfixes, among them is <a href="http://support.mozilla.com/en-US/forum/1/489394" target="_blank">All toolbars disappear on closing print preview</a>.</li>
+	<li>A few bugfixes, among them is “All toolbars disappear on closing print preview”.</li>
 </ul>
-<h1>What’s new in 0.4</h1>
+<h2>What’s new in 0.4</h1>
 <ul>
 	<li>Added interpretation of EXIF values that are contained in XMP format rather than in old binary format. Added some fields mainly regarding the location of the subject. Internally more fields are inspected to fill the license field.</li>
 	<li>Also rearranged the order of the field listing, fixed some bugs in the XMP interpreter and the binary EXIF reader.</li>
@@ -101,7 +105,7 @@ Since this window has been removed with Firefox 3.6 I’ve added my own one acce
 	<li>Enabled overlaying of the properties window that’s being readded by Geoff Lankows <a href="https://addons.mozilla.org/de/firefox/addon/14228" target="_blank">Element properties</a></li>
 	<li>Added new translation for Russian thanks to Max Pozdeev. All localizations have been overhauled, thanks to old and new contributors on <a href="http://www.babelzilla.org" target="_blank">BabelZilla</a>.</li>
 </ul>
-<h1>What’s new in 0.4.1</h1>
+<h2>What’s new in 0.4.1</h1>
 <ul>
 	<li>Only use DateTime if no DateTimeOriginal or DateTimeDigitized are available.</li>
 	<li>Fixed <a href="http://code.google.com/p/fxif/issues/detail?id=3" target="_blank">Issue 3</a>: Relaxed detection of XMP data a bit to work around a bug in some photo software.</li>
@@ -110,12 +114,12 @@ Since this window has been removed with Firefox 3.6 I’ve added my own one acce
 	<li>Fixed <a href="http://code.google.com/p/fxif/issues/detail?id=2" target="_blank">Issue 2</a>: a bug where "chr" was used as language if the pref intl.accept_language was left at the default for the browser. (Thanks to Hector Zhao)</li>
 	<li>Added new translation for Dutch thanks to markh van BabelZilla.org.</li>
 </ul>
-<h1>What’s new in 0.4.2</h1>
+<h2>What’s new in 0.4.2</h1>
 <ul>
 	<li>Flash data from XMP is now better evaluated (also as child values of the Flash tag instead only attributes of it). Thanks to Phil Lattimore for reporting.</li>
   <li>At least one software appends a null byte to the XMP document and the Mozilla XML parser doesn’t like this at all. I added a workaround for this case which shortens the document by one byte.</li>
 </ul>
-<h1>What’s new in 0.4.3</h1>
+<h2>What’s new in 0.4.3</h1>
 <ul>
 	<li>Fixed some reads which were to optimistic on the bytes contained in a JPEG marker which could lead to negative byte counts tried to be read (and causing the stream reader to bail out). Thanks to Jemini for reporting.</li>
 	<li>Fixed a bug preventing to catch and report it the aforementioned bug correctly to the user.</li>
@@ -129,5 +133,14 @@ Since this window has been removed with Firefox 3.6 I’ve added my own one acce
   <li>Polish translation is not contained since newly added strings weren’t translated.</li>
   <li>Fixed <a href="http://code.google.com/p/fxif/issues/detail?id=10" target="_blank">Issue 10</a>: Endless recursion if Exif Interoperability Offset or Exif Offset point to its own start offset. That’s an error in the data.</li>
 </ul>
+<h2>What’s new in 0.4.4</h2>
+<ul>
+  <li>Reading of informations about lens (from binary Exif, XMP data has already been read in the past) and used software.</li>
+  <li>Dropping Support for the old Mozilla Suite. It’s dead for quite some time and no one should use it for his or her own good anymore anyway.</li>
+  <li>At least in Gecko 2 (Firefox 4, SeaMonkey 2.1) the XML parser became picky about non-ASCII characters not correctly encoded as UTF-8 or Unicode. Some images do contain such documents which violate XMP specification (and actually XML specification too). I inserted a workaround which makes a second try after converting non-ASCII characters. This can lead to wrong display of such chars in buggy files, but they’re at least parsable this way.</li>
+  <li>Ctrl+W, resp. Accel+W now closes FxIF’s own dialogue (like Esc already does since version 0.4).</li>
+  <li>FxIF’s own window now behaves like when the data is shown in the browsers own property window (resp. that of the <a href="https://addons.mozilla.org/de/firefox/addon/14228" target="_blank">Element-properties</a> extension). I.e. it’s now possible to have multiple FxIF windows open in parallel instead reusing one.</li>
+</ul>
+
 </body>
 </html>

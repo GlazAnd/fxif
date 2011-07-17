@@ -22,6 +22,8 @@
  *   Christian Eyrich <ch.ey@gmx.net>
  * ***** END LICENSE BLOCK ***** */
 
+"use strict";
+
 /*
  *  Some utility functions for FxIF.
  */

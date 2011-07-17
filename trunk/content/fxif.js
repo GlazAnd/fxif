@@ -238,8 +238,8 @@ function fxifClass ()
   // Returns true if imgURL is a JPEG image, false otherwise.
   // This isn't bullet proof but solely relies on the first
   // two bytes being SOI_MARER. This should suffice.
-  // This merely is a hack, I'd rather like asking the app
-  // what type of image this is. But how to?
+  // Since it's merely a hack, I'd rather like asking the app
+  // what type of image it is. But how to?
   function isJPEG(imgUrl)
   {
     var istream = getDataStream(imgUrl);
@@ -308,6 +308,7 @@ function fxifClass ()
       setInfo("image-caption", ed.Caption);
       setInfo("image-comment", ed.UserComment);
       setInfo("image-instructions", ed.Instructions);
+      setInfo("image-software", ed.Software);
 
       if (ed.GPSPureDdLat && ed.GPSPureDdLon) {
         var href = 'http://www.openstreetmap.org/?mlat=%lat%&mlon=%lon%&layers=B000FTF';
@@ -454,7 +455,7 @@ function fxifClass ()
   }
 
   this.showImageData = function () {
-    window.openDialog("chrome://fxif/content/fxifPropertiesDialog.xul", "fxif_properties", "chrome,resizable", imgURL);
+    window.openDialog("chrome://fxif/content/fxifPropertiesDialog.xul", "_blank", "chrome,resizable", imgURL);
   }
 
 }

@@ -51,9 +51,25 @@ function xmpClass(stringBundle)
     if (xml.length > 1 && xml[xml.length - 1] == 0)
 			doclength--;
     var dom = parser.parseFromBuffer(xml, doclength, 'text/xml');
+
     if (dom.documentElement.nodeName == 'parsererror') {
-//      alert("Error parsing XML");
-      throw ("Error parsing XML");
+      // parsererror might have been caused by incorrect encoding of characters.
+      // XMP documents in JPEG files have been reported with characters as ISO-8859-1 ()
+      // while containing an UTF-8 BOM) or even illegal not UTF-8 encoded "BOM" like
+      // xpacket begin="i»?" which.
+      // So just go on and try to save the situation converting from a single byte encoding to Unicode.
+      // I used iso-8859-1 here which will give wrong characters if the source is encoded differently,
+      // but getting correct characters isn’t the objective here, just to be able reading the document
+      // somehow. The document is corrupt anyway.
+      var converter = Components.classes["@mozilla.org/intl/scriptableunicodeconverter"].createInstance(Components.interfaces.nsIScriptableUnicodeConverter);
+      converter.charset = 'iso-8859-1';
+      var xmlString = converter.convertFromByteArray(xml, doclength);
+      dom = parser.parseFromString(xmlString, 'text/xml');
+
+      if (dom.documentElement.nodeName == 'parsererror') {
+//        alert("Error parsing XML");
+        throw ("Error parsing XML");
+      }
     }
 
     var val;
@@ -88,6 +104,10 @@ function xmpClass(stringBundle)
     val = getXMPValue(dom, "http://ns.adobe.com/photoshop/1.0/", "Instructions");
     if (val)
       dataObj.Instructions = val;
+
+    val = getXMPValue(dom, "http://ns.adobe.com/xap/1.0/", "CreatorTool");
+    if (val)
+      dataObj.Software = val;
 
 
     var lang = fxifUtils.getLang();

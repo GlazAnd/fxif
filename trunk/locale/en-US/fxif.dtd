@@ -4,6 +4,7 @@
 <!ENTITY CameraMake "Camera Maker:">
 <!ENTITY CameraModel "Camera Model:">
 <!ENTITY CameraLens "Lens:">
+<!ENTITY Software "Software:">
 <!ENTITY ImageDate "Image Date:">
 <!ENTITY ImageOrientation "Orientation:">
 <!ENTITY ImageBW "Black and White:">

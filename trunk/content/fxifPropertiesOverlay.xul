@@ -238,6 +238,11 @@
             <label value="&Instructions;"/>
             <textbox id="image-instructions-text" multiline="true" readonly="true"/>
           </row>
+          <row id="image-software">
+            <separator orient="vertical"/>
+            <label value="&Software;"/>
+            <textbox id="image-software-text" readonly="true"/>
+          </row>
         </rows>
       </grid>
       <hbox id="no-data">

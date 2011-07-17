@@ -4,6 +4,7 @@
 <!ENTITY CameraMake "Изготовитель камеры:">
 <!ENTITY CameraModel "Модель камеры:">
 <!ENTITY CameraLens "Объектив:">
+<!ENTITY Software "ПО:">
 <!ENTITY ImageDate "Дата съемки:">
 <!ENTITY ImageOrientation "Ориентация:">
 <!ENTITY ImageBW "Черно-белый снимок:">
