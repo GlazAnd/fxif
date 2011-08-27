@@ -55,7 +55,7 @@
     <stringbundle src="chrome://fxif/locale/fxif.properties" id="bundle_fxif"/>
     <vbox id="exif-sec">
       <hbox align="end">
-        <label value="&EXIFData;:"/>
+        <label value="&FxIFData;:"/>
         <separator flex="1"/>
         <button id="copy-button" label="&Copy;" onclick="fxifObj.copyDataToClipboard()"/>
         <keyset>

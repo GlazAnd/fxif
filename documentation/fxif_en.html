@@ -12,7 +12,7 @@
 
 <h1>Usage</h1>
 <p>After installing FxIF, simply right click on an image, then click <code>Properties</code>. The meta data will be displayed in the properties window. This integration into the existing dialog keeps the interface simple.<br />
-Since this window has been removed with Firefox 3.6 I’ve added my own one accessible through the <code>EXIF data</code> entry for those versions.</p>
+Since this window has been removed with Firefox 3.6 I’ve added my own one accessible through the <code>EXIF data</code> entry for those versions. Note: in the event of the <a href="https://addons.mozilla.org/de/firefox/addon/14228" target="_blank">Element-properties</a> extension being installed, FxIF integrates itself there.</p>
 
 <h1>Doesn’t work?</h1>
 <p>I’d like my extension to work on your system as much as you do. Though sometimes it doesn’t work for you and for changing this I definitely need your help.</p>
@@ -33,6 +33,7 @@ Since this window has been removed with Firefox 3.6 I’ve added my own one acce
 <p>In detail you can view the following EXIF fields: ImageDescription, Make, Model, LensInfo, LensMake, LensModel, Orientation, ModifyDate/DateTimeOriginal/DateTimeDigitized, Artist, Copyright, Software, ExposureTime., FNumber, ExposureProgram, GPSInfo, ISO, ShutterSpeedValue, ExposureCompensation, MaxApertureValue, SubjectDistance, MeteringMode, LightSource, Flash, FocalLength, UserComment, ExifImageWidth, ExifImageLength, FocalPlaneXResolution, FocalPlaneResolutionUnit. ExposureMode, WhiteBalance, DigitalZoomRatio, FocalLengthIn35mmFormat, ColorSpace</p>
 <p>Also following fields are taken from IPTC-NAA: By-line, Caption-Abstract, Headline, Instructions, CopyrightNotice, City, Sublocation, Province/State and Country</p>
 <p>And the following from XMP: dc:Creator, photoshop:Headline, dc:title, dc:description, dc:rights, xmpRights:UsageTerms, cc:license, photoshop:City, Iptc4xmpCore:Location, photoshop:State, photoshop:Country, tiff:Make, tiff:Model, aux:Lens, exif:DateTimeOriginal, exif:DateTimeDigitized, exif:FNumber, exif:ApertureValue, exif:FocalLength, exif:FocalLengthIn35mmFilm, exif:SubjectDistance, exif:ExposureTime, exif:Flash, tiff:Orientation, exif:ExposureBiasValue, exif:WhiteBalance, exif:LightSource, exif:MeteringMode, exif:ExposureProgram, exif:ExposureIndex, exif:ExposureMode, exif:ISOSpeedRatings, exif:DigitalZoomRatio, exif:GPSAltitude, exif:GPSAltitudeRef, exif:GPSLatitude, exif:GPSLongitude, exif:ColorSpace, photoshop:ICCProfile, photoshop:Instructions, xap:CreatorTool</p>
+<p>Additionally the JFIF comment field is interpreted.</p>
 <p>That said, not all data is displayed always and at once. First not all files contain all fields. And second if fields that exist to hold the same information like the photographers name or description of the image are present in more than one structure, the information is only displayed once. The priority in which they’re used is XMP, IPTC-NAA, EXIF in descending order.</p>
 <p>Also for your convenience if GPS coordinates are available in the EXIF fields, a weblink to a map provider is displayed behind them. At least it is in Firefox 3 and SeaMonkey 2 because earlier don’t support the technique used. And be aware that these are the coordinates of the camera, not the object photographed which can differ significantly especially for tele photos.</p>
 
@@ -56,15 +57,16 @@ Since this window has been removed with Firefox 3.6 I’ve added my own one acce
 <p>The other option is the map provider to use for the weblink. The default (when the pref isn’t available or empty) is to use <code>openstreetmap.org</code>, but as I wrote, likings are different.</p>
 <p>So to change it, insert any URL into the field (or pref). You can use really any URL, but to have the respective coordinates used, put a <code>%lat%</code> anywhere the latitude shall be inserted and <code>%lon%</code> anywhere the longitude shall be inserted.</p>
 <p>So the default is</p>
-<p><code>http://www.openstreetmap.org/?lat=%mlat%&amp;mlon=%lon%&amp;layers=B000FTF</code></p>
+<p><code>http://www.openstreetmap.org/?mlat=%lat%&amp;mlon=%lon%&amp;layers=M</code></p>
 <p>but if you want to use Google as a map provider, insert for example</p>
-<p><code>http://maps.google.com/maps?ll=%lat%,%lon%&amp;q=%lat%,%lon%&amp;z=10&amp;hl=%lang%</code></p>
+<p><code>http://maps.google.com/maps?ll=%lat%,%lon%&amp;q=%lat%,%lon%&amp;hl=%lang%</code></p>
 <p>or for Yahoo use</p>
-<p><code>http://maps.yahoo.com/index.php#mvt=m&amp;trf=0&amp;lon=%lon%&amp;lat=%lat%&amp;mag=8</code></p>
+<p><code>http://maps.yahoo.com/#mvt=m&amp;lat=%lat%&amp;lon=%lon%</code></p>
 <p>or</p>
 <p><code>http://atlas.mapquest.com/maps/map.adp?searchtype=address&amp;formtype=latlong&amp;latlongtype=decimal&amp;latitude=%lat%&amp;longitude=%lon%</code></p>
 <p>for MapQuest a.s.o. In URL langitude and longitude will always get inserted in unrounded decimal format.</p>
 <p>Noticed the <code>%lang%</code> in the Google Maps URL? This is the third placeholder available and will be replaced by the content language code you’ve chosen in your general browser settings. It’s not necessary but at least in case of Google offers the site in your language.</p>
+<p>You can also add another parameter which is “z=” for Google or “zoom=” for OpenStreetMap and Yahoo! if you don’t like the providers standard zoom setting. Simply write a zoom level after the equal sign (interesting levels should be around 15).</p>
 <p>The associated pref is <code>extensions.fxif.mapProvider</code>.</p>
 
 <h1>Are there localized versions?</h1>
@@ -140,7 +142,13 @@ Since this window has been removed with Firefox 3.6 I’ve added my own one acce
   <li>At least in Gecko 2 (Firefox 4, SeaMonkey 2.1) the XML parser became picky about non-ASCII characters not correctly encoded as UTF-8 or Unicode. Some images do contain such documents which violate XMP specification (and actually XML specification too). I inserted a workaround which makes a second try after converting non-ASCII characters. This can lead to wrong display of such chars in buggy files, but they’re at least parsable this way.</li>
   <li>Ctrl+W, resp. Accel+W now closes FxIF’s own dialogue (like Esc already does since version 0.4).</li>
   <li>FxIF’s own window now behaves like when the data is shown in the browsers own property window (resp. that of the <a href="https://addons.mozilla.org/de/firefox/addon/14228" target="_blank">Element-properties</a> extension). I.e. it’s now possible to have multiple FxIF windows open in parallel instead reusing one.</li>
+  <li>Improved IPTC date handling: If IPTC only contains either date or time, only use it if there’s no date already set.</li>
+  <li>JFIF comments are now displayed</li>
+	<li>Added new translation for Turkish thanks to contributor omrakin on <a href="http://www.babelzilla.org" target="_blank">BabelZilla</a> and polish translation is included again.</li>
 </ul>
-
+<h2>What’s new in 0.5</h2>
+<ul>
+	<li>Support for Maker Notes. Maker Notes are a pain to implement and the format in the binary Exif is dead ugly because the formats of the informations do not only vary between manufacturers but also between models. The now supported Lens Type informations for Canon, Nikon, Pentax and Sony have x variations. Also those type informations aren’t written into the file as text but coded as some number. Decoders like FxIF rely on work of volunteer with these lenses to provide test images because these numbers aren’t documented officially. Also not all camera models provide e.g. lens informations.</li>
+</ul>
 </body>
 </html>

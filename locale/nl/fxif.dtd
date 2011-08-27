@@ -1,9 +1,10 @@
-<!ENTITY contextMenu.label "EXIF-gegevens">
-<!ENTITY EXIFData "EXIF-gegevens">
+<!ENTITY contextMenu.label "FxIF-gegevens">
+<!ENTITY FxIFData "FxIF-gegevens">
 <!ENTITY Copy "Kopiëren">
 <!ENTITY CameraMake "Camerafabrikant:">
 <!ENTITY CameraModel "Cameramodel:">
 <!ENTITY CameraLens "Lens:">
+<!ENTITY Software "Software:">
 <!ENTITY ImageDate "Afbeeldingsdatum:">
 <!ENTITY ImageOrientation "Oriëntatie:">
 <!ENTITY ImageBW "Zwart-wit:">

@@ -1,5 +1,5 @@
-<!ENTITY contextMenu.label "EXIF Andmed">
-<!ENTITY EXIFData "EXIF Andmed">
+<!ENTITY contextMenu.label "FxIF Andmed">
+<!ENTITY FxIFData "FxIF Andmed">
 <!ENTITY Copy "Kopeeri">
 <!ENTITY CameraMake "Kaamera Tegija:">
 <!ENTITY CameraModel "Kaamera Mudel:">

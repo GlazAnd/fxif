@@ -222,15 +222,30 @@ function iptcClass()
     }
 
     // only overwrite existing date if XMP data not already parsed
-    if((!dataObj.Date || !fxifUtils.xmpDone) && iptcDate && iptcTime)
+    if((!dataObj.Date || !fxifUtils.xmpDone) && (iptcDate || iptcTime))
     {
-      var matches = iptcDate.match(/^(\d{4})(\d{2})(\d{2})$/);
-      if (matches)
+      // if IPTC only contains either date or time, only use it if there’s
+      // no date already set
+      if ((iptcDate && iptcTime) || !dataObj.Date && (iptcDate && !iptcTime || !iptcDate && iptcTime))
       {
-        var date = matches[1] + '-' + matches[2] + '-' + matches[3];
-        matches = iptcTime.match(/^(\d{2})(\d{2})(\d{2})([+-]\d{4})$/);
-        if (matches)
-          date += ' ' + matches[1] + ':' + matches[2] + ':' + matches[3] + ' ' + matches[4];
+        var date;
+        var matches;
+        if (iptcDate)
+        {
+          matches = iptcDate.match(/^(\d{4})(\d{2})(\d{2})$/);
+          if (matches)
+            date = matches[1] + '-' + matches[2] + '-' + matches[3];
+        }
+        if (iptcTime)
+        {
+          matches = iptcTime.match(/^(\d{2})(\d{2})(\d{2})([+-]\d{4})$/);
+          if (matches)
+          {
+            if (date)
+              date += ' ';
+            date += matches[1] + ':' + matches[2] + ':' + matches[3] + ' ' + matches[4];
+          }
+        }
 
         dataObj.Date = date;
       }

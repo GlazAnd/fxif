@@ -1,9 +1,10 @@
-<!ENTITY contextMenu.label "EXIF Data">
-<!ENTITY EXIFData "EXIF Data">
+<!ENTITY contextMenu.label "FxIF Data">
+<!ENTITY FxIFData "FxIF Data">
 <!ENTITY Copy "Kopírovat">
 <!ENTITY CameraMake "Značka:">
 <!ENTITY CameraModel "Model:">
 <!ENTITY CameraLens "Objektiv:">
+<!ENTITY Software "Software:">
 <!ENTITY ImageDate "Datum pořízení:">
 <!ENTITY ImageOrientation "Orientace:">
 <!ENTITY ImageBW "Černobílý:">

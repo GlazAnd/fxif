@@ -29,6 +29,7 @@
     <em:translator>Edgard Dias Magalhães (edgard.magalhaes@gmail.com) - Brazilian Portuguese (pt-BR)</em:translator>
     <em:translator>Max Pozdeev - Russian (ru)</em:translator>
     <em:translator>Jan Kardell - Swedish (sv-SE)</em:translator>
+    <em:translator>omrakin - Turkish (tr-TR)</em:translator>
     <em:translator>Hector Zhao - simplified Chinese (zh-CN)</em:translator>
     <em:translator>Cola99 - initial traditional Chinese (zh-TW)</em:translator>
     <em:targetApplication RDF:resource="rdf:#$QPBnF1"/>
@@ -40,10 +41,10 @@
   <RDF:Description RDF:about="rdf:#$QPBnF1"
                    em:id="{ec8030f7-c20a-464f-9b0e-13a3a9e97384}"
                    em:minVersion="0.10"
-                   em:maxVersion="7.0.*" />
+                   em:maxVersion="8.*" />
   <!-- SeaMonkey -->
   <RDF:Description RDF:about="rdf:#$SPBnF1"
                    em:id="{92650c4d-4b8e-4d2a-b7eb-24ecf4f6b63a}"
                    em:minVersion="1.0"
-                   em:maxVersion="2.4.*" />
+                   em:maxVersion="2.5.*" />
 </RDF:RDF>

@@ -13,7 +13,7 @@
 
 <h1>Nutzung</h1>
 <p>Machen Sie nach der Installation von FxIF einfach einen Rechtsklick auf ein Bild und wählen Sie dann <code>Eigenschaften</code>. Die Metadaten werden im Eigenschaften-Fenster eingeblendet. Diese Integration in den vorhandenen Dialog hält die Oberfläche einfach.<br />
-Da dieses Fenster mit Firefox 3.6 entfernt wurde, wird ab dieser Version ein eigener Menüeintrag <code>EXIF-Daten</code> eingefügt der ein eigenes Fenster öffnet.</p>
+Da dieses Fenster mit Firefox 3.6 entfernt wurde, wird ab dieser Version ein eigener Menüeintrag <code>EXIF-Daten</code> eingefügt der ein eigenes Fenster öffnet. Sollte jedoch die <a href="https://addons.mozilla.org/de/firefox/addon/14228" target="_blank">Element-properties</a>-Erweiterung installiert sein, integriert sich FxIF dort.</p>
 
 <h1>Geht was nicht?</h1>
 <p>Ich möchte meine Erweiterung genauso gerne auf Ihrem System laufen lassen wie Sie. Aber manchmal funktioniert FxIF nicht bei Ihnen und um dies zu ändern benötige ich Ihre Hilfe.</p>
@@ -34,6 +34,7 @@ Da dieses Fenster mit Firefox 3.6 entfernt wurde, wird ab dieser Version ein eig
 <p>Im Detail können Sie die folgenden EXIF-Felder ansehen: ImageDescription, Make, Model, LensInfo, LensMake, LensModel, Orientation, ModifyDate/DateTimeOriginal/DateTimeDigitized, Artist, Copyright, Software, ExposureTime., FNumber, ExposureProgram, GPSInfo, ISO, ShutterSpeedValue, ExposureCompensation, MaxApertureValue, SubjectDistance, MeteringMode, LightSource, Flash, FocalLength, UserComment, ExifImageWidth, ExifImageLength, FocalPlaneXResolution, FocalPlaneResolutionUnit. ExposureMode, WhiteBalance, DigitalZoomRatio, FocalLengthIn35mmFormat, ColorSpace</p>
 <p>Die folgenden Felder werden aus IPTC-NAA ausgelesen: By-line, Caption-Abstract, Headline, Instructions, CopyrightNotice, City, Sublocation, Province/State and Country</p>
 <p>Und die folgenden aus XMP: dc:Creator, photoshop:Headline, dc:title, dc:description, dc:rights, xmpRights:UsageTerms, cc:license, photoshop:City, Iptc4xmpCore:Location, photoshop:State, photoshop:Country, tiff:Make, tiff:Model, aux:Lens, exif:DateTimeOriginal, exif:DateTimeDigitized, exif:FNumber, exif:ApertureValue, exif:FocalLength, exif:FocalLengthIn35mmFilm, exif:SubjectDistance, exif:ExposureTime, exif:Flash, tiff:Orientation, exif:ExposureBiasValue, exif:WhiteBalance, exif:LightSource, exif:MeteringMode, exif:ExposureProgram, exif:ExposureIndex, exif:ExposureMode, exif:ISOSpeedRatings, exif:DigitalZoomRatio, exif:GPSAltitude, exif:GPSAltitudeRef, exif:GPSLatitude, exif:GPSLongitude, exif:ColorSpace, photoshop:ICCProfile, photoshop:Instructions, xap:CreatorTool</p>
+<p>Ausserdem wird der JFIF-Kommentar ausgewertet.</p>
 <p>Wie gesagt werden nicht alle Daten immer und auf einmal angezeigt. Denn zuerst einmal enthalten nicht alle Dateien alle Felder. Und zweitens sind manche Felder in verschiedenen Strukturen gleichbedeutend wie beispielsweise der Name des Fotografen oder die Bildbeschreibung, in diesen Fällen wird die Information nur einmal angezeigt. Die Priorität liegt hierbei auf XMP, dann folgt IPTC-NAA und schließlich EXIF.</p>
 <p>Zu Ihrer Bequemlichkeit wird aus in EXIF-Feldern enthaltenen GPS-Koordinaten auch ein Weblink zu einem Kartenanbieter generiert und in der gleichen Zeile angezeigt. Dies gilt zumindest für Firefox 3 und SeaMonkey 2 da frühere Versionen die verwendete Technik nicht unterstützen. Seien Sie sich jedoch bewusst, dass diese Koordinaten diejenigen der Kamera sind und nicht des fotografierten Objekts. Vor allem bei Telefotos kann die Abweichung erheblich sein.</p>
 
@@ -57,15 +58,16 @@ Da dieses Fenster mit Firefox 3.6 entfernt wurde, wird ab dieser Version ein eig
 <p>Die andere Option betrifft den Kartenanbieter der für den Weblink verwendet wird. Der Default (wenn das Pref nicht gesetzt oder leer ist) ist <code>openstreetmap.org</code> zu verwenden, aber wie ich schon schrieb sind die Geschmäcker verschieden.</p>
 <p>Um also den Kartenanbieter zu ändern geben Sie die URL in das Feld (oder das Pref) ein. Sie können wirklich jede URL eingeben. Um die jeweiligen Koordinaten zu verwenden muß jedoch ein <code>%lat%</code> überall dort wo der Breitengrad eingefügt werden soll stehen und <code>%lon%</code> überall wo der Längengrad eingefügt werden soll.</p>
 <p>Der Default ist also</p>
-<p><code>http://www.openstreetmap.org/?lat=%mlat%&amp;mlon=%lon%&amp;layers=B000FTF</code></p>
+<p><code>http://www.openstreetmap.org/?mlat=%lat%&amp;mlon=%lon%&amp;layers=M</code></p>
 <p>aber wenn Sie Google als Kartenanbieter verwenden wollen, geben Sie beispielsweise folgendes ein:</p>
-<p><code>http://maps.google.com/maps?ll=%lat%,%lon%&amp;q=%lat%,%lon%&amp;z=10&amp;hl=%lang%</code></p>
+<p><code>http://maps.google.com/maps?ll=%lat%,%lon%&amp;q=%lat%,%lon%&amp;hl=%lang%</code></p>
 <p>oder um Yahoo zu verwenden</p>
-<p><code>http://maps.yahoo.com/index.php#mvt=m&amp;trf=0&amp;lon=%lon%&amp;lat=%lat%&amp;mag=8</code></p>
+<p><code>http://de.maps.yahoo.com/#mvt=m&amp;lat=%lat%&amp;lon=%lon%</code></p>
 <p>oder</p>
 <p><code>http://atlas.mapquest.com/maps/map.adp?searchtype=address&amp;formtype=latlong&amp;latlongtype=decimal&amp;latitude=%lat%&amp;longitude=%lon%</code></p>
 <p>für MapQuest usw. In der URL werden Breite und Länge jeweils ungerundet im Dezimalformat eingefügt.</p>
 <p>Haben Sie das <code>%lang%</code> in der URL für Google Maps bemerkt? Dieses ist der dritte verfügbare Platzhalter und wird mit der Sprache ersetzt die Sie im Browser als bevorzugte Sprache für Webinhalte angegeben haben. Die Setzung dieses Parameters ist nicht nötig, aber zumindest im Falle von Google wird dann die jeweilige Seite in der Sprache des Nutzers angezeigt.</p>
+<p>Ebenso können Sie im Falle von Google den Parameter „z=“ oder im Falle von OpenStreetMap und Yahoo! den Parameter „zoom=“ hinzufügen falls Ihnen die Standardzoomstufe des Providers nicht zusagt. Einfach hinter das Gleichzeichen eine Zoomstufe eintragen (interessante Zoomstufen dürften um 15 herum liegen).</p>
 <p>Das zugehörige Pref ist <code>extensions.fxif.mapProvider</code>.</p>
 
 <h1>Gibt es lokalisierte Versionen?</h1>
@@ -141,6 +143,13 @@ Da dieses Fenster mit Firefox 3.6 entfernt wurde, wird ab dieser Version ein eig
   <li>Zumindest seit Gecko 2 (Firefox 4, SeaMonkey 2.1) ist der XML-Parser sehr pingelig wenn ihm nicht korrekt als UTF-8 oder Unicode codierte Dokumente übergeben werden. Manche Bilder enthalten jedoch gegen die XMP- (und eigentlich auch XML-) Spezifikation verstoßende Dokumente mit z.B. ISO-8859-1-Umlauten. Ich habe einen Workaround eingefügt der bei Fehler beim Parsen einen zweiten Versuch macht in dem die Sonderzeichen zuerst konvertiert werden. Das kann zu falsch dargestellten Sonderzeichen in solchen Dateien führen, aber immerhin sind die Dokumente so überhaupt lesbar.</li>
   <li>Ctrl+W, bzw. Accel+W schließt nun (wie seit Version 0.4 schon Escape) das FxIF-eigene Fenster.</li>
   <li>Das FxIF-eigene Fenster verhält sich jetzt genauso wie wenn die Daten in das Browser-eigene Eigenschaften-Fenster (bzw. das der <a href="https://addons.mozilla.org/de/firefox/addon/14228" target="_blank">Element-properties</a>-Erweiterung) eingeblendet werden. Das heißt es ist nun möglich mehrere parallel zu öffnen statt daß eines immer wiederverwendet wird.</li>
+  <li>Verbessertes handling von IPTC-Datum: Wenn IPTC nur entweder Datum oder Zeit enthält wird es nur benutzt wenn nicht schon ein Datum gesetzt ist.</li>
+  <li>Jetzt werden auch JFIF-Kommentare angezeigt.</li>
+	<li>Neue Übersetzung ins Türkische, Danke an omrakin auf <a href="http://www.babelzilla.org" target="_blank">BabelZilla</a>, und die polnische Übersetzung ist wieder enthalten.</li>
+</ul>
+<h2>What’s new in 0.5</h2>
+<ul>
+	<li>Unterstützung für Maker Notes. Maker Notes sind einfach umständlich und das Format im binären Exif einfach hässlich zu implementieren da die Formate der einzelnen Information nicht nur zwischen Herstellern sondern auch Kameramodellen variieren. So benötigen die nun unterstützen Objektivkennungen für Canon, Nikon, Pentax and Sony x Variationen. Ebenfalls werden diese Objektivbezeichnungen nicht einfach in die Bilddatei geschrieben, sondern es wird nur eine Zahl hinterlegt. Programme wie FxIF müssen sich auf die Arbeit vieler Freiwilliger stützen die Testbilder zur Verfügung stellen da die Zahlencodes nirgends offiziell dokumentiert sind. Es ist auch zu beachten, dass nicht jedes Kameramodel diese Informationen hinterlegen.</li>
 </ul>
 </body>
 </html>

@@ -1,9 +1,10 @@
-<!ENTITY contextMenu.label "EXIF 信息">
-<!ENTITY EXIFData "EXIF 信息">
+<!ENTITY contextMenu.label "FxIF 信息">
+<!ENTITY FxIFData "FxIF 信息">
 <!ENTITY Copy "复制">
 <!ENTITY CameraMake "厂商:">
 <!ENTITY CameraModel "机型:">
 <!ENTITY CameraLens "镜头:">
+<!ENTITY Software "软件:">
 <!ENTITY ImageDate "时间:">
 <!ENTITY ImageOrientation "方向:">
 <!ENTITY ImageBW "黑白:">

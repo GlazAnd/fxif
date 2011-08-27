@@ -1,0 +1,46 @@
+<!ENTITY contextMenu.label "FxIF Verileri">
+<!ENTITY FxIFData "FxIF Verileri">
+<!ENTITY Copy "Kopyala">
+<!ENTITY CameraMake "Kamera Üreticisi:">
+<!ENTITY CameraModel "Kamera Modeli:">
+<!ENTITY CameraLens "Lens:">
+<!ENTITY Software "Yazılım:">
+<!ENTITY ImageDate "Görüntü Tarihi:">
+<!ENTITY ImageOrientation "Kare Sayısı:">
+<!ENTITY ImageBW "Siyah ve Beyaz:">
+<!ENTITY FlashUsed "Flaş Kullanımı:">
+<!ENTITY FocalLength "Odak Uzaklığı:">
+<!ENTITY DigitalZoom "Dijital Yakınlaştırma:">
+<!ENTITY CCDWidth "CCD Genişliği:">
+<!ENTITY ExposureTime "Poz Zamanı:">
+<!ENTITY Aperture "Diyafram:">
+<!ENTITY FocusDist "Odak Mesafesi:">
+<!ENTITY ISOequiv "ISO eşdeğeri:">
+<!ENTITY ExposureBias "Pozlama Telafisi:">
+<!ENTITY WhiteBalance "Beyaz Dengesi:">
+<!ENTITY LightSource "Işık Kaynağı:">
+<!ENTITY MeteringMode "Ölçüm Modu:">
+<!ENTITY ExposureProgram "Pozlama:">
+<!ENTITY ExposureMode "Pozlama Modu:">
+<!ENTITY ImageColorSpace "Renk Alanı:">
+<!ENTITY GPSCoord "GPS Koordinatı:">
+<!ENTITY MapLink "Harita Linki">
+<!ENTITY GPSAlt "GPS Rakımı:">
+<!ENTITY Photographer "Fotoğrafçı:">
+<!ENTITY City "Şehir:">
+<!ENTITY Sublocation "Bölge:">
+<!ENTITY ProvinceState "İl/Eyalet:">
+<!ENTITY CountryName "Ülke:">
+<!ENTITY Copyright "Telif Hakkı:">
+<!ENTITY Title "Başlık:">
+<!ENTITY Caption "Resim yazısı:">
+<!ENTITY Comment "Yorum:">
+<!ENTITY Instructions "Talimatlar:">
+<!ENTITY NoData "Üstveri bulunamadı">
+<!-- Options dialog -->
+<!ENTITY OptionsDialogTitle "FxIF Tercihleri">
+<!ENTITY GPSFormat "Kullanılan Koordinat formatı:">
+<!ENTITY DD.label "Ondalık derece">
+<!ENTITY DM.label "Derece Dakika">
+<!ENTITY DMS.label "Derece Dakika Saniye">
+<!ENTITY OverrideMapProvider "Harita sağlayıcı:">
