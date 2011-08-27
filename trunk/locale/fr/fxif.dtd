@@ -1,9 +1,10 @@
-<!ENTITY contextMenu.label "Données EXIF">
-<!ENTITY EXIFData "Données EXIF">
+<!ENTITY contextMenu.label "Données FxIF">
+<!ENTITY FxIFData "Données FxIF">
 <!ENTITY Copy "Copier">
 <!ENTITY CameraMake "Marque de l'appareil :">
 <!ENTITY CameraModel "Modèle de l'appareil :">
 <!ENTITY CameraLens "Objectif :">
+<!ENTITY Software "Logiciel :">
 <!ENTITY ImageDate "Date et heure de la photo :">
 <!ENTITY ImageOrientation "Orientation :">
 <!ENTITY ImageBW "Noir et blanc :">

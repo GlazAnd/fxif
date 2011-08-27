@@ -1,9 +1,10 @@
-<!ENTITY contextMenu.label "EXIF データ">
-<!ENTITY EXIFData "EXIF データ">
+<!ENTITY contextMenu.label "FxIF データ">
+<!ENTITY FxIFData "FxIF データ">
 <!ENTITY Copy "コピー">
 <!ENTITY CameraMake "カメラメーカー:">
 <!ENTITY CameraModel "カメラモデル:">
 <!ENTITY CameraLens "レンズ:">
+<!ENTITY Software "ソフトウェア:">
 <!ENTITY ImageDate "撮影日時:">
 <!ENTITY ImageOrientation "画像方向:">
 <!ENTITY ImageBW "白黒画像:">

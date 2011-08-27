@@ -1,5 +1,5 @@
-<!ENTITY contextMenu.label "EXIF 信息">
-<!ENTITY EXIFData "EXIF 信息">
+<!ENTITY contextMenu.label "FxIF 信息">
+<!ENTITY FxIFData "FxIF 信息">
 <!ENTITY Copy "複製">
 <!ENTITY CameraMake "製造廠商:">
 <!ENTITY CameraModel "相機型號:">

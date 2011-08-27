@@ -1,9 +1,10 @@
-<!ENTITY contextMenu.label "EXIF Tiedot">
-<!ENTITY EXIFData "EXIF Tiedot">
+<!ENTITY contextMenu.label "FxIF Tiedot">
+<!ENTITY FxIFData "FxIF Tiedot">
 <!ENTITY Copy "Kopioi">
 <!ENTITY CameraMake "Kameran valmistaja:">
 <!ENTITY CameraModel "Kameran malli:">
 <!ENTITY CameraLens "Linssi:">
+<!ENTITY Software "Ohjelma:">
 <!ENTITY ImageDate "Kuvan päiväys:">
 <!ENTITY ImageOrientation "Suunta:">
 <!ENTITY ImageBW "Mustavalkoinen:">

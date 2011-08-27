@@ -33,6 +33,7 @@ function fxifClass ()
   const EOI_MARKER = 0xFFD9;  // end of image
   const APP1_MARKER = 0xFFE1; // start of binary EXIF data
   const APP13_MARKER = 0xFFED; // start of IPTC-NAA data
+  const COM_MARKER = 0xFFFE; // start of JFIF comment data
 
   const INTEL_BYTE_ORDER = 0x4949;
 
@@ -206,10 +207,15 @@ function fxifClass ()
                   fxifUtils.iptcDone = true;
                 }
               }
-              else {
-                // read and discard data ...
-                bis.readBytes(len);
-              }
+              else
+                // Or perhaps a JFIF comment?
+                if(marker == COM_MARKER && len >= 1) {
+                  dataObj.UserComment = fxifUtils.bytesToString(bis.readByteArray(len), 0, len);
+                }
+                else {
+                  // read and discard data ...
+                  bis.readBytes(len);
+                }
 
             marker = bis.read16();
           }

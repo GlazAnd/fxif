@@ -1,5 +1,5 @@
-<!ENTITY contextMenu.label "Данные EXIF">
-<!ENTITY EXIFData "Данные EXIF">
+<!ENTITY contextMenu.label "Данные FxIF">
+<!ENTITY FxIFData "Данные FxIF">
 <!ENTITY Copy "Копировать">
 <!ENTITY CameraMake "Изготовитель камеры:">
 <!ENTITY CameraModel "Модель камеры:">

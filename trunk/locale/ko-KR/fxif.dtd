@@ -1,9 +1,10 @@
-<!ENTITY contextMenu.label "EXIF 정보">
-<!ENTITY EXIFData "EXIF 정보">
+<!ENTITY contextMenu.label "FxIF 정보">
+<!ENTITY FxIFData "FxIF 정보">
 <!ENTITY Copy "복사">
 <!ENTITY CameraMake "카메라 제조사:">
 <!ENTITY CameraModel "카메라 모델:">
 <!ENTITY CameraLens "렌즈:">
+<!ENTITY Software "소프트웨어 :">
 <!ENTITY ImageDate "촬영 일시:">
 <!ENTITY ImageOrientation "사진방향:">
 <!ENTITY ImageBW "흑백:">
@@ -34,7 +35,9 @@
 <!ENTITY Title "제목:">
 <!ENTITY Caption "머리말:">
 <!ENTITY Comment "설명:">
+<!ENTITY Instructions "지시:">
 <!ENTITY NoData "메타 정보를 찾을 수 없음">
+<!-- Options dialog -->
 <!ENTITY OptionsDialogTitle "FxIF 환경설정">
 <!ENTITY GPSFormat "좌표 형식 사용:">
 <!ENTITY DD.label "도">
