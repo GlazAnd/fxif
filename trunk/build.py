@@ -79,7 +79,7 @@ def GetFiles(dir, dirname):
 path = os.path.dirname(os.path.abspath(sys.argv[0]))
 config = ReadConfig(os.path.join(path, "config_build.sh"))
 
-if not 'APP_NAME' in config or not 'CHROME_PROVIDERS' in config:
+if not 'APP_NAME' in config:
     print >>sys.stderr, "You need a config_build.sh"
     sys.exit(1)
 
@@ -93,18 +93,24 @@ try:
 except:
     pass
 
+# Necessary file: install.rdf
+xpifiles = [('install.rdf','install.rdf')]
+
+chrome_providers = [];
 # Get list of all files in chrome provider paths
-jarfiles = []
-for chromedir in config['CHROME_PROVIDERS'].split():
-    jarfiles.extend(GetFiles(os.path.join(path,chromedir), chromedir))
+if 'CHROME_PROVIDERS' in config:
+    jarfiles = []
+    chrome_providers = config['CHROME_PROVIDERS'].split();
+    for chromedir in chrome_providers:
+        jarfiles.extend(GetFiles(os.path.join(path,chromedir), chromedir))
 
-jarzip = ZipFile(jarfile, 'w', ZIP_STORED)
-for j in jarfiles:
-    jarzip.write(j[0], j[1])
-jarzip.close()
+    jarzip = ZipFile(jarfile, 'w', ZIP_STORED)
+    for j in jarfiles:
+        jarzip.write(j[0], j[1])
+    jarzip.close()
 
-# Necessary files: the jar and install.rdf
-xpifiles = [(jarfile,'chrome/'+appname+'.jar'), ('install.rdf','install.rdf')]
+    # Necessary files: the jar and install.rdf
+    xpifiles.extend([(jarfile,'chrome/'+appname+'.jar')])
 
 # Optional directories to add to the XPI
 if 'ROOT_DIRS' in config:
@@ -124,11 +130,16 @@ manifest = os.path.join(path, 'chrome.manifest')
 if os.path.exists(manifest):
     manifest_munged = ''
     contentre = re.compile(r'^(content\s+\S*\s+)(\S*\/)$')
-    skinlocre = re.compile(r'^(skin|locale)(\s+\S*\s+\S*\s+)(.*\/)$')
+    localre = re.compile(r'^locale(\s+\S*\s+\S*\s+)(.*\/)$')
+    skinre = re.compile(r'^skin(\s+\S*\s+\S*\s+)(.*\/)$')
     for line in file(manifest):
         line = line.rstrip()
-        line = contentre.sub(r'\1jar:chrome/'+ appname +r'.jar!/\2', line)
-        line = skinlocre.sub(r'\1\2jar:chrome/'+ appname +r'.jar!/\3', line)
+        if 'content' in chrome_providers:
+            line = contentre.sub(r'\1jar:chrome/'+ appname +r'.jar!/\2', line)
+        if 'locale' in chrome_providers:
+            line = localre.sub(r'locale\1jar:chrome/'+ appname +r'.jar!/\2', line)
+        if 'skin' in chrome_providers:
+            line = skinre.sub(r'skin\1jar:chrome/'+ appname +r'.jar!/\2', line)
         manifest_munged += line + "\n"
     xpizip.writestr('chrome.manifest', manifest_munged)
 xpizip.close()

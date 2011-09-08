@@ -1,16 +1,14 @@
 <?xml version="1.0"?>
-<RDF:RDF xmlns:em="http://www.mozilla.org/2004/em-rdf#"
-         xmlns:NC="http://home.netscape.com/NC-rdf#"
-         xmlns:RDF="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-  <RDF:Description RDF:about="urn:mozilla:install-manifest"
-                   em:id="{11483926-db67-4190-91b1-ef20fcec5f33}"
-                   em:name="FxIF"
-                   em:version="0.4.4"
-                   em:creator="Ted Mielczarek"
-                   em:description="View EXIF data in image properties"
-                   em:homepageURL="http://christian-eyrich.de/mozilla/fxif/"
-                   em:iconURL="chrome://fxif/content/fxif_small.png"
-                   em:optionsURL="chrome://fxif/content/fxifOptions.xul">
+<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:em="http://www.mozilla.org/2004/em-rdf#">
+  <Description about="urn:mozilla:install-manifest">
+    <em:id>{11483926-db67-4190-91b1-ef20fcec5f33}</em:id>
+    <em:type>2</em:type>
+    <em:name>FxIF</em:name>
+    <em:version>0.4.4</em:version>
+    <em:description>View EXIF data in image properties</em:description>
+
+    <em:creator>Ted Mielczarek</em:creator>
     <em:developer>Christian Eyrich – GPS, IPTC, XMP and current maintainer</em:developer>
     <em:contributor>Matthias Wandel (JHead developer)</em:contributor>
     <em:contributor>Chris Beaven (FxIF icon)</em:contributor>
@@ -32,19 +30,27 @@
     <em:translator>omrakin - Turkish (tr-TR)</em:translator>
     <em:translator>Hector Zhao - simplified Chinese (zh-CN)</em:translator>
     <em:translator>Cola99 - initial traditional Chinese (zh-TW)</em:translator>
-    <em:targetApplication RDF:resource="rdf:#$QPBnF1"/>
-    <em:targetApplication RDF:resource="rdf:#$SPBnF1"/>
-    <em:file RDF:resource="urn:mozilla:extension:file:fxif.jar"/>
-  </RDF:Description>
 
-  <!-- Firefox -->
-  <RDF:Description RDF:about="rdf:#$QPBnF1"
-                   em:id="{ec8030f7-c20a-464f-9b0e-13a3a9e97384}"
-                   em:minVersion="0.10"
-                   em:maxVersion="8.*" />
-  <!-- SeaMonkey -->
-  <RDF:Description RDF:about="rdf:#$SPBnF1"
-                   em:id="{92650c4d-4b8e-4d2a-b7eb-24ecf4f6b63a}"
-                   em:minVersion="1.0"
-                   em:maxVersion="2.5.*" />
-</RDF:RDF>
+    <em:homepageURL>http://christian-eyrich.de/mozilla/fxif/</em:homepageURL>
+    <em:iconURL>chrome://fxif/content/fxif_small.png</em:iconURL>
+    <em:optionsURL>chrome://fxif/content/fxifOptions.xul</em:optionsURL>
+
+    <!-- Firefox -->
+    <em:targetApplication>
+      <Description>
+        <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+        <em:minVersion>0.10</em:minVersion>
+        <em:maxVersion>8.*</em:maxVersion>
+      </Description>
+    </em:targetApplication>
+
+    <!-- SeaMonkey -->
+    <em:targetApplication>
+      <Description>
+        <em:id>{92650c4d-4b8e-4d2a-b7eb-24ecf4f6b63a}</em:id>
+        <em:minVersion>1.0</em:minVersion>
+        <em:maxVersion>2.5a2</em:maxVersion>
+      </Description>
+    </em:targetApplication>
+  </Description>
+</RDF>
