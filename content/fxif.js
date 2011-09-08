@@ -317,7 +317,7 @@ function fxifClass ()
       setInfo("image-software", ed.Software);
 
       if (ed.GPSPureDdLat && ed.GPSPureDdLon) {
-        var href = 'http://www.openstreetmap.org/?mlat=%lat%&mlon=%lon%&layers=B000FTF';
+        var href = 'http://www.openstreetmap.org/?mlat=%lat%&mlon=%lon%&layers=M';
         try {
           var mapProvider = fxifUtils.getPreferences().getCharPref("mapProvider");
           if(mapProvider.length)
