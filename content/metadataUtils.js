@@ -167,7 +167,7 @@ function getImageForMap(map)
 {
     var mapuri = "#" + map.getAttribute("name");
     var multipleFound = false;
-    var img;
+    var img = null;
 
     var list = getHTMLElements(map.ownerDocument, "img");
     for (var i=0; i < list.length; i++) {
@@ -199,4 +199,11 @@ function getImageForMap(map)
         img = null;
 
     return img;
+}
+
+function getHTMLElements(node, name)
+{
+    if (htmlMode)
+        return node.getElementsByTagName(name);
+    return node.getElementsByTagNameNS(XHTMLNS, name);
 }

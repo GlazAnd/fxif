@@ -37,8 +37,7 @@
 <!ENTITY Comment "Opmerking:">
 <!ENTITY Instructions "Instructies:">
 <!ENTITY NoData "Geen metagegevens gevonden">
-<!-- Options dialog -->
-<!ENTITY OptionsDialogTitle "FxIF voorkeuren">
+<!ENTITY OptionsDialogTitle "FxIF-voorkeuren">
 <!ENTITY GPSFormat "Te gebruiken opmaak voor coördinaten:">
 <!ENTITY DD.label "Decimale graden">
 <!ENTITY DM.label "Graden Minuten">

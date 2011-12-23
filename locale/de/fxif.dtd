@@ -37,8 +37,6 @@
 <!ENTITY Comment "Kommentar:">
 <!ENTITY Instructions "Anweisungen:">
 <!ENTITY NoData "Keine Metadaten gefunden">
-
-<!-- Options dialog -->
 <!ENTITY OptionsDialogTitle "FxIF-Einstellungen">
 <!ENTITY GPSFormat "Koordinatenformat:">
 <!ENTITY DD.label "Dezimalgrad">

@@ -37,7 +37,6 @@
 <!ENTITY Comment "Comment:">
 <!ENTITY Instructions "Instructions:">
 <!ENTITY NoData "No meta data found">
-
 <!-- Options dialog -->
 <!ENTITY OptionsDialogTitle "FxIF Preferences">
 <!ENTITY GPSFormat "Coordinates format to use:">

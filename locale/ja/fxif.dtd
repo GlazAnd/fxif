@@ -37,7 +37,6 @@
 <!ENTITY Comment "コメント:">
 <!ENTITY Instructions "インストラクション:">
 <!ENTITY NoData "メタデータがありません">
-<!-- Options dialog -->
 <!ENTITY OptionsDialogTitle "FxIF 設定">
 <!ENTITY GPSFormat "使用する位置情報の形式:">
 <!ENTITY DD.label "10進法">

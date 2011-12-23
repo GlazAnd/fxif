@@ -1,16 +1,16 @@
 <!ENTITY contextMenu.label "FxIF 信息">
 <!ENTITY FxIFData "FxIF 信息">
 <!ENTITY Copy "复制">
-<!ENTITY CameraMake "厂商:">
-<!ENTITY CameraModel "机型:">
+<!ENTITY CameraMake "相机制造商:">
+<!ENTITY CameraModel "相机型号:">
 <!ENTITY CameraLens "镜头:">
 <!ENTITY Software "软件:">
-<!ENTITY ImageDate "时间:">
+<!ENTITY ImageDate "图像时间:">
 <!ENTITY ImageOrientation "方向:">
 <!ENTITY ImageBW "黑白:">
-<!ENTITY FlashUsed "闪光:">
+<!ENTITY FlashUsed "闪光灯:">
 <!ENTITY FocalLength "焦距:">
-<!ENTITY DigitalZoom "数字变焦:">
+<!ENTITY DigitalZoom "数码变焦:">
 <!ENTITY CCDWidth "CCD 宽度:">
 <!ENTITY ExposureTime "曝光时间:">
 <!ENTITY Aperture "光圈:">
@@ -26,7 +26,7 @@
 <!ENTITY GPSCoord "GPS 坐标:">
 <!ENTITY MapLink "地图链接">
 <!ENTITY GPSAlt "GPS 高度:">
-<!ENTITY Photographer "图像作者:">
+<!ENTITY Photographer "拍摄者:">
 <!ENTITY City "城市:">
 <!ENTITY Sublocation "场所:">
 <!ENTITY ProvinceState "省/州:">
@@ -37,7 +37,6 @@
 <!ENTITY Comment "用户注释:">
 <!ENTITY Instructions "特别指示:">
 <!ENTITY NoData "未找到元数据">
-<!-- Options dialog -->
 <!ENTITY OptionsDialogTitle "FxIF 首选项">
 <!ENTITY GPSFormat "使用坐标格式:">
 <!ENTITY DD.label "十进制度">
