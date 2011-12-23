@@ -282,6 +282,7 @@ Real MN-Offset: 0x038e
 
     var ntags = 0;
     var numEntries = fxifUtils.read16(data, dirstart, swapbytes);
+
     for (var i = 0; i < numEntries; i++) {
       var entry = dir_entry_addr(dirstart, i);
       var tag = fxifUtils.read16(data, entry, swapbytes);
@@ -294,10 +295,12 @@ Real MN-Offset: 0x038e
       var nbytes = components * BytesPerFormat[format];
       var valueoffset;
 
-      if(nbytes <= 4) { // stored in the entry
+      if(nbytes <= 4) {
+        // stored in the entry
         valueoffset = entry + 8;
       }
       else {
+        // stored in data area
         valueoffset = fxifUtils.read32(data, entry + 8, swapbytes);
       }
 
@@ -411,6 +414,7 @@ Real MN-Offset: 0x0356
     for (var i = 0; i < numEntries; i++) {
       var entry = dir_entry_addr(dirstart, i);
       var tag = fxifUtils.read16(data, entry, swapbytes);
+
       var format = fxifUtils.read16(data, entry+2, swapbytes);
       var components = fxifUtils.read32(data, entry+4, swapbytes);
 
@@ -420,10 +424,12 @@ Real MN-Offset: 0x0356
       var nbytes = components * BytesPerFormat[format];
       var valueoffset;
 
-      if(nbytes <= 4) { // stored in the entry
+      if(nbytes <= 4) { 
+        // stored in the entry
         valueoffset = entry + 8;
       }
       else {
+        // stored in data area
         valueoffset = fxifUtils.read32(data, entry + 8, swapbytes);
       }
 
@@ -805,12 +811,14 @@ Real MN-Offset: 0x0356
           // maker.
           if (dataObj.Make == 'Canon')
           {
-	          // This tags format is given as undefined with some weird
-	          // big numbers as components. This makes the code before
-	          // this switch to write the following IFDs data as string
-	          // to val instead giving us the offset. Therefore use valueoffset
-	          // directly.
-            ntags += this.readCanonExifDir(dataObj, data, valueoffset, swapbytes);
+	          // This tags format is often given as undefined or zero with
+            // some weird numbers or zeros as components. This makes the
+            // code before this switch to generate strange offsets.
+            // Therefore use use value at entry + 8 directly.
+            // This should work in any case and does in the available test images.
+			      var val = ConvertAnyFormat(data, FMT_ULONG, entry + 8, 0, 0, swapbytes);
+
+            ntags += this.readCanonExifDir(dataObj, data, val, swapbytes);
           }
         break;
 

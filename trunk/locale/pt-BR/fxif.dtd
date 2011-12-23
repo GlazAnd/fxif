@@ -37,7 +37,6 @@
 <!ENTITY Comment "Comentário:">
 <!ENTITY Instructions "Instruções:">
 <!ENTITY NoData "Nenhum metadado encontrado">
-<!-- Options dialog -->
 <!ENTITY OptionsDialogTitle "Preferências do FxIF">
 <!ENTITY GPSFormat "Formato das coordenadas:">
 <!ENTITY DD.label "Graus decimais">

@@ -44,7 +44,7 @@ function fxifOptionsClass ()
     try {
       mapProviderEl.value = fxifUtils.getPreferences().getCharPref("mapProvider");
     } catch(e) {
-      mapProviderEl.value = "";
+      mapProviderEl.value = "http://www.openstreetmap.org/?mlat=%lat%&mlon=%lon%&layers=M";
     }
   }
 

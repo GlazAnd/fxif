@@ -241,7 +241,7 @@ function fxifClass ()
     dataObj.error += stringBundle.getFormattedString("specialError", [type, type]);
   }
 
-  // Returns true if imgURL is a JPEG image, false otherwise.
+  // Returns true if imgUrl is a JPEG image, false otherwise.
   // This isn't bullet proof but solely relies on the first
   // two bytes being SOI_MARER. This should suffice.
   // Since it's merely a hack, I'd rather like asking the app
@@ -412,11 +412,11 @@ function fxifClass ()
   this.onFxIFDataDialogLoad = function ()
   {
     stringBundle = document.getElementById("bundle_fxif");
-    var fileName = window.arguments[0];
+    var fileName = window.arguments[0]; // imgURL passed to window.openDialog() in showImageData()
     var pos = fileName.lastIndexOf('/');
     // if no /, pos is -1 and the + 1 will result in
     // using the whole string - that's what we want
-    window.document.title = stringBundle.getString("contextMenu.label") + " " + decodeURI(fileName.substr(pos + 1));
+    window.document.title = stringBundle.getString("windowtitle") + " " + decodeURI(fileName.substr(pos + 1));
     showEXIFDataFor(window.arguments[0]);
   }
 
@@ -432,29 +432,34 @@ function fxifClass ()
   // hides or shows the menu entry depending on the context
   this.visibilityOfMenuItems = function()
   {
-    imgURL = showMetadataFor(gContextMenu.target);
-
-    // only display the entries if no properties entry available
-    var properties_entry = document.getElementById("context-metadata");
-  	var bOnImage = imgURL && !properties_entry && gContextMenu.onImage;
-
     var item1 = document.getElementById("context-fxif");
     var item2 = document.getElementById("context-fxif-sep");
-    if (bOnImage) {
-      item1.hidden = false;
-      item2.hidden = false;
 
-      var reg_jpg = new RegExp('\.jp(eg|e|g)(\\?.*)?$', 'i');
-      if (reg_jpg.test(imgURL) || isJPEG(imgURL)) {
-        item1.disabled = false;
-        item2.disabled = false;
+    try {
+      // only show the entries if no properties entry available
+      var properties_entry = document.getElementById("context-metadata");
+//      var bOnImage = imgURL && !properties_entry && gContextMenu.onImage;
+
+      if (!properties_entry && (imgURL = showMetadataFor(gContextMenu.target))) {
+        item1.hidden = false;
+        item2.hidden = false;
+
+        var reg_jpg = new RegExp('\.jp(eg|e|g)(\\?.*)?$', 'i');
+        if (reg_jpg.test(imgURL) || isJPEG(imgURL)) {
+          item1.disabled = false;
+          item2.disabled = false;
+        }
+        else {
+          item1.disabled = true;
+          item2.disabled = true;
+        }
       }
       else {
-        item1.disabled = true;
-        item2.disabled = true;
+        item1.hidden = true;
+        item2.hidden = true;
       }
     }
-    else {
+    catch(ex) {
       item1.hidden = true;
       item2.hidden = true;
     }

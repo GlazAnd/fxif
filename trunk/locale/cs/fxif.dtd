@@ -1,5 +1,5 @@
-<!ENTITY contextMenu.label "FxIF Data">
-<!ENTITY FxIFData "FxIF Data">
+<!ENTITY contextMenu.label "Data FxIF">
+<!ENTITY FxIFData "Data FxIF">
 <!ENTITY Copy "Kopírovat">
 <!ENTITY CameraMake "Značka:">
 <!ENTITY CameraModel "Model:">
@@ -37,7 +37,6 @@
 <!ENTITY Comment "Komentář:">
 <!ENTITY Instructions "Instrukce:">
 <!ENTITY NoData "Žádná meta data">
-<!-- Options dialog -->
 <!ENTITY OptionsDialogTitle "Možnosti FxIF">
 <!ENTITY GPSFormat "Formát souøadnic GPS:">
 <!ENTITY DD.label "Desetiny stupòù">

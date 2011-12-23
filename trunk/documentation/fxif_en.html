@@ -140,11 +140,21 @@ Since this window has been removed with Firefox 3.6 I’ve added my own one acce
   <li>Reading of informations about lens (from binary Exif, XMP data has already been read in the past) and used software.</li>
   <li>Dropping Support for the old Mozilla Suite. It’s dead for quite some time and no one should use it for his or her own good anymore anyway.</li>
   <li>At least in Gecko 2 (Firefox 4, SeaMonkey 2.1) the XML parser became picky about non-ASCII characters not correctly encoded as UTF-8 or Unicode. Some images do contain such documents which violate XMP specification (and actually XML specification too). I inserted a workaround which makes a second try after converting non-ASCII characters. This can lead to wrong display of such chars in buggy files, but they’re at least parsable this way.</li>
-  <li>Ctrl+W, resp. Accel+W now closes FxIF’s own dialogue (like Esc already does since version 0.4).</li>
+  <li>Ctrl+W, resp. Cmd+W now closes FxIF’s own dialogue (like Esc already does since version 0.4).</li>
   <li>FxIF’s own window now behaves like when the data is shown in the browsers own property window (resp. that of the <a href="https://addons.mozilla.org/de/firefox/addon/14228" target="_blank">Element-properties</a> extension). I.e. it’s now possible to have multiple FxIF windows open in parallel instead reusing one.</li>
   <li>Improved IPTC date handling: If IPTC only contains either date or time, only use it if there’s no date already set.</li>
   <li>JFIF comments are now displayed</li>
 	<li>Added new translation for Turkish thanks to contributor omrakin on <a href="http://www.babelzilla.org" target="_blank">BabelZilla</a> and polish translation is included again.</li>
+</ul>
+<h2>What’s new in 0.4.5</h2>
+<ul>
+	<li>Fixed a bug which caused the browser to hang hard. Thanks to Radek Docekal for notifying.</li>
+  <li>Fixed a bug which displayed a FxIF Data window with all fields but without any data. It was triggered by images using a <map>. Thanks to Joop Nijenhuis for notifying.</li>
+  <li>If the mapProvider pref isn’t set, a default is used but wasn’t filled in the corresponding input field in the options. This is now done.</li>
+  <li>Among the fields evaluated for the designation of the software used for creating the photo is the XMP field CreatorTool. When present it overwrote the value in the EXIF field Software. But CreatorTool only contains (at least following the specification) the software used for originally creating the photo, not the last version (like it should in the EXIF field Software).<br />
+So now also the field softwareAgent (in the History list) is evaluated and its last list entry is used for displaying the software. Also the field CreatorTool is only used if the EXIF field Software isn’t present.
+</li>
+  <li>More lens information are read from Canon Maker Notes.</li>
 </ul>
 <h2>What’s new in 0.5</h2>
 <ul>

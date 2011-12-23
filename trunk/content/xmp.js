@@ -39,9 +39,6 @@ function xmpClass(stringBundle)
 
 
   // Parses and reads through the XMP document within the file.
-  // Currently the getElementsByTagNameNS() methods are used
-  // for Firefox 2 (Gecko 1.8) compatibility. These are ugly and
-  // complicated. Should remove this when Firefox 3 is widespread.
   this.parseXML = function (dataObj, xml)
   {
     var parser = new DOMParser();
@@ -76,9 +73,9 @@ function xmpClass(stringBundle)
 
     // Creators come in an ordered list. Get them all.
 //    val = getXMPOrderedArray(dom, "dc:creator");
-    val = getXMPOrderedArray(dom, "http://purl.org/dc/elements/1.1/", "creator");
+    val = getXMPOrderedArray(dom, "http://purl.org/dc/elements/1.1/", "creator", "");
     if(val && val.length) {
-      dataObj.Photographer = val;
+      dataObj.Photographer = val.join(", ");
     }
 
     val = getXMPValue(dom, "http://ns.adobe.com/photoshop/1.0/", "City");
@@ -105,9 +102,18 @@ function xmpClass(stringBundle)
     if (val)
       dataObj.Instructions = val;
 
-    val = getXMPValue(dom, "http://ns.adobe.com/xap/1.0/", "CreatorTool");
-    if (val)
-      dataObj.Software = val;
+    // only use if not already set
+    if (!dataObj.Software)
+    {
+      val = getXMPValue(dom, "http://ns.adobe.com/xap/1.0/", "CreatorTool");
+      if (val)
+        dataObj.Software = val;
+    }
+
+    val = getXMPOrderedArray(dom, "http://ns.adobe.com/xap/1.0/mm/", "History", "http://ns.adobe.com/xap/1.0/sType/ResourceEvent#", "softwareAgent");
+    if(val && val.length) {
+      dataObj.Software = val[val.length - 1];
+    }
 
 
     var lang = fxifUtils.getLang();
@@ -483,7 +489,7 @@ function xmpClass(stringBundle)
 
     val = getXMPOrderedArray(dom, "http://ns.adobe.com/exif/1.0/", "ISOSpeedRatings");
     if(val && val.length)
-      dataObj.ISOequivalent = val;
+      dataObj.ISOequivalent = val.join(", ");
 
     val = getXMPValue(dom, "http://ns.adobe.com/exif/1.0/", "DigitalZoomRatio");
     if (val && val > 1)
@@ -500,7 +506,7 @@ function xmpClass(stringBundle)
 
     if (!dataObj.ColorSpace)
     {
-      // At least Photoshop writes ColorSpace "uncallibrated" though it uses
+      // At least Photoshop writes ColorSpace "uncalibrated" though it uses
       // a defined colorspace which is documented in ICCProfile
       val = getXMPValue(dom, "http://ns.adobe.com/photoshop/1.0/", "ICCProfile");
       if(val)
@@ -647,22 +653,16 @@ function xmpClass(stringBundle)
   // in multiple alternative languages.
   // But only those in the first structure with the
   // given property name is fetched.
-  // Currently the getElementsByTagNameNS() methods are used
-  // for Firefox 2 (Gecko 1.8) compatibility. These are ugly and
-  // complicated. Should remove this when Firefox 3 is widespread.
-  //function getXMPAltValue(dom, property, langTest)
   function getXMPAltValue(dom, ns, property, langTest)
   {
     var val;
 
-//    var propertyList = dom.getElementsByTagName(property);
     var propertyList = dom.getElementsByTagNameNS(ns, property);
 
     // go through all the property elements (though there should
     // only be one)
     for(var i = 0; i < propertyList.length && !val; i++)
     {
-//      var entriesList = propertyList[0].getElementsByTagName("rdf:li");
       var entriesList = propertyList[0].getElementsByTagNameNS("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "li");
 
       for(var j = 0; j < entriesList.length; j++)
@@ -711,41 +711,40 @@ function xmpClass(stringBundle)
 
   // Get all entries from an ordered array.
   // Elements might be straight text nodes or come
-  // with a property qualifier in a more complex organisation.
+  // with a property qualifier in a more complex organisation like
+  // values as properties of the li element.
   // Currently the getElementsByTagNameNS() methods are used
   // for Firefox 2 (Gecko 1.8) compatibility. These are ugly and
   // complicated. Should remove this when Firefox 3 is widespread.
   //function getXMPOrderedArray(dom, property)
-  function getXMPOrderedArray(dom, ns, property)
+  function getXMPOrderedArray(dom, ns, property, attrNS, attrName)
   {
-    var val = "";
+    var valarray = new Array();
 
-//    var el = dom.getElementsByTagName(property);
     var el = dom.getElementsByTagNameNS(ns, property);
     if(el.length) {
-//      var list = el[0].getElementsByTagName("rdf:li");
       var list = el[0].getElementsByTagNameNS("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "li");
       for(var i = 0; i < list.length; i++) {
         if (list[i].hasChildNodes()) {
-          var el = list[i].firstChild;
-          if(el.nodeType == NodeTypes.TEXT_NODE)  // it's just the photographer
-            val += el.nodeValue + ", ";
-//   This part is untested due do lack of software that writes that.
-          else if(el.nodeType == NodeTypes.ELEMENT_NODE) {
-            // Above li contains a rdf:Description which contains the rdf:value and a ns:role.
-//            var list = el.getElementsByTagName("rdf:value");
-            var list = el.getElementsByTagNameNS("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "value");
-            if(list.length && list[0].hasChildNodes())
-              val += list[0].firstChild.nodeValue + ", ";
-          }
+          var el;
+          var tmp = list[i].getElementsByTagNameNS(attrNS, attrName);
+          if (tmp.length && tmp[0].hasChildNodes())
+            el = tmp[0].firstChild;
           else
-            alert("Uh, unknown nodeType: " + el.nodeType);
+            el = list[i].firstChild;
+          if (el.nodeType == NodeTypes.TEXT_NODE)
+            valarray.push(el.nodeValue);
+        }
+        else
+        // supposedly one element with values as properties
+        {
+          var test = list[i].getAttributeNS(attrNS, attrName);
+          if (test)
+            valarray.push(test);
         }
       }
-      // Remove last, superfluous comma.
-      val = val.replace(/, $/, '');
     }
 
-    return val;
+    return valarray;
   }
 }

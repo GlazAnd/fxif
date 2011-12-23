@@ -1,8 +1,8 @@
 <!ENTITY contextMenu.label "Données FxIF">
 <!ENTITY FxIFData "Données FxIF">
 <!ENTITY Copy "Copier">
-<!ENTITY CameraMake "Marque de l'appareil :">
-<!ENTITY CameraModel "Modèle de l'appareil :">
+<!ENTITY CameraMake "Marque de l\'appareil :">
+<!ENTITY CameraModel "Modèle de l\'appareil :">
 <!ENTITY CameraLens "Objectif :">
 <!ENTITY Software "Logiciel :">
 <!ENTITY ImageDate "Date et heure de la photo :">
@@ -12,16 +12,16 @@
 <!ENTITY FocalLength "Distance focale :">
 <!ENTITY DigitalZoom "Zoom numérique :">
 <!ENTITY CCDWidth "Largeur CCD :">
-<!ENTITY ExposureTime "Durée d'exposition :">
+<!ENTITY ExposureTime "Durée d\'exposition :">
 <!ENTITY Aperture "Ouverture :">
 <!ENTITY FocusDist "Distance de mise au point :">
 <!ENTITY ISOequiv "Équivalence ISO :">
-<!ENTITY ExposureBias "Correction de l'exposition :">
+<!ENTITY ExposureBias "Correction de l\'exposition :">
 <!ENTITY WhiteBalance "Balance des blancs :">
 <!ENTITY LightSource "Source lumineuse :">
 <!ENTITY MeteringMode "Mode de mesure :">
 <!ENTITY ExposureProgram "Exposition :">
-<!ENTITY ExposureMode "Mode d'exposition :">
+<!ENTITY ExposureMode "Mode d\'exposition :">
 <!ENTITY ImageColorSpace "Espace colorimétrique :">
 <!ENTITY GPSCoord "Coordonnées GPS :">
 <!ENTITY MapLink "Lien vers carte :">
@@ -31,13 +31,12 @@
 <!ENTITY Sublocation "Sous-localité :">
 <!ENTITY ProvinceState "Province/état :">
 <!ENTITY CountryName "Pays :">
-<!ENTITY Copyright "Droits d'auteur :">
+<!ENTITY Copyright "Droits d\'auteur :">
 <!ENTITY Title "Intitulé :">
 <!ENTITY Caption "Description :">
 <!ENTITY Comment "Commentaire :">
 <!ENTITY Instructions "Instructions :">
 <!ENTITY NoData "Pas de métadonnées trouvées">
-<!-- Options dialog -->
 <!ENTITY OptionsDialogTitle "Paramètres de FxIF">
 <!ENTITY GPSFormat "Format des coordonnées :">
 <!ENTITY DD.label "Degré décimal">

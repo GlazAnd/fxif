@@ -11,7 +11,7 @@
 <!ENTITY FlashUsed "Вспышка:">
 <!ENTITY FocalLength "Фокусное расстояние:">
 <!ENTITY DigitalZoom "Цифровое увеличение:">
-<!ENTITY CCDWidth "CCD Width:">
+<!ENTITY CCDWidth "Размер матрицы:">
 <!ENTITY ExposureTime "Выдержка:">
 <!ENTITY Aperture "Диафрагма:">
 <!ENTITY FocusDist "Расстояние до объекта:">
@@ -37,7 +37,6 @@
 <!ENTITY Comment "Комментарий:">
 <!ENTITY Instructions "Инструкции:">
 <!ENTITY NoData "Данные не найдены">
-<!-- Options dialog -->
 <!ENTITY OptionsDialogTitle "Настройки FxIF">
 <!ENTITY GPSFormat "Формат координат GPS:">
 <!ENTITY DD.label "Десятичные градусы">

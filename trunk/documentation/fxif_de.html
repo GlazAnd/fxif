@@ -141,11 +141,20 @@ Da dieses Fenster mit Firefox 3.6 entfernt wurde, wird ab dieser Version ein eig
   <li>Auslesen der Informationen zum Objektiv (in binärem Exif, aus XMP-Daten wurde schon länger ausgelesen) und verwendeten Software.</li>
 	<li>Wegfall der Unterstützung für die alte Mozilla Suite. Sie ist schon lange genug tot und sollte zur eigenen Sicherheit sowieso nicht mehr verwendet werden.</li>
   <li>Zumindest seit Gecko 2 (Firefox 4, SeaMonkey 2.1) ist der XML-Parser sehr pingelig wenn ihm nicht korrekt als UTF-8 oder Unicode codierte Dokumente übergeben werden. Manche Bilder enthalten jedoch gegen die XMP- (und eigentlich auch XML-) Spezifikation verstoßende Dokumente mit z.B. ISO-8859-1-Umlauten. Ich habe einen Workaround eingefügt der bei Fehler beim Parsen einen zweiten Versuch macht in dem die Sonderzeichen zuerst konvertiert werden. Das kann zu falsch dargestellten Sonderzeichen in solchen Dateien führen, aber immerhin sind die Dokumente so überhaupt lesbar.</li>
-  <li>Ctrl+W, bzw. Accel+W schließt nun (wie seit Version 0.4 schon Escape) das FxIF-eigene Fenster.</li>
+  <li>Strg+W, bzw. Befehl+W schließt nun (wie seit Version 0.4 schon Escape) das FxIF-eigene Fenster.</li>
   <li>Das FxIF-eigene Fenster verhält sich jetzt genauso wie wenn die Daten in das Browser-eigene Eigenschaften-Fenster (bzw. das der <a href="https://addons.mozilla.org/de/firefox/addon/14228" target="_blank">Element-properties</a>-Erweiterung) eingeblendet werden. Das heißt es ist nun möglich mehrere parallel zu öffnen statt daß eines immer wiederverwendet wird.</li>
   <li>Verbessertes handling von IPTC-Datum: Wenn IPTC nur entweder Datum oder Zeit enthält wird es nur benutzt wenn nicht schon ein Datum gesetzt ist.</li>
   <li>Jetzt werden auch JFIF-Kommentare angezeigt.</li>
 	<li>Neue Übersetzung ins Türkische, Danke an omrakin auf <a href="http://www.babelzilla.org" target="_blank">BabelZilla</a>, und die polnische Übersetzung ist wieder enthalten.</li>
+</ul>
+<h2>What’s new in 0.4.5</h2>
+<ul>
+	<li>Bug behoben welcher verursachte dass der Browser sich hart aufhing. Danke an Radek Docekal für die Meldung.</li>
+  <li>Bug behoben der ein FxIF-Daten-Fenster mit allen Bezeichnern aber ohne Daten zeigte. Dieses wurde durch Bilder die eine <map> verwenden sichtbar. Danke an Joop Nijenhuis für die Meldung.</li>
+  <li>Wenn das mapProvider-Pref nicht gesetzt ist, wurde ein Default genutzt jedoch nicht ins entsprechende Eingabefeld in den Optionen eingefüllt. Das wird nun gemacht.</li>
+  <li>Für die Angabe der zur Erstellung verwendeten Software wurde auch das XMP-Feld CreatorTool ausgewertet und eine eventuelle Angabe aus dem EXIF-Feld Software überschrieben. CreatorTool jedoch enthält (zumindest laut Spezifikation) nur die ursprüngliche Software, nicht die zuletzt für die Erstellung des vorliegenden Bildes verwendete (wie es beim EXIF-Feld Software sein sollte).<br />
+Deshalb wird nun auch das Feld softwareAgent (in der History-Liste) ausgewertet und letzte dort vorhandene Listeneintrag angezeigt. Das Feld CreatorTool wird nur verwendet sollte das EXIF-Feld Software nicht vorhanden sein.</li>
+  <li>Es werden nun mehr Objektivinfos aus den Canon-Maker-Notes ausgelesen.</li>
 </ul>
 <h2>What’s new in 0.5</h2>
 <ul>
