@@ -26,7 +26,8 @@
 <!ENTITY GPSCoord "GPS-position:">
 <!ENTITY MapLink "Kartlänk">
 <!ENTITY GPSAlt "GPS-höjd:">
-<!ENTITY Photographer "Fotograf:">
+<!ENTITY GPSImgDir "Synriktning:">
+<!ENTITY Creator "Fotograf:">
 <!ENTITY City "Ort:">
 <!ENTITY Sublocation "Motivplats:">
 <!ENTITY ProvinceState "Delstat:">
@@ -37,6 +38,7 @@
 <!ENTITY Comment "Kommentar:">
 <!ENTITY Instructions "Anvisning:">
 <!ENTITY NoData "Inget metadata hittat">
+<!---->
 <!ENTITY OptionsDialogTitle "FxIF Inställningar">
 <!ENTITY GPSFormat "Koordinatformat:">
 <!ENTITY DD.label "Grader decimalt">

@@ -33,7 +33,7 @@ Da dieses Fenster mit Firefox 3.6 entfernt wurde, wird ab dieser Version ein eig
 <h2>Und welche Felder genau?</h2>
 <p>Im Detail können Sie die folgenden EXIF-Felder ansehen: ImageDescription, Make, Model, LensInfo, LensMake, LensModel, Orientation, ModifyDate/DateTimeOriginal/DateTimeDigitized, Artist, Copyright, Software, ExposureTime., FNumber, ExposureProgram, GPSInfo, ISO, ShutterSpeedValue, ExposureCompensation, MaxApertureValue, SubjectDistance, MeteringMode, LightSource, Flash, FocalLength, UserComment, ExifImageWidth, ExifImageLength, FocalPlaneXResolution, FocalPlaneResolutionUnit. ExposureMode, WhiteBalance, DigitalZoomRatio, FocalLengthIn35mmFormat, ColorSpace</p>
 <p>Die folgenden Felder werden aus IPTC-NAA ausgelesen: By-line, Caption-Abstract, Headline, Instructions, CopyrightNotice, City, Sublocation, Province/State and Country</p>
-<p>Und die folgenden aus XMP: dc:Creator, photoshop:Headline, dc:title, dc:description, dc:rights, xmpRights:UsageTerms, cc:license, photoshop:City, Iptc4xmpCore:Location, photoshop:State, photoshop:Country, tiff:Make, tiff:Model, aux:Lens, exif:DateTimeOriginal, exif:DateTimeDigitized, exif:FNumber, exif:ApertureValue, exif:FocalLength, exif:FocalLengthIn35mmFilm, exif:SubjectDistance, exif:ExposureTime, exif:Flash, tiff:Orientation, exif:ExposureBiasValue, exif:WhiteBalance, exif:LightSource, exif:MeteringMode, exif:ExposureProgram, exif:ExposureIndex, exif:ExposureMode, exif:ISOSpeedRatings, exif:DigitalZoomRatio, exif:GPSAltitude, exif:GPSAltitudeRef, exif:GPSLatitude, exif:GPSLongitude, exif:ColorSpace, photoshop:ICCProfile, photoshop:Instructions, xap:CreatorTool</p>
+<p>Und die folgenden aus XMP: dc:Creator, photoshop:Headline, dc:title, dc:description, dc:rights, xmpRights:UsageTerms, cc:license, photoshop:City, Iptc4xmpCore:Location, photoshop:State, photoshop:Country, tiff:Make, tiff:Model, aux:Lens, exif:DateTimeOriginal, exif:DateTimeDigitized, exif:FNumber, exif:ApertureValue, exif:FocalLength, exif:FocalLengthIn35mmFilm, exif:SubjectDistance, exif:ExposureTime, exif:Flash, tiff:Orientation, exif:ExposureBiasValue, exif:WhiteBalance, exif:LightSource, exif:MeteringMode, exif:ExposureProgram, exif:ExposureIndex, exif:ExposureMode, exif:ISOSpeedRatings, exif:DigitalZoomRatio, exif:GPSAltitude, exif:GPSAltitudeRef, exif:GPSLatitude, exif:GPSLongitude, exif:GPSImgDirection, exif:GPSImgDirectionRef, exif:ColorSpace, photoshop:ICCProfile, photoshop:Instructions, xap:CreatorTool, softwareAgent in mm:History</p>
 <p>Ausserdem wird der JFIF-Kommentar ausgewertet.</p>
 <p>Wie gesagt werden nicht alle Daten immer und auf einmal angezeigt. Denn zuerst einmal enthalten nicht alle Dateien alle Felder. Und zweitens sind manche Felder in verschiedenen Strukturen gleichbedeutend wie beispielsweise der Name des Fotografen oder die Bildbeschreibung, in diesen Fällen wird die Information nur einmal angezeigt. Die Priorität liegt hierbei auf XMP, dann folgt IPTC-NAA und schließlich EXIF.</p>
 <p>Zu Ihrer Bequemlichkeit wird aus in EXIF-Feldern enthaltenen GPS-Koordinaten auch ein Weblink zu einem Kartenanbieter generiert und in der gleichen Zeile angezeigt. Dies gilt zumindest für Firefox 3 und SeaMonkey 2 da frühere Versionen die verwendete Technik nicht unterstützen. Seien Sie sich jedoch bewusst, dass diese Koordinaten diejenigen der Kamera sind und nicht des fotografierten Objekts. Vor allem bei Telefotos kann die Abweichung erheblich sein.</p>
@@ -147,7 +147,7 @@ Da dieses Fenster mit Firefox 3.6 entfernt wurde, wird ab dieser Version ein eig
   <li>Jetzt werden auch JFIF-Kommentare angezeigt.</li>
 	<li>Neue Übersetzung ins Türkische, Danke an omrakin auf <a href="http://www.babelzilla.org" target="_blank">BabelZilla</a>, und die polnische Übersetzung ist wieder enthalten.</li>
 </ul>
-<h2>What’s new in 0.4.5</h2>
+<h2>Was ist neu in 0.4.5</h2>
 <ul>
 	<li>Bug behoben welcher verursachte dass der Browser sich hart aufhing. Danke an Radek Docekal für die Meldung.</li>
   <li>Bug behoben der ein FxIF-Daten-Fenster mit allen Bezeichnern aber ohne Daten zeigte. Dieses wurde durch Bilder die eine <map> verwenden sichtbar. Danke an Joop Nijenhuis für die Meldung.</li>
@@ -156,9 +156,13 @@ Da dieses Fenster mit Firefox 3.6 entfernt wurde, wird ab dieser Version ein eig
 Deshalb wird nun auch das Feld softwareAgent (in der History-Liste) ausgewertet und letzte dort vorhandene Listeneintrag angezeigt. Das Feld CreatorTool wird nur verwendet sollte das EXIF-Feld Software nicht vorhanden sein.</li>
   <li>Es werden nun mehr Objektivinfos aus den Canon-Maker-Notes ausgelesen.</li>
 </ul>
-<h2>What’s new in 0.5</h2>
+<h2>Was ist neu in 0.4.6</h2>
 <ul>
-	<li>Unterstützung für Maker Notes. Maker Notes sind einfach umständlich und das Format im binären Exif einfach hässlich zu implementieren da die Formate der einzelnen Information nicht nur zwischen Herstellern sondern auch Kameramodellen variieren. So benötigen die nun unterstützen Objektivkennungen für Canon, Nikon, Pentax and Sony x Variationen. Ebenfalls werden diese Objektivbezeichnungen nicht einfach in die Bilddatei geschrieben, sondern es wird nur eine Zahl hinterlegt. Programme wie FxIF müssen sich auf die Arbeit vieler Freiwilliger stützen die Testbilder zur Verfügung stellen da die Zahlencodes nirgends offiziell dokumentiert sind. Es ist auch zu beachten, dass nicht jedes Kameramodel diese Informationen hinterlegen.</li>
+  <li>Einen Fehler beim Interpretieren von Canon Maker Notes behoben. FxIF hatte dabei das Byteordering der EXIF-Felder verwendet, Canon Maker Notes sind jedoch unabhängig davon anscheinend immer in Intel Byte Order (Little Endian).</li>
+  <li>Einen weiteren Fehler beim Interpretieren von Canon Maker Notes behoben. Es gibt anscheinend Software die die Maker Notes innerhalb der Datei verschiebt, die Zeiger dorthin auch anpasst, aber die Offsets innerhalb der Maker Notes nicht. Deshalb wird nun ein Korrekturoffset aus dem Maker-Notes-Footer errechnet. Danke an Phil Harveys Image-Exif-Tools für diese Einsicht.</li>
+  <li>Von FxIF genutzte EInstellungen stehen nun auf der Sync-Whitelist. Das bedeutet, dass FxIF-Options nun per <a href="https://support.mozilla.org/de/kb/was-ist-firefox-sync" target="_blank">Firefox-Sync</a> synchronisiert werden.</li>
+  <li>FxIF stoppt nun beim Lesen von Strings wenn es ein Nullbyte erreicht. Bisher wurden sie einfach übergangen wenn mehr Bytes für ein Feld angegeben waren. Danke an ennis van den Broek für das Testbild um den Bug aufzudecken.</li>
+  <li>FxIF nterpretiert nun die Angabe der Richtung in die die Kamera während der Aufnahme zeigte wenn diese Information aufgezeichnet wurde. Danke an Dennis van den Broek für die Testbilder.</li>
 </ul>
 </body>
 </html>

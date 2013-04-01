@@ -26,7 +26,8 @@
 <!ENTITY GPSCoord "GPS 坐标:">
 <!ENTITY MapLink "地图链接">
 <!ENTITY GPSAlt "GPS 高度:">
-<!ENTITY Photographer "拍摄者:">
+<!ENTITY GPSImgDir "视角方向:">
+<!ENTITY Creator "创作者:">
 <!ENTITY City "城市:">
 <!ENTITY Sublocation "场所:">
 <!ENTITY ProvinceState "省/州:">
@@ -37,6 +38,7 @@
 <!ENTITY Comment "用户注释:">
 <!ENTITY Instructions "特别指示:">
 <!ENTITY NoData "未找到元数据">
+<!---->
 <!ENTITY OptionsDialogTitle "FxIF 首选项">
 <!ENTITY GPSFormat "使用坐标格式:">
 <!ENTITY DD.label "十进制度">

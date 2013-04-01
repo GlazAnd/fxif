@@ -41,9 +41,9 @@
     xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
     id="fxifContextOverlay">
 
+  <script type="application/x-javascript" src="chrome://fxif/content/metadataUtils.js"/>
   <script type="application/x-javascript" src="chrome://fxif/content/fxifUtils.js"/>
   <script type="application/x-javascript" src="chrome://fxif/content/fxif.js"/>
-  <script type="application/x-javascript" src="chrome://fxif/content/metadataUtils.js"/>
   <script type="application/x-javascript">
     window.addEventListener("load", fxifObj.initMenuItems, false);
   </script>

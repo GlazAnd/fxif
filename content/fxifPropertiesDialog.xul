@@ -52,12 +52,12 @@
     style="width: 40em; height: 10em;"
     persist="screenX screenY">
 
+  <script type="application/x-javascript" src="chrome://fxif/content/metadataUtils.js"/>
   <script type="application/x-javascript" src="chrome://fxif/content/fxifUtils.js"/>
   <script type="application/x-javascript" src="chrome://fxif/content/binExif.js"/>
   <script type="application/x-javascript" src="chrome://fxif/content/binIptc.js"/>
   <script type="application/x-javascript" src="chrome://fxif/content/xmp.js"/>
   <script type="application/x-javascript" src="chrome://fxif/content/fxif.js"/>
-  <script type="application/x-javascript" src="chrome://fxif/content/metadataUtils.js"/>
   <script type="application/x-javascript">
     window.addEventListener("load", fxifObj.onFxIFDataDialogLoad, false);
   </script>
@@ -172,9 +172,13 @@
           <label value="&GPSAlt;"/>
           <textbox id="image-gpsalt-text" readonly="true"/>
         </row>
-        <row id="image-photographer">
-          <label value="&Photographer;"/>
-          <textbox id="image-photographer-text" readonly="true"/>
+          <row id="image-gpsimgdir">
+            <label value="&GPSImgDir;"/>
+            <textbox id="image-gpsimgdir-text" readonly="true"/>
+          </row>
+        <row id="image-creator">
+          <label value="&Creator;"/>
+          <textbox id="image-creator-text" readonly="true"/>
         </row>
         <row id="image-city">
           <label value="&City;"/>

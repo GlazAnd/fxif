@@ -5,7 +5,7 @@
     <em:id>{11483926-db67-4190-91b1-ef20fcec5f33}</em:id>
     <em:type>2</em:type>
     <em:name>FxIF</em:name>
-    <em:version>0.4.5</em:version>
+    <em:version>0.4.6</em:version>
     <em:description>View EXIF data in image properties</em:description>
 
     <em:creator>Ted Mielczarek</em:creator>
@@ -17,7 +17,7 @@
     <em:translator>Álvaro G. Vicario - Spanish (es-ES)</em:translator>
     <em:translator>Oliverl - Estonian (et-EE)</em:translator>
     <em:translator>Ilari Oras – Finnish (fi)</em:translator>
-    <em:translator>Cédric Corazza – French (fr)</em:translator>
+    <em:translator>Cédric Corazza and Goofy – French (fr)</em:translator>
     <em:translator>MatrixIsAllOver – Italian (it)</em:translator>
     <em:translator>Takanori - initial Japanese (ja)</em:translator>
     <em:translator>Hisateru Tanaka - new Japanese (ja)</em:translator>
@@ -25,23 +25,143 @@
     <em:translator>markh van BabelZilla.org - Dutch (nl)</em:translator>
     <em:translator>Tomasz Tracz - Polish (pl)</em:translator>
     <em:translator>Edgard Dias Magalhães (edgard.magalhaes@gmail.com) - Brazilian Portuguese (pt-BR)</em:translator>
-    <em:translator>Max Pozdeev - Russian (ru)</em:translator>
+    <em:translator>Max Pozdeev, DimmY and Pinsky - Russian (ru)</em:translator>
     <em:translator>Jan Kardell - Swedish (sv-SE)</em:translator>
     <em:translator>omrakin - Turkish (tr)</em:translator>
-    <em:translator>Hector Zhao - simplified Chinese (zh-CN)</em:translator>
-    <em:translator>Cola99 - initial traditional Chinese (zh-TW)</em:translator>
+    <em:translator>Yaroslav Krytsun - Ukranian (uk-UA)</em:translator>
+    <em:translator>Hector Zhao and yfdyh000 - simplified Chinese (zh-CN)</em:translator>
+    <em:translator>Rock Yang - traditional Chinese (zh-TW)</em:translator>
+
+    <em:localized>
+      <Description>
+        <em:locale>cs</em:locale>
+        <em:name>FxIF</em:name>
+        <em:description>Zobrazit údaje EXIF ve vlastnostech obrázku</em:description>
+      </Description>
+    </em:localized>
+    <em:localized>
+      <Description>
+        <em:locale>de</em:locale>
+        <em:name>FxIF</em:name>
+        <em:description>EXIF-Daten in den Bildeigenschaften ansehen</em:description>
+      </Description>
+    </em:localized>
+    <em:localized>
+      <Description>
+        <em:locale>es-ES</em:locale>
+        <em:name>FxIF</em:name>
+        <em:description>Ver los datos EXIF de una imagen junto al resto de sus propiedades</em:description>
+      </Description>
+    </em:localized>
+    <em:localized>
+      <Description>
+        <em:locale>fi</em:locale>
+        <em:name>FxIF</em:name>
+        <em:description>Katso EXIF-dataa kuvan tiedoista</em:description>
+      </Description>
+    </em:localized>
+    <em:localized>
+      <Description>
+        <em:locale>fr</em:locale>
+        <em:name>FxIF</em:name>
+        <em:description>Afficher les données EXIF dans les propriétés de l'image</em:description>
+      </Description>
+    </em:localized>
+    <em:localized>
+      <Description>
+        <em:locale>it</em:locale>
+        <em:name>FxIF</em:name>
+        <em:description>Permette di visualizzare i dati Exif delle immagini -se presenti- selezionando nel menu contestuale la voce 'Visualizza i dati Exif con FxIF…'</em:description>
+      </Description>
+    </em:localized>
+    <em:localized>
+      <Description>
+        <em:locale>ja</em:locale>
+        <em:name>FxIF</em:name>
+        <em:description>画像のプロパティで EXIF データを閲覧</em:description>
+      </Description>
+    </em:localized>
+    <em:localized>
+      <Description>
+        <em:locale>ko-KR</em:locale>
+        <em:name>FxIF</em:name>
+        <em:description>이미지 속성내 EXIF 정보를 보여줍니다</em:description>
+      </Description>
+    </em:localized>
+    <em:localized>
+      <Description>
+        <em:locale>nl</em:locale>
+        <em:name>FxIF</em:name>
+        <em:description>Bekijk EXIF-gegevens in de eigenschappen van afbeeldingen</em:description>
+      </Description>
+    </em:localized>
+    <em:localized>
+      <Description>
+        <em:locale>pl</em:locale>
+        <em:name>FxIF</em:name>
+        <em:description>Zobacz dane EXIF dla zdjęć bezpośrednio w przeglądarce</em:description>
+      </Description>
+    </em:localized>
+    <em:localized>
+      <Description>
+        <em:locale>pt-BR</em:locale>
+        <em:name>FxIF</em:name>
+        <em:description>Ver dados EXIF nas propriedades da imagem</em:description>
+      </Description>
+    </em:localized>
+    <em:localized>
+      <Description>
+        <em:locale>ru</em:locale>
+        <em:name>FxIF</em:name>
+        <em:description>Просмотр EXIF-данных фотографий</em:description>
+      </Description>
+    </em:localized>
+    <em:localized>
+      <Description>
+        <em:locale>sv-SE</em:locale>
+        <em:name>FxIF</em:name>
+        <em:description>Se EXIF-data i bildegenskaper</em:description>
+      </Description>
+    </em:localized>
+    <em:localized>
+      <Description>
+        <em:locale>tr</em:locale>
+        <em:name>FxIF</em:name>
+        <em:description>Resim özelliklerinde EXIF verilerini gösterir</em:description>
+      </Description>
+    </em:localized>
+    <em:localized>
+      <Description>
+        <em:locale>uk-UA</em:locale>
+        <em:name>FxIF</em:name>
+        <em:description>Перегляд EXIF-даних фотографій</em:description>
+      </Description>
+    </em:localized>
+    <em:localized>
+      <Description>
+        <em:locale>zh-CN</em:locale>
+        <em:name>FxIF</em:name>
+        <em:description>查看图片的 EXIF 信息。</em:description>
+      </Description>
+    </em:localized>
+    <em:localized>
+      <Description>
+        <em:locale>zh-TW</em:locale>
+        <em:name>FxIF</em:name>
+        <em:description>查看圖片的 EXIF 資訊。</em:description>
+      </Description>
+    </em:localized>
 
     <em:homepageURL>http://christian-eyrich.de/mozilla/fxif/</em:homepageURL>
     <em:iconURL>chrome://fxif/content/fxif_small.png</em:iconURL>
     <em:optionsURL>chrome://fxif/content/fxifOptions.xul</em:optionsURL>
-    <em:updateInfoURL>http://christian-eyrich.de/mozilla/fxif/news.%APP_LOCALE%.xhtml</em:updateInfoURL>
 
     <!-- Firefox -->
     <em:targetApplication>
       <Description>
         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
-        <em:minVersion>0.10</em:minVersion>
-        <em:maxVersion>12.0a1</em:maxVersion>
+        <em:minVersion>3.0</em:minVersion>
+        <em:maxVersion>22.*</em:maxVersion>
       </Description>
     </em:targetApplication>
 
@@ -49,8 +169,8 @@
     <em:targetApplication>
       <Description>
         <em:id>{92650c4d-4b8e-4d2a-b7eb-24ecf4f6b63a}</em:id>
-        <em:minVersion>1.0</em:minVersion>
-        <em:maxVersion>2.8a2</em:maxVersion>
+        <em:minVersion>2.0</em:minVersion>
+        <em:maxVersion>2.19.*</em:maxVersion>
       </Description>
     </em:targetApplication>
   </Description>

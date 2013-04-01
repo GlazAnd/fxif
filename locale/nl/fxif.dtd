@@ -26,7 +26,8 @@
 <!ENTITY GPSCoord "GPS-coördinaat:">
 <!ENTITY MapLink "Plattegrondkoppeling">
 <!ENTITY GPSAlt "GPS-hoogte:">
-<!ENTITY Photographer "Fotograaf:">
+<!ENTITY GPSImgDir "Kijkrichting:">
+<!ENTITY Creator "Maker:">
 <!ENTITY City "Stad:">
 <!ENTITY Sublocation "Sublocatie:">
 <!ENTITY ProvinceState "Provincie/Staat:">
@@ -37,6 +38,7 @@
 <!ENTITY Comment "Opmerking:">
 <!ENTITY Instructions "Instructies:">
 <!ENTITY NoData "Geen metagegevens gevonden">
+<!---->
 <!ENTITY OptionsDialogTitle "FxIF-voorkeuren">
 <!ENTITY GPSFormat "Te gebruiken opmaak voor coördinaten:">
 <!ENTITY DD.label "Decimale graden">

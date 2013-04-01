@@ -26,7 +26,7 @@
  *  FxIF options window handling.
  */
 
-function fxifOptionsClass ()
+function fxifOptionsClass()
 {
   var fxifUtils = new fxifUtilsClass();
 
