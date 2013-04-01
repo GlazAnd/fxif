@@ -26,7 +26,8 @@
 <!ENTITY GPSCoord "GPS-koordinaatit:">
 <!ENTITY MapLink "Karttalinkki">
 <!ENTITY GPSAlt "GPSn korkeus:">
-<!ENTITY Photographer "Valokuvaaja:">
+<!ENTITY GPSImgDir "Katselusuunta:">
+<!ENTITY Creator "Tekijä:">
 <!ENTITY City "Kaupunki:">
 <!ENTITY Sublocation "Tarkempi sijainti:">
 <!ENTITY ProvinceState "Lääni/Osavaltio:">
@@ -37,6 +38,7 @@
 <!ENTITY Comment "Kommentti:">
 <!ENTITY Instructions "Käyttöohje:">
 <!ENTITY NoData "Metadataa ei löytynyt">
+<!---->
 <!ENTITY OptionsDialogTitle "FxIF Asetukset">
 <!ENTITY GPSFormat "Käytettävä koordinaattien ilmaisutapa:">
 <!ENTITY DD.label "Desimaaliasteet">

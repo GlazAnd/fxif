@@ -43,6 +43,7 @@
     id="fxifPropertiesOverlay">
 
   <window id="metadata">
+    <script type="application/x-javascript" src="chrome://fxif/content/metadataUtils.js"/>
     <script type="application/x-javascript" src="chrome://fxif/content/fxifUtils.js"/>
     <script type="application/x-javascript" src="chrome://fxif/content/binExif.js"/>
     <script type="application/x-javascript" src="chrome://fxif/content/binIptc.js"/>
@@ -188,10 +189,15 @@
             <label value="&GPSAlt;"/>
             <textbox id="image-gpsalt-text" readonly="true"/>
           </row>
-          <row id="image-photographer">
+          <row id="image-gpsimgdir">
             <separator orient="vertical"/>
-            <label value="&Photographer;"/>
-            <textbox id="image-photographer-text" readonly="true"/>
+            <label value="&GPSImgDir;"/>
+            <textbox id="image-gpsimgdir-text" readonly="true"/>
+          </row>
+          <row id="image-creator">
+            <separator orient="vertical"/>
+            <label value="&Creator;"/>
+            <textbox id="image-creator-text" readonly="true"/>
           </row>
           <row id="image-city">
             <separator orient="vertical"/>

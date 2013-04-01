@@ -26,7 +26,8 @@
 <!ENTITY GPSCoord "GPS 位置:">
 <!ENTITY MapLink "地図 リンク">
 <!ENTITY GPSAlt "GPS 高度:">
-<!ENTITY Photographer "撮影者:">
+<!ENTITY GPSImgDir "視線方位:">
+<!ENTITY Creator "クリエイター:">
 <!ENTITY City "市区町村:">
 <!ENTITY Sublocation "地方:">
 <!ENTITY ProvinceState "県/州:">
@@ -37,6 +38,7 @@
 <!ENTITY Comment "コメント:">
 <!ENTITY Instructions "インストラクション:">
 <!ENTITY NoData "メタデータがありません">
+<!---->
 <!ENTITY OptionsDialogTitle "FxIF 設定">
 <!ENTITY GPSFormat "使用する位置情報の形式:">
 <!ENTITY DD.label "10進法">

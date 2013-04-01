@@ -26,7 +26,9 @@
  *  Main code driving FxIF.
  */
 
-function fxifClass ()
+//"use strict";
+
+function fxifClass()
 {
   const SOI_MARKER = 0xFFD8;  // start of image
   const SOS_MARKER = 0xFFDA;  // start of stream
@@ -39,6 +41,7 @@ function fxifClass ()
 
 
   var fxifUtils = new fxifUtilsClass();
+  var metadataUtils = new metadataUtilsClass();
 
   var stringBundle;
   var imgURL = null;
@@ -282,39 +285,40 @@ function fxifClass ()
 
     if(!edEmpty) {
       document.getElementById("no-data").style.display = "none";
-      setInfo("camera-make", ed.Make);
-      setInfo("camera-model", ed.Model);
-      setInfo("camera-lens", ed.Lens);
-      setInfo("image-date", ed.Date);
-      setInfo("image-orientation", ed.Orientation);
-      setInfo("image-bw", ed.IsColor);		// TODO: what's this?
-      setInfo("image-flash", ed.FlashUsed);
-      setInfo("image-focallen", ed.FocalLengthText);
-      setInfo("image-digitalzoom", ed.DigitalZoomRatio);
-      setInfo("image-exposuretime", ed.ExposureTime);
-      setInfo("image-aperture", ed.ApertureFNumber);
-      setInfo("image-focusdist", ed.Distance);
-      setInfo("image-isoequiv", ed.ISOequivalent);
-      setInfo("image-exposurebias", ed.ExposureBias);
-      setInfo("image-whitebalance", ed.WhiteBalance);
-      setInfo("image-lightsource", ed.LightSource);
-      setInfo("image-meteringmode", ed.MeteringMode);
-      setInfo("image-exposureprogram", ed.ExposureProgram);
-      setInfo("image-exposuremode", ed.ExposureMode);
-      setInfo("image-colorspace", ed.ColorSpace);
-      setInfo("image-gpscoord", ed.GPSLat + ", " + ed.GPSLon);
-      setInfo("image-gpsalt", ed.GPSAlt);
-      setInfo("image-photographer", ed.Photographer);
-      setInfo("image-city", ed.City);
-      setInfo("image-sublocation", ed.Sublocation);
-      setInfo("image-provincestate", ed.ProvinceState);
-      setInfo("image-countryname", ed.CountryName);
-      setInfo("image-copyright", ed.Copyright);
-      setInfo("image-title", ed.Headline);
-      setInfo("image-caption", ed.Caption);
-      setInfo("image-comment", ed.UserComment);
-      setInfo("image-instructions", ed.Instructions);
-      setInfo("image-software", ed.Software);
+      metadataUtils.setInfo("camera-make", ed.Make);
+      metadataUtils.setInfo("camera-model", ed.Model);
+      metadataUtils.setInfo("camera-lens", ed.Lens);
+      metadataUtils.setInfo("image-date", ed.Date);
+      metadataUtils.setInfo("image-orientation", ed.Orientation);
+      metadataUtils.setInfo("image-bw", ed.IsColor);		// TODO: what's this?
+      metadataUtils.setInfo("image-flash", ed.FlashUsed);
+      metadataUtils.setInfo("image-focallen", ed.FocalLengthText);
+      metadataUtils.setInfo("image-digitalzoom", ed.DigitalZoomRatio);
+      metadataUtils.setInfo("image-exposuretime", ed.ExposureTime);
+      metadataUtils.setInfo("image-aperture", ed.ApertureFNumber);
+      metadataUtils.setInfo("image-focusdist", ed.Distance);
+      metadataUtils.setInfo("image-isoequiv", ed.ISOequivalent);
+      metadataUtils.setInfo("image-exposurebias", ed.ExposureBias);
+      metadataUtils.setInfo("image-whitebalance", ed.WhiteBalance);
+      metadataUtils.setInfo("image-lightsource", ed.LightSource);
+      metadataUtils.setInfo("image-meteringmode", ed.MeteringMode);
+      metadataUtils.setInfo("image-exposureprogram", ed.ExposureProgram);
+      metadataUtils.setInfo("image-exposuremode", ed.ExposureMode);
+      metadataUtils.setInfo("image-colorspace", ed.ColorSpace);
+      metadataUtils.setInfo("image-gpscoord", ed.GPSLat + ", " + ed.GPSLon);
+      metadataUtils.setInfo("image-gpsalt", ed.GPSAlt);
+	  metadataUtils.setInfo("image-gpsimgdir", ed.GPSImgDir);
+      metadataUtils.setInfo("image-creator", ed.Creator);
+      metadataUtils.setInfo("image-city", ed.City);
+      metadataUtils.setInfo("image-sublocation", ed.Sublocation);
+      metadataUtils.setInfo("image-provincestate", ed.ProvinceState);
+      metadataUtils.setInfo("image-countryname", ed.CountryName);
+      metadataUtils.setInfo("image-copyright", ed.Copyright);
+      metadataUtils.setInfo("image-title", ed.Headline);
+      metadataUtils.setInfo("image-caption", ed.Caption);
+      metadataUtils.setInfo("image-comment", ed.UserComment);
+      metadataUtils.setInfo("image-instructions", ed.Instructions);
+      metadataUtils.setInfo("image-software", ed.Software);
 
       if (ed.GPSPureDdLat && ed.GPSPureDdLon) {
         var href = 'http://www.openstreetmap.org/?mlat=%lat%&mlon=%lon%&layers=M';
@@ -440,7 +444,7 @@ function fxifClass ()
       var properties_entry = document.getElementById("context-metadata");
 //      var bOnImage = imgURL && !properties_entry && gContextMenu.onImage;
 
-      if (!properties_entry && (imgURL = showMetadataFor(gContextMenu.target))) {
+      if (!properties_entry && (imgURL = metadataUtils.showMetadataFor(gContextMenu.target))) {
         item1.hidden = false;
         item2.hidden = false;
 

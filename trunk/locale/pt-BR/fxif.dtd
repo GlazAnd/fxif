@@ -26,7 +26,8 @@
 <!ENTITY GPSCoord "Coordenadas GPS:">
 <!ENTITY MapLink "Endereço do Mapa:">
 <!ENTITY GPSAlt "Altitude do GPS:">
-<!ENTITY Photographer "Fotógrafo:">
+<!ENTITY GPSImgDir "Direção da visada:">
+<!ENTITY Creator "Criador:">
 <!ENTITY City "Cidade:">
 <!ENTITY Sublocation "Sub-localidade:">
 <!ENTITY ProvinceState "Cidade/Estado:">
@@ -37,6 +38,7 @@
 <!ENTITY Comment "Comentário:">
 <!ENTITY Instructions "Instruções:">
 <!ENTITY NoData "Nenhum metadado encontrado">
+<!---->
 <!ENTITY OptionsDialogTitle "Preferências do FxIF">
 <!ENTITY GPSFormat "Formato das coordenadas:">
 <!ENTITY DD.label "Graus decimais">

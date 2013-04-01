@@ -525,6 +525,16 @@ function xmpClass(stringBundle)
     if (val)
       gpsAltRef = Number(val);
 
+    val = getXMPValue(dom, "http://ns.adobe.com/exif/1.0/", "GPSImgDirection");
+    var gpsImgDir;
+    if (val)
+      gpsImgDir = parseRational(val);
+
+    val = getXMPValue(dom, "http://ns.adobe.com/exif/1.0/", "GPSImgDirectionRef");
+    var gpsImgDirRef = 'M';
+    if (val)
+      gpsImgDirRef = val;
+
     val = getXMPValue(dom, "http://ns.adobe.com/exif/1.0/", "GPSLatitude");
     var gpsLat;
     if (val)
@@ -567,6 +577,9 @@ function xmpClass(stringBundle)
     }
     if (gpsAlt != undefined) {
       dataObj.GPSAlt = stringBundle.getFormattedString("meters", [gpsAlt * (gpsAltRef ? -1.0 : 1.0)]);
+    }
+    if (gpsImgDir != undefined) {
+      dataObj.GPSImgDir = stringBundle.getFormattedString("dir"+gpsImgDirRef, [gpsImgDir]);
     }
 
     // Get the straight decimal values without rounding.

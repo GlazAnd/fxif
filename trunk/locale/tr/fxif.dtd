@@ -26,7 +26,8 @@
 <!ENTITY GPSCoord "GPS Koordinatı:">
 <!ENTITY MapLink "Harita Linki">
 <!ENTITY GPSAlt "GPS Rakımı:">
-<!ENTITY Photographer "Fotoğrafçı:">
+<!ENTITY GPSImgDir "Görüntülenen Yön:">
+<!ENTITY Creator "Hazırlayan:">
 <!ENTITY City "Şehir:">
 <!ENTITY Sublocation "Bölge:">
 <!ENTITY ProvinceState "İl/Eyalet:">
@@ -37,6 +38,7 @@
 <!ENTITY Comment "Yorum:">
 <!ENTITY Instructions "Talimatlar:">
 <!ENTITY NoData "Üstveri bulunamadı">
+<!---->
 <!ENTITY OptionsDialogTitle "FxIF Tercihleri">
 <!ENTITY GPSFormat "Kullanılan Koordinat formatı:">
 <!ENTITY DD.label "Ondalık derece">

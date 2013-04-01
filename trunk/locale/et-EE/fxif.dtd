@@ -10,10 +10,10 @@
 <!ENTITY Aperture "Ava:">
 <!ENTITY WhiteBalance "Valge Tasakaal:">
 <!ENTITY LightSource "Valgusallikas:">
-<!ENTITY City "Linn:">
 <!ENTITY CountryName "Riik:">
 <!ENTITY Copyright "Autoriõigus:">
 <!ENTITY Title "Pealkiri:">
 <!ENTITY Comment "Kommentaar:">
 <!ENTITY Instructions "Juhised:">
+<!---->
 <!ENTITY DM.label "Kraadi Minutis">

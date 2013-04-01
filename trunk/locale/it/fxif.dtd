@@ -1,5 +1,5 @@
 <!ENTITY contextMenu.label "Visualizza i dati Exif con FxIF…">
-<!ENTITY FxIFData "Dati FxIF">
+<!ENTITY FxIFData "Dati rilevati tramite FxIF">
 <!ENTITY Copy "Copia">
 <!ENTITY CameraMake "Marca fotocamera:">
 <!ENTITY CameraModel "Modello fotocamera:">
@@ -26,7 +26,8 @@
 <!ENTITY GPSCoord "Coordinate GPS:">
 <!ENTITY MapLink "Link della mappa">
 <!ENTITY GPSAlt "Altezza GPS:">
-<!ENTITY Photographer "Fotografo:">
+<!ENTITY GPSImgDir "Direzione GPS:">
+<!ENTITY Creator "Fotografo:">
 <!ENTITY City "Città:">
 <!ENTITY Sublocation "CAP:">
 <!ENTITY ProvinceState "Stato/Provincia:">

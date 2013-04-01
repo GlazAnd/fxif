@@ -26,7 +26,8 @@
 <!ENTITY GPSCoord "Souřadnice GPS:">
 <!ENTITY MapLink "Ukázat Odkaz">
 <!ENTITY GPSAlt "Zeměp. výška (GPS):">
-<!ENTITY Photographer "Fotograf:">
+<!ENTITY GPSImgDir "Orientace:">
+<!ENTITY Creator "Vytvořil:">
 <!ENTITY City "Město:">
 <!ENTITY Sublocation "Místo:">
 <!ENTITY ProvinceState "Region:">
@@ -37,6 +38,7 @@
 <!ENTITY Comment "Komentář:">
 <!ENTITY Instructions "Instrukce:">
 <!ENTITY NoData "Žádná meta data">
+<!---->
 <!ENTITY OptionsDialogTitle "Možnosti FxIF">
 <!ENTITY GPSFormat "Formát souøadnic GPS:">
 <!ENTITY DD.label "Desetiny stupòù">

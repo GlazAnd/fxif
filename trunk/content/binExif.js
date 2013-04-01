@@ -93,12 +93,14 @@ function exifClass(stringBundle)
   const TAG_COLORSPACE         = 0xa001;
   const TAG_INTEROPINDEX       = 0x0001;
 
-  const TAG_GPS_LAT_REF    = 1;
-  const TAG_GPS_LAT        = 2;
-  const TAG_GPS_LON_REF    = 3;
-  const TAG_GPS_LON        = 4;
-  const TAG_GPS_ALT_REF    = 5;
-  const TAG_GPS_ALT        = 6;
+  const TAG_GPS_LAT_REF    = 0x0001;
+  const TAG_GPS_LAT        = 0x0002;
+  const TAG_GPS_LON_REF    = 0x0003;
+  const TAG_GPS_LON        = 0x0004;
+  const TAG_GPS_ALT_REF    = 0x0005;
+  const TAG_GPS_ALT        = 0x0006;
+  const TAG_GPS_IMG_DIR_REF      = 0x0010;
+  const TAG_GPS_IMG_DIR      = 0x0011;
 
   var BytesPerFormat = [0,1,1,2,4,8,1,1,2,4,8,4,8];
 
@@ -161,26 +163,26 @@ function exifClass(stringBundle)
     return value;
   }
 
-  function readGPSDir(dataObj, data, dirstart, swapbytes)
+  function readGPSDir(dataObj, data, dirStart, swapbytes)
   {
-    var numEntries = fxifUtils.read16(data, dirstart, swapbytes);
-    var gpsLatHemisphere = 'N', gpsLonHemisphere = 'E', gpsAltReference = 0;
+    var numEntries = fxifUtils.read16(data, dirStart, swapbytes);
+    var gpsLatHemisphere = 'N', gpsLonHemisphere = 'E', gpsAltReference = 0, gpsImgDirReference = 'M';
     var gpsLat, gpsLon, gpsAlt;
     var vals = new Array();
 
     for (var i = 0; i < numEntries; i++) {
-      var entry = dir_entry_addr(dirstart, i);
+      var entry = dir_entry_addr(dirStart, i);
       var tag = fxifUtils.read16(data, entry, swapbytes);
       var format = fxifUtils.read16(data, entry+2, swapbytes);
       var components = fxifUtils.read32(data, entry+4, swapbytes);
 
-      if(format >= BytesPerFormat.length)
+      if (format >= BytesPerFormat.length)
         continue;
 
       var nbytes = components * BytesPerFormat[format];
       var valueoffset;
 
-      if(nbytes <= 4) // stored in the entry
+      if (nbytes <= 4) // stored in the entry
         valueoffset = entry + 8;
       else
         valueoffset = fxifUtils.read32(data, entry + 8, swapbytes);
@@ -200,6 +202,10 @@ function exifClass(stringBundle)
         gpsAltReference = val;
         break;
 
+      case TAG_GPS_IMG_DIR_REF:
+        gpsImgDirReference = val;
+        break;
+
       case TAG_GPS_LAT:
       case TAG_GPS_LON:
         // data is saved as three 64bit rationals -> 24 bytes
@@ -214,6 +220,10 @@ function exifClass(stringBundle)
         break;
 
       case TAG_GPS_ALT:
+        vals[tag] = val;
+        break;
+
+      case TAG_GPS_IMG_DIR:
         vals[tag] = val;
         break;
 
@@ -254,7 +264,9 @@ function exifClass(stringBundle)
     if (vals[TAG_GPS_ALT] != undefined) {
       dataObj.GPSAlt = stringBundle.getFormattedString("meters", [vals[TAG_GPS_ALT] * (gpsAltReference ? -1.0 : 1.0)]);
     }
-
+    if (vals[TAG_GPS_IMG_DIR] != undefined) {
+      dataObj.GPSImgDir = stringBundle.getFormattedString("dir"+gpsImgDirReference, [vals[TAG_GPS_IMG_DIR]]);
+    }
     // Get the straight decimal values without rounding.
     // For creating links to map services.
     if (vals[TAG_GPS_LAT] != undefined &&
@@ -273,7 +285,10 @@ Offset 0x0382
 Real MN-Offset: 0x038e
 
   */
-  this.readCanonExifDir = function (dataObj, data, dirstart, swapbytes)
+  /* CanonExifDir (MakerNotes) are always in Intel (little endian) byte order,
+   * so always do swapbytes.
+   */
+  function readCanonExifDir (dataObj, data, dirStart, makerNotesLen)
   {
     // Canon EXIF tags
     const TAG_CAMERA_INFO        = 0x000d;
@@ -281,10 +296,14 @@ Real MN-Offset: 0x038e
     const TAG_CANON_MODEL_ID     = 0x0010;
 
     var ntags = 0;
-    var numEntries = fxifUtils.read16(data, dirstart, swapbytes);
+    // Canon MakerNotes are always in Intel (little endian) byte order
+    var swapbytes = true;
+    var numEntries = fxifUtils.read16(data, dirStart, swapbytes);
+
+    var entryOffset = FixCanonMakerNotesBase(data, dirStart, makerNotesLen);
 
     for (var i = 0; i < numEntries; i++) {
-      var entry = dir_entry_addr(dirstart, i);
+      var entry = dir_entry_addr(dirStart, i);
       var tag = fxifUtils.read16(data, entry, swapbytes);
       var format = fxifUtils.read16(data, entry+2, swapbytes);
       var components = fxifUtils.read32(data, entry+4, swapbytes);
@@ -301,7 +320,7 @@ Real MN-Offset: 0x038e
       }
       else {
         // stored in data area
-        valueoffset = fxifUtils.read32(data, entry + 8, swapbytes);
+        valueoffset = fxifUtils.read32(data, entry + 8, swapbytes) + entryOffset;
       }
 
       var val = ConvertAnyFormat(data, format, valueoffset, components, nbytes, swapbytes);
@@ -352,6 +371,45 @@ Real MN-Offset: 0x038e
     return ntags;
   }
 
+  // This functions code is derived from Phil Harveys Image::ExifTool::MakerNotes FixBase()
+  function FixCanonMakerNotesBase (data, dirStart, makerNotesLen)
+  {
+    var swapbytes = true;
+    var fix = 0;
+
+    if (makerNotesLen > 8)
+    {
+      var footerPtr = dirStart + makerNotesLen - 8;
+      var footer = fxifUtils.bytesToStringWithNull(data, footerPtr, 8);
+      if (footer.search(/^(II\x2a\0|MM\0\x2a)/) != -1)  // check for TIFF footer
+//          footer.substr(0, 2) == GetByteOrder()) # validate byte ordering
+      {
+        var offsetFromFooter = ConvertAnyFormat(data, FMT_ULONG, footerPtr + 4, 0, 0, swapbytes);
+        fix = dirStart - offsetFromFooter;
+        if (fix == 0)
+          return 0;
+        // Picasa and ACDSee have a bug where they update other offsets without
+        // updating the TIFF footer (PH - 2009/02/25), so test for this case:
+        // validate Canon maker note footer fix by checking offset of last value
+//        var maxPt = $valPtrs[-1] + $$valBlock{$valPtrs[-1]};
+        // compare to end of maker notes, taking 8-byte footer into account
+//Autumn1.jpg
+//dirStart: 4814, dirLen: 4876, maxPt: 5526, dataPos: 0
+//        var endDiff = footerPtr - (maxPt - dataPos);
+        // ignore footer offset only if end difference is exactly correct
+        // (allow for possible padding byte, although I have never seen this)
+/*        if (endDiff == 0 || endDiff == 1) {
+            alert('Canon maker note footer may be invalid (ignored)');
+//          $exifTool->Warn('Canon maker note footer may be invalid (ignored)', 1);
+          return 0;
+        }
+*/
+      }
+    }
+
+    return fix;
+  }
+
 /*
 D3S_141805.jpg
 0x927c at pos 0x24b
@@ -370,7 +428,7 @@ Real MN-Offset: 0x0356
      might be different from the one in the rest of the Exif header as denoted
      in this TIFF header (which typically is Motorola byte order for Nikon).
   */
-  this.readNikonExifDir = function (dataObj, data, dirstart, swapbytes)
+  function readNikonExifDir (dataObj, data, dirStart, swapbytes)
   {
     // Is it really Nikon?
     if(header == 'Nikon\0') {
@@ -402,17 +460,17 @@ Real MN-Offset: 0x0356
      But doesn't overwrite those fields when already populated
      by IPTC-NAA or IPTC4XMP.
   */
-  this.readExifDir = function (dataObj, data, dirstart, swapbytes)
+  this.readExifDir = function (dataObj, data, dirStart, swapbytes)
   {
     var ntags = 0;
-    var numEntries = fxifUtils.read16(data, dirstart, swapbytes);
+    var numEntries = fxifUtils.read16(data, dirStart, swapbytes);
     var interopIndex = "";
     var colorSpace = 0;
     var exifDateTime = 0;
     var exifDateTimeOrig = 0;
     var lensInfo;
     for (var i = 0; i < numEntries; i++) {
-      var entry = dir_entry_addr(dirstart, i);
+      var entry = dir_entry_addr(dirStart, i);
       var tag = fxifUtils.read16(data, entry, swapbytes);
 
       var format = fxifUtils.read16(data, entry+2, swapbytes);
@@ -424,7 +482,8 @@ Real MN-Offset: 0x0356
       var nbytes = components * BytesPerFormat[format];
       var valueoffset;
 
-      if(nbytes <= 4) { 
+      if (nbytes <= 4)
+      {
         // stored in the entry
         valueoffset = entry + 8;
       }
@@ -436,7 +495,8 @@ Real MN-Offset: 0x0356
       var val = ConvertAnyFormat(data, format, valueoffset, components, nbytes, swapbytes);
 
       ntags++;
-      switch(tag) {
+      switch(tag)
+      {
       case TAG_MAKE:
         dataObj.Make = val;
         break;
@@ -773,7 +833,7 @@ Real MN-Offset: 0x0356
         // Prevent simple loops, it has happened that readExifDir()
         // has been recursed hundreds of time because this tag pointed
         // to its own start.
-        if (val != dirstart)
+        if (val != dirStart)
           ntags += this.readExifDir(dataObj, data, val, swapbytes);
         break;
 
@@ -816,9 +876,10 @@ Real MN-Offset: 0x0356
             // code before this switch to generate strange offsets.
             // Therefore use use value at entry + 8 directly.
             // This should work in any case and does in the available test images.
-			      var val = ConvertAnyFormat(data, FMT_ULONG, entry + 8, 0, 0, swapbytes);
+            var val = ConvertAnyFormat(data, FMT_ULONG, entry + 8, 0, 0, swapbytes);
+            var dirLen = ConvertAnyFormat(data, FMT_ULONG, entry + 4, 0, 0, swapbytes);
 
-            ntags += this.readCanonExifDir(dataObj, data, val, swapbytes);
+            ntags += readCanonExifDir(dataObj, data, val, dirLen);
           }
         break;
 

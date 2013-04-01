@@ -47,7 +47,7 @@ function fxifUtilsClass ()
 
   this.read32 = function (data, offset, swapbytes)
   {
-    if(!swapbytes)
+    if (!swapbytes)
       return (data[offset] << 24) | (data[offset+1] << 16) | (data[offset+2] << 8) | data[offset+3];
 
     return data[offset] | (data[offset+1] << 8) | (data[offset+2] << 16) | (data[offset+3] << 24);
@@ -57,12 +57,23 @@ function fxifUtilsClass ()
   {
     var s = "";
 
-    for(var i=offset; i<offset+num; i++) {
+    for (var i=offset; i<offset+num; i++) {
       if(data[i] == 0)
-        continue;
+//        continue;
+        break;
 
       s += String.fromCharCode(data[i]);
     }
+
+    return s;
+  }
+
+  this.bytesToStringWithNull = function (data, offset, num)
+  {
+    var s = "";
+
+    for (var i=offset; i<offset+num; i++)
+      s += String.fromCharCode(data[i]);
 
     return s;
   }
@@ -127,7 +138,7 @@ function fxifUtilsClass ()
     {
       // Get the browsers language as default, only use the primary part of the string.
       // That's a bit laborious since defLang must be a string, no array.
-      var nl = navigator.language.match(/^[a-z]{2,3}/i);
+      var nl = general.useragent.locale.match(/^[a-z]{2,3}/i);
       lang = nl.length ? nl[0] : "en";
     }
     // To really get a clean code.

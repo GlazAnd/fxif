@@ -1,30 +1,47 @@
-<!ENTITY contextMenu.label "FxIF 信息">
-<!ENTITY FxIFData "FxIF 信息">
+<!ENTITY contextMenu.label "FxIF 資訊">
+<!ENTITY FxIFData "FxIF 資訊">
 <!ENTITY Copy "複製">
-<!ENTITY CameraMake "製造廠商:">
-<!ENTITY CameraModel "相機型號:">
-<!ENTITY ImageDate "拍攝時間:">
-<!ENTITY ImageOrientation "方位:">
-<!ENTITY ImageBW "黑白照:">
+<!ENTITY CameraMake "廠商:">
+<!ENTITY CameraModel "機型:">
+<!ENTITY CameraLens "鏡頭:">
+<!ENTITY Software "軟體:">
+<!ENTITY ImageDate "時間:">
+<!ENTITY ImageOrientation "方向:">
+<!ENTITY ImageBW "黑白:">
 <!ENTITY FlashUsed "閃光燈:">
-<!ENTITY FocalLength "鏡頭焦長:">
+<!ENTITY FocalLength "焦距:">
 <!ENTITY DigitalZoom "數位變焦:">
 <!ENTITY CCDWidth "CCD 寬度:">
 <!ENTITY ExposureTime "曝光時間:">
-<!ENTITY Aperture "光圈值:">
-<!ENTITY FocusDist "焦點距離:">
-<!ENTITY ISOequiv "ISO 感光值:">
-<!ENTITY ExposureBias "曝光傾向:">
+<!ENTITY Aperture "光圈:">
+<!ENTITY FocusDist "對焦距離:">
+<!ENTITY ISOequiv "ISO 感光度:">
+<!ENTITY ExposureBias "曝光補償:">
 <!ENTITY WhiteBalance "白平衡:">
 <!ENTITY LightSource "光源:">
 <!ENTITY MeteringMode "測光模式:">
-<!ENTITY ExposureProgram "曝光:">
+<!ENTITY ExposureProgram "曝光程式:">
 <!ENTITY ExposureMode "曝光模式:">
-<!ENTITY MapLink "地圖 链接">
+<!ENTITY ImageColorSpace "色彩空間:">
+<!ENTITY GPSCoord "GPS 座標:">
+<!ENTITY MapLink "地圖連結">
 <!ENTITY GPSAlt "GPS 高度:">
-<!ENTITY Photographer "攝影師:">
-<!ENTITY Copyright "專利權:">
-<!ENTITY Title "書名:">
-<!ENTITY Caption "描述:">
-<!ENTITY Comment "註解:">
-<!ENTITY NoData "沒有元數據發現">
+<!ENTITY GPSImgDir "拍攝方向">
+<!ENTITY Creator "作者:">
+<!ENTITY City "城市:">
+<!ENTITY Sublocation "地點:">
+<!ENTITY ProvinceState "省/州:">
+<!ENTITY CountryName "國家名:">
+<!ENTITY Copyright "版權:">
+<!ENTITY Title "標題:">
+<!ENTITY Caption "相片標題:">
+<!ENTITY Comment "註釋:">
+<!ENTITY Instructions "特別說明:">
+<!ENTITY NoData "沒有資料">
+<!---->
+<!ENTITY OptionsDialogTitle "FxIF 功能選項">
+<!ENTITY GPSFormat "使用座標格式:">
+<!ENTITY DD.label "十進位">
+<!ENTITY DM.label "度、分">
+<!ENTITY DMS.label "度、分、秒">
+<!ENTITY OverrideMapProvider "地圖提供商:">
