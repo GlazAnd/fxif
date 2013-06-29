@@ -68,12 +68,26 @@ function fxifUtilsClass ()
     return s;
   }
 
-  this.bytesToStringWithNull = function (data, offset, num)
+  // charWidth should normally be 1 and this function thus read
+  // the bytes one by one. But reading Unicode needs reading
+  // 16 Bit values.
+  this.bytesToStringWithNull = function (data, offset, num, swapbytes, charWidth)
   {
     var s = "";
 
-    for (var i=offset; i<offset+num; i++)
-      s += String.fromCharCode(data[i]);
+    if (charWidth == 1)
+    {
+      for (var i=offset; i<offset+num; i++)
+        s += String.fromCharCode(data[i]);
+    }
+    else
+    {
+      for (var i=offset; i<offset+num; i += charWidth)
+      {
+        var ix = this.read16(data, i, swapbytes);
+        s += String.fromCharCode(ix);
+      }
+    }
 
     return s;
   }
@@ -82,7 +96,7 @@ function fxifUtilsClass ()
   this.dd2dms = function (gpsval)
   {
     // a bit unconventional calculation to get input edge cases
-    // like 0x31 / 0x01, 0x0a / 0x01, 0x3c / 0x01 to 49°11'0" instead of 49°10'60"
+    // like 0x31 / 0x01, 0x0a / 0x01, 0x3c / 0x01 to 49Â°11'0" instead of 49Â°10'60"
     var gpsDeg = Math.floor(gpsval / 3600);
     gpsval -= gpsDeg * 3600.0;
     var gpsMin = Math.floor(gpsval / 60);
@@ -94,7 +108,7 @@ function fxifUtilsClass ()
   this.dd2dm = function (gpsval)
   {
     // a bit unconventional calculation to get input edge cases
-    // like 0x31 / 0x01, 0x0a / 0x01, 0x3c / 0x01 to 49°11'0" instead of 49°10'60"
+    // like 0x31 / 0x01, 0x0a / 0x01, 0x3c / 0x01 to 49Â°11'0" instead of 49Â°10'60"
     var gpsDeg = Math.floor(gpsval / 3600);
     gpsval -= gpsDeg * 3600.0;
     // round to 2 digits after the comma

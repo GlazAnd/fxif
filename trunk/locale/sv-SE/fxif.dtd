@@ -38,7 +38,6 @@
 <!ENTITY Comment "Kommentar:">
 <!ENTITY Instructions "Anvisning:">
 <!ENTITY NoData "Inget metadata hittat">
-<!---->
 <!ENTITY OptionsDialogTitle "FxIF Inställningar">
 <!ENTITY GPSFormat "Koordinatformat:">
 <!ENTITY DD.label "Grader decimalt">

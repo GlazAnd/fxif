@@ -26,8 +26,8 @@
 <!ENTITY GPSCoord "Współrzędne GPS:">
 <!ENTITY MapLink "Mapa Łącze">
 <!ENTITY GPSAlt "Wysokość:">
-<!ENTITY GPSImgDir "Kierunek wzroku:">
-<!ENTITY Creator "Twórca:">
+<!ENTITY GPSImgDir "Kierunek widoku:">
+<!ENTITY Creator "Autor:">
 <!ENTITY City "Miejscowość:">
 <!ENTITY Sublocation "Ulica:">
 <!ENTITY ProvinceState "Region:">
@@ -38,7 +38,6 @@
 <!ENTITY Comment "Komentarz:">
 <!ENTITY Instructions "Instrukcje:">
 <!ENTITY NoData "Brak danych EXIF">
-<!---->
 <!ENTITY OptionsDialogTitle "Preferencje FxIF">
 <!ENTITY GPSFormat "Współrzędne w formacie do wykorzystania:">
 <!ENTITY DD.label "Stopnie dziesiętne">

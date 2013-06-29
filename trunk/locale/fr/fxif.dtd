@@ -1,47 +1,46 @@
 <!ENTITY contextMenu.label "Données FxIF">
 <!ENTITY FxIFData "Données FxIF">
 <!ENTITY Copy "Copier">
-<!ENTITY CameraMake "Marque de l\'appareil :">
-<!ENTITY CameraModel "Modèle de l\'appareil :">
-<!ENTITY CameraLens "Objectif :">
-<!ENTITY Software "Logiciel :">
-<!ENTITY ImageDate "Date et heure de la photo :">
-<!ENTITY ImageOrientation "Orientation :">
-<!ENTITY ImageBW "Noir et blanc :">
-<!ENTITY FlashUsed "Utilisation du flash :">
-<!ENTITY FocalLength "Distance focale :">
-<!ENTITY DigitalZoom "Zoom numérique :">
-<!ENTITY CCDWidth "Largeur CCD :">
-<!ENTITY ExposureTime "Durée d\'exposition :">
-<!ENTITY Aperture "Ouverture :">
-<!ENTITY FocusDist "Distance de mise au point :">
-<!ENTITY ISOequiv "Équivalence ISO :">
-<!ENTITY ExposureBias "Correction de l\'exposition :">
-<!ENTITY WhiteBalance "Balance des blancs :">
-<!ENTITY LightSource "Source lumineuse :">
-<!ENTITY MeteringMode "Mode de mesure :">
-<!ENTITY ExposureProgram "Exposition :">
-<!ENTITY ExposureMode "Mode d\'exposition :">
-<!ENTITY ImageColorSpace "Espace colorimétrique :">
-<!ENTITY GPSCoord "Coordonnées GPS :">
-<!ENTITY MapLink "Lien vers carte :">
+<!ENTITY CameraMake "Marque de l’appareil:">
+<!ENTITY CameraModel "Modèle de l’appareil:">
+<!ENTITY CameraLens "Objectif:">
+<!ENTITY Software "Logiciel:">
+<!ENTITY ImageDate "Date et heure de la photo:">
+<!ENTITY ImageOrientation "Orientation:">
+<!ENTITY ImageBW "Noir et blanc:">
+<!ENTITY FlashUsed "Utilisation du flash:">
+<!ENTITY FocalLength "Distance focale:">
+<!ENTITY DigitalZoom "Zoom numérique:">
+<!ENTITY CCDWidth "Largeur CCD:">
+<!ENTITY ExposureTime "Durée d’exposition:">
+<!ENTITY Aperture "Ouverture:">
+<!ENTITY FocusDist "Distance de mise au point:">
+<!ENTITY ISOequiv "Équivalence ISO:">
+<!ENTITY ExposureBias "Correction de l’exposition:">
+<!ENTITY WhiteBalance "Balance des blancs:">
+<!ENTITY LightSource "Source lumineuse:">
+<!ENTITY MeteringMode "Mode de mesure:">
+<!ENTITY ExposureProgram "Exposition:">
+<!ENTITY ExposureMode "Mode d’exposition:">
+<!ENTITY ImageColorSpace "Espace colorimétrique:">
+<!ENTITY GPSCoord "Coordonnées GPS:">
+<!ENTITY MapLink "Lien vers carte:">
 <!ENTITY GPSAlt "Altitude GPS:">
-<!ENTITY GPSImgDir "Affichage de la direction :">
-<!ENTITY Creator "Créateur :">
-<!ENTITY City "Ville :">
-<!ENTITY Sublocation "Sous-localité :">
-<!ENTITY ProvinceState "Province/état :">
-<!ENTITY CountryName "Pays :">
-<!ENTITY Copyright "Droits d\'auteur :">
-<!ENTITY Title "Intitulé :">
-<!ENTITY Caption "Description :">
-<!ENTITY Comment "Commentaire :">
-<!ENTITY Instructions "Instructions :">
+<!ENTITY GPSImgDir "Affichage de la direction:">
+<!ENTITY Creator "Créateur:">
+<!ENTITY City "Ville:">
+<!ENTITY Sublocation "Sous-localité:">
+<!ENTITY ProvinceState "Province/état:">
+<!ENTITY CountryName "Pays:">
+<!ENTITY Copyright "Droits d’auteur:">
+<!ENTITY Title "Intitulé:">
+<!ENTITY Caption "Description:">
+<!ENTITY Comment "Commentaire:">
+<!ENTITY Instructions "Instructions:">
 <!ENTITY NoData "Pas de métadonnées trouvées">
-<!---->
 <!ENTITY OptionsDialogTitle "Paramètres de FxIF">
-<!ENTITY GPSFormat "Format des coordonnées :">
+<!ENTITY GPSFormat "Format des coordonnées:">
 <!ENTITY DD.label "Degré décimal">
 <!ENTITY DM.label "Degrés minutes">
 <!ENTITY DMS.label "Degrés minutes secondes">
-<!ENTITY OverrideMapProvider "Service de carte :">
+<!ENTITY OverrideMapProvider "Service de carte:">

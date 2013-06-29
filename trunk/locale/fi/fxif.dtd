@@ -38,7 +38,6 @@
 <!ENTITY Comment "Kommentti:">
 <!ENTITY Instructions "Käyttöohje:">
 <!ENTITY NoData "Metadataa ei löytynyt">
-<!---->
 <!ENTITY OptionsDialogTitle "FxIF Asetukset">
 <!ENTITY GPSFormat "Käytettävä koordinaattien ilmaisutapa:">
 <!ENTITY DD.label "Desimaaliasteet">

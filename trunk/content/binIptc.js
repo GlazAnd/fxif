@@ -163,8 +163,8 @@ function iptcClass()
                 break;
 
               case TAG_IPTC_BYLINE:
-                if(!dataObj.Photographer || !fxifUtils.xmpDone)
-                  dataObj.Photographer = val;
+                if(!dataObj.Creator || !fxifUtils.xmpDone)
+                  dataObj.Creator = val;
                 break;
 
               case TAG_IPTC_CITY:
@@ -224,7 +224,7 @@ function iptcClass()
     // only overwrite existing date if XMP data not already parsed
     if((!dataObj.Date || !fxifUtils.xmpDone) && (iptcDate || iptcTime))
     {
-      // if IPTC only contains either date or time, only use it if there’s
+      // if IPTC only contains either date or time, only use it if thereâ€™s
       // no date already set
       if ((iptcDate && iptcTime) || !dataObj.Date && (iptcDate && !iptcTime || !iptcDate && iptcTime))
       {

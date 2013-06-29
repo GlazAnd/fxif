@@ -38,7 +38,6 @@
 <!ENTITY Comment "用户注释:">
 <!ENTITY Instructions "特别指示:">
 <!ENTITY NoData "未找到元数据">
-<!---->
 <!ENTITY OptionsDialogTitle "FxIF 首选项">
 <!ENTITY GPSFormat "使用坐标格式:">
 <!ENTITY DD.label "十进制度">

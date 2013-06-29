@@ -74,9 +74,9 @@ function fxifClass()
         // if it's a web resource, load it with bypassing the cache
         if(u.schemeIs("http") ||
            u.schemeIs("https")) {
-  				var c = ios.newChannelFromURI(u);
-//  				c.loadFlags |= Components.interfaces.nsIRequest.LOAD_BYPASS_CACHE;
-  				istream = c.open();
+            var c = ios.newChannelFromURI(u);
+//            c.loadFlags |= Components.interfaces.nsIRequest.LOAD_BYPASS_CACHE;
+            istream = c.open();
         }
         else
         // see if it's a local file and we can open it
@@ -87,7 +87,7 @@ function fxifClass()
           istream.init(f, 1, 0, false);
         }
         else
-  			// or is it some sort of message
+        // or is it some sort of message
         if(u.schemeIs("mailbox") ||
            u.schemeIs("news") ||
            u.schemeIs("imap")) {
@@ -116,26 +116,26 @@ function fxifClass()
     var dataObj = {};
 
     var istream = getDataStream(imgUrl);
-    if(istream) {
+    if (istream) {
       try {
         var bis = Components.classes["@mozilla.org/binaryinputstream;1"].createInstance(Components.interfaces.nsIBinaryInputStream);
         bis.setInputStream(istream);
         var swapbytes = false;
         var marker = bis.read16();
         var len;
-        if(marker == SOI_MARKER) {
+        if (marker == SOI_MARKER) {
           marker = bis.read16();
           // reading SOS marker indicates start of image stream
-          while(marker != SOS_MARKER &&
-                (!fxifUtils.exifDone || !fxifUtils.iptcDone || !fxifUtils.xmpDone)) {
+          while (marker != SOS_MARKER &&
+                 (!fxifUtils.exifDone || !fxifUtils.iptcDone || !fxifUtils.xmpDone)) {
             // length includes the length bytes
             len = bis.read16() - 2;
 
-            if(marker == APP1_MARKER && len >= 6) {
+            if (marker == APP1_MARKER && len >= 6) {
               // for EXIF the first 6 bytes should be 'Exif\0\0'
               var header = bis.readBytes(6);
               // Is it EXIF?
-              if(header == 'Exif\0\0') {
+              if (header == 'Exif\0\0') {
                 // 8 byte TIFF header
                 // first two determine byte order
                 var exifData = bis.readByteArray(len - 6);
@@ -155,13 +155,13 @@ function fxifClass()
                 fxifUtils.exifDone = true;
               }
               else {
-                if(len > 28)
+                if (len > 28)
                 {
                   // Maybe it's XMP. If it is, it starts with the XMP namespace URI
                   // 'http://ns.adobe.com/xap/1.0/\0'.
                   // see http://partners.adobe.com/public/developer/en/xmp/sdk/XMPspecification.pdf
                   header += bis.readBytes(22);  // 6 bytes read means 22 more to go
-                  if(header == 'http://ns.adobe.com/xap/1.0/') {
+                  if (header == 'http://ns.adobe.com/xap/1.0/') {
                     // There is at least one programm which writes spaces behind the namespace URI.
                     // Overread up to 5 bytes of such garbage until a '\0'. I deliberately don't read
                     // until reaching len bytes.
@@ -195,11 +195,11 @@ function fxifClass()
             }
             else
               // Or is it IPTC-NAA record as IIM?
-              if(marker == APP13_MARKER && len > 14) {
+              if (marker == APP13_MARKER && len > 14) {
                 // 6 bytes, 'Photoshop 3.0\0'
                 var psString = bis.readBytes(14);
                 var psData = bis.readByteArray(len - 14);
-                if(psString == 'Photoshop 3.0\0') {
+                if (psString == 'Photoshop 3.0\0') {
                   var iptcReader = new iptcClass();
                   try {
                     iptcReader.readPsSection(dataObj, psData);
@@ -212,7 +212,7 @@ function fxifClass()
               }
               else
                 // Or perhaps a JFIF comment?
-                if(marker == COM_MARKER && len >= 1) {
+                if (marker == COM_MARKER && len >= 1) {
                   dataObj.UserComment = fxifUtils.bytesToString(bis.readByteArray(len), 0, len);
                 }
                 else {
@@ -307,7 +307,7 @@ function fxifClass()
       metadataUtils.setInfo("image-colorspace", ed.ColorSpace);
       metadataUtils.setInfo("image-gpscoord", ed.GPSLat + ", " + ed.GPSLon);
       metadataUtils.setInfo("image-gpsalt", ed.GPSAlt);
-	  metadataUtils.setInfo("image-gpsimgdir", ed.GPSImgDir);
+      metadataUtils.setInfo("image-gpsimgdir", ed.GPSImgDir);
       metadataUtils.setInfo("image-creator", ed.Creator);
       metadataUtils.setInfo("image-city", ed.City);
       metadataUtils.setInfo("image-sublocation", ed.Sublocation);
@@ -326,7 +326,7 @@ function fxifClass()
           var mapProvider = fxifUtils.getPreferences().getCharPref("mapProvider");
           if(mapProvider.length)
             href = mapProvider;
-        } catch(e) {}
+        } catch(ex) {}
         href = href.replace(/%lat%/g, ed.GPSPureDdLat);
         href = href.replace(/%lon%/g, ed.GPSPureDdLon);
         href = href.replace(/%lang%/g, fxifUtils.getLang());
@@ -337,8 +337,8 @@ function fxifClass()
       }
     }
     else {
-  		// Show at least a message if there's nothing. Else "it just leaves you guessing
-  		// whether the extension is at fault or what." as a comment on AMO says.
+      // Show at least a message if there's nothing. Else "it just leaves you guessing
+      // whether the extension is at fault or what." as a comment on AMO says.
       document.getElementById("copy-button").style.display = "none";
       document.getElementById("data-list").style.display = "none";
     }
@@ -354,26 +354,26 @@ function fxifClass()
   {
     var browser = window.opener.getBrowser();
     try {
-  	  var prefRoot = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService).getBranch("browser.");
-    	var destpref = prefRoot.getIntPref("link.open_newwindow");
-  	  if (destpref == 1)
-  			browser.loadURI(urlstring);
+      var prefRoot = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService).getBranch("browser.");
+      var destpref = prefRoot.getIntPref("link.open_newwindow");
+      if (destpref == 1)
+        browser.loadURI(urlstring);
       else
-  		{
-  			if (destpref == 2)
-  	      window.open(urlstring);
-  		  else
-  				if (destpref == 3)
-  				{
-  					var selectNewTab = !prefRoot.getBoolPref("tabs.loadInBackground");
-  					if (event.shiftKey)
-  						selectNewTab = !selectNewTab;
-  				  var tab = browser.addTab(urlstring);
-  					if (selectNewTab)
-  						browser.selectedTab = tab;
-  				}
-  			}
-    } catch(e) {}
+      {
+        if (destpref == 2)
+          window.open(urlstring);
+        else
+          if (destpref == 3)
+          {
+            var selectNewTab = !prefRoot.getBoolPref("tabs.loadInBackground");
+            if (event.shiftKey)
+              selectNewTab = !selectNewTab;
+            var tab = browser.addTab(urlstring);
+            if (selectNewTab)
+              browser.selectedTab = tab;
+          }
+        }
+    } catch(ex) {}
   }
 
   this.copyDataToClipboard = function ()
@@ -413,6 +413,7 @@ function fxifClass()
     }
   }
 
+
   this.onFxIFDataDialogLoad = function ()
   {
     stringBundle = document.getElementById("bundle_fxif");
@@ -448,7 +449,9 @@ function fxifClass()
         item1.hidden = false;
         item2.hidden = false;
 
-        var reg_jpg = new RegExp('\.jp(eg|e|g)(\\?.*)?$', 'i');
+        // matching url endings of .jpeg, .jpe and .jpg each with
+        // optional HTTP GET parameters after a following ?
+        var reg_jpg = new RegExp(/\.jp(eg|e|g)(\?.*)?$/i);
         if (reg_jpg.test(imgURL) || isJPEG(imgURL)) {
           item1.disabled = false;
           item2.disabled = false;
