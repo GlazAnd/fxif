@@ -159,11 +159,21 @@ So now also the field softwareAgent (in the History list) is evaluated and its l
 <h2>What’s new in 0.4.6</h2>
 <ul>
   <li>Fixed a bug in interpreting Canon Maker Notes. FxIF used the byte order of the EXIF fields for it but it seems Canon Maker Notes are always in Intel byte order (Little-Endian).</li>
-  <li></li>
   <li>Fixed another bug in interpreting Canon Maker Notes. It seems there exists software which moves Maker Notes within the image file, modifying the pointers into that block, but not the offsets within the Maker Notes. Because of this FxIF now adjusts those offsets using the Maker Notes Footer. Thanks to Phil Harveys Image-Exif-Tools for this insight.</li>
   <li>Preferences used by FxIF are now added to the sync whitelist. That means the FxIF options now get synced using <a href="https://support.mozilla.org/en-US/kb/firefox-sync-take-your-bookmarks-and-tabs-with-you" target="_blank">Firefox-Sync</a>.</li>
   <li>FxIF now stops reading strings if encountering a null byte. Until now the given number of chars where read and a null byte just filtered. Thanks to Dennis van den Broek for providing the sample image that uncovered that bug.</li>
   <li>FxIF now interprets the direction the camera pointed if that information is present. Thanks to Dennis van den Broek for providing the sample images.</li>
+  <li>Fixed <a href="http://code.google.com/p/fxif/issues/detail?id=18" target="_blank">Issue 18</a>: Fixed bad regex which matched too much.</li>
+</ul>
+<h2>What’s new in 0.4.7</h2>
+<ul>
+  <li>"Fixed" <a href="http://code.google.com/p/fxif/issues/detail?id=19" target="_blank">Issue 19</a>: Deactivated alerting the user on parse error of the XMP document. There is no workaround I know of as long as FxIF is using Mozillas DOM parser. And I don’t want to go implementing my own.</li>
+  <li>Exception occured when there was an empty GpsImgRef field in EXIF or XMP or if it was other than M or T.</li>
+  <li>Fixed <a href="http://code.google.com/p/fxif/issues/detail?id=17" target="_blank">Issue 17</a>: Endless recursion if Exif Interoperability Offset or Exif Offset point to a directory that has been processed before. It’s similar but more complex to Issue 10 which has been fixed in FxIF 0.4.3.</li>
+  <li>Fixed a bug that had the effect that the creator data (formerly photograph) wasn't shown anymore. I renamed a variable in one place instead all occurences. Many thanks to Oliver Theobald for finding the bug.</li>
+  <li>In at least one image the ISO value isn’t contained as integer, as it's specified, but as string. FxIF nevertheless handled it as integer, bailed out and so the rest of the data wasn't evaluated. So for this and another field where this might happen too I added a workaround. Many thanks to Aaron Gullison for finding the bug.</li>
+  <li>Evaluating the EXIF fields Aperture and MaxAperture was wrong – and that at least since version 0.2.3. I assume an error in porting the relevant code from Jhead (which is written in C). Different from the field FNumber the value isn’t used directly but computed using a formula which I don’t pretend to understand, neither the reason for using it, but ported correctly the result is the expected one. Many thanks to Babar de Saint Cyr for finding the bug.</li>
+  <li>According to the EXIF 2 specification the EXIF field UserComment offers the posibility to encode the string in ASCI, JIS, UNICODE and self defined coding. Until now FxIF just interpreted everything as ASCII and only displayed the character code in case of other codings. Now FxIF understands ASCII and UNICODE for this field. In case of other codings the content will be displayed as ASCII string. Many thanks to Babar de Saint Cyr for finding the bug. That bug was also reported as <a href="http://code.google.com/p/fxif/issues/detail?id=19" target="_blank">Issue 20</a>.</li>
 </ul>
 </body>
 </html>

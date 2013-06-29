@@ -26,7 +26,8 @@
 <!ENTITY GPSCoord "GPS-Koordinate:">
 <!ENTITY MapLink "Kartenlink">
 <!ENTITY GPSAlt "GPS-Höhe:">
-<!ENTITY Photographer "Fotograf:">
+<!ENTITY GPSImgDir "Blickrichtung:">
+<!ENTITY Creator "Urheber:">
 <!ENTITY City "Ort:">
 <!ENTITY Sublocation "Ort des Motivs:">
 <!ENTITY ProvinceState "Bundesland:">

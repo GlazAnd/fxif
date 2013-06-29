@@ -1,0 +1,45 @@
+<!ENTITY contextMenu.label "Дані FxIF">
+<!ENTITY FxIFData "Дані FxIF">
+<!ENTITY Copy "Копіювати">
+<!ENTITY CameraMake "Виробник камери:">
+<!ENTITY CameraModel "Модель камери:">
+<!ENTITY CameraLens "Оптика:">
+<!ENTITY Software "Програмне забезпечення:">
+<!ENTITY ImageDate "Дата зображення:">
+<!ENTITY ImageOrientation "Орієнтація:">
+<!ENTITY ImageBW "Чорно-біле:">
+<!ENTITY FlashUsed "Спалах:">
+<!ENTITY FocalLength "Фокусна віддаль:">
+<!ENTITY DigitalZoom "Цифрове збільшення:">
+<!ENTITY CCDWidth "Розмір матриці:">
+<!ENTITY ExposureTime "Час витримки:">
+<!ENTITY Aperture "Діафрагма:">
+<!ENTITY FocusDist "Відстань до об'єкта:">
+<!ENTITY ISOequiv "Значення ISO:">
+<!ENTITY ExposureBias "Експокорекція:">
+<!ENTITY WhiteBalance "Баланс білого:">
+<!ENTITY LightSource "Джерело світла:">
+<!ENTITY MeteringMode "Режим вимірювання:">
+<!ENTITY ExposureProgram "Витримка:">
+<!ENTITY ExposureMode "Режим витримки:">
+<!ENTITY ImageColorSpace "Кольоровий простір:">
+<!ENTITY GPSCoord "Координати GPS:">
+<!ENTITY MapLink "Посилання на карту">
+<!ENTITY GPSAlt "Висота за GPS:">
+<!ENTITY Creator "Автор:">
+<!ENTITY City "Місто:">
+<!ENTITY Sublocation "Район:">
+<!ENTITY ProvinceState "Область/штат:">
+<!ENTITY CountryName "Країна:">
+<!ENTITY Copyright "Авторські права:">
+<!ENTITY Title "Назва:">
+<!ENTITY Caption "Заголовок:">
+<!ENTITY Comment "Коментар:">
+<!ENTITY Instructions "Інструкції:">
+<!ENTITY NoData "Метаданих не виявлено">
+<!ENTITY OptionsDialogTitle "Налаштування FxIF">
+<!ENTITY GPSFormat "Формат координат:">
+<!ENTITY DD.label "Десяткові градуси">
+<!ENTITY DM.label "Градуси Мінути">
+<!ENTITY DMS.label "Градуси Мінути Секунди">
+<!ENTITY OverrideMapProvider "Постачальник карти:">

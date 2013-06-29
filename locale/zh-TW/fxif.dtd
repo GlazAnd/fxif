@@ -38,7 +38,6 @@
 <!ENTITY Comment "註釋:">
 <!ENTITY Instructions "特別說明:">
 <!ENTITY NoData "沒有資料">
-<!---->
 <!ENTITY OptionsDialogTitle "FxIF 功能選項">
 <!ENTITY GPSFormat "使用座標格式:">
 <!ENTITY DD.label "十進位">

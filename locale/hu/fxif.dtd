@@ -1,0 +1,47 @@
+<!ENTITY contextMenu.label "FxIF adatok">
+<!ENTITY FxIFData "FxIF adatok">
+<!ENTITY Copy "Másolás">
+<!ENTITY CameraMake "Fényképezőgép gyártó:">
+<!ENTITY CameraModel "Fényképezőgép típus:">
+<!ENTITY CameraLens "Objektív:">
+<!ENTITY Software "Szoftver:">
+<!ENTITY ImageDate "Fénykép időpontja:">
+<!ENTITY ImageOrientation "Képirány:">
+<!ENTITY ImageBW "Fekete-fehér:">
+<!ENTITY FlashUsed "Vaku elvillant:">
+<!ENTITY FocalLength "Fókusztávolság:">
+<!ENTITY DigitalZoom "Digitális zoom:">
+<!ENTITY CCDWidth "CCD szélesség:">
+<!ENTITY ExposureTime "Záridő:">
+<!ENTITY Aperture "Rekeszérték:">
+<!ENTITY FocusDist "Fókuszpont távolsága:">
+<!ENTITY ISOequiv "ISO érzékenység:">
+<!ENTITY ExposureBias "Expozíciókompenzáció:">
+<!ENTITY WhiteBalance "Fehéregyensúly:">
+<!ENTITY LightSource "Fényforrás:">
+<!ENTITY MeteringMode "Fénymérés módja:">
+<!ENTITY ExposureProgram "Expozíciós program:">
+<!ENTITY ExposureMode "Expozíciós mód:">
+<!ENTITY ImageColorSpace "Színtér:">
+<!ENTITY GPSCoord "GPS koordináta:">
+<!ENTITY MapLink "Térkép link">
+<!ENTITY GPSAlt "GPS magasság:">
+<!ENTITY GPSImgDir "Nézőpont szöge:">
+<!ENTITY Creator "Szerző:">
+<!ENTITY City "Város:">
+<!ENTITY Sublocation "Alhelyszín:">
+<!ENTITY ProvinceState "Tartomány/Megye:">
+<!ENTITY CountryName "Ország:">
+<!ENTITY Copyright "Szerzői jog:">
+<!ENTITY Title "Cím:">
+<!ENTITY Caption "Képszöveg:">
+<!ENTITY Comment "Megjegyzés:">
+<!ENTITY Instructions "Használati utasítás:">
+<!ENTITY NoData "A kép nem tartalmaz EXIF metaadatot.">
+<!-- Options dialog -->
+<!ENTITY OptionsDialogTitle "FxIF beállítások">
+<!ENTITY GPSFormat "A GPS koordináták formátuma:">
+<!ENTITY DD.label "Tizedes fok">
+<!ENTITY DM.label "Fok Perc">
+<!ENTITY DMS.label "Fok Perc Másodperc">
+<!ENTITY OverrideMapProvider "Térképszolgáltató:">

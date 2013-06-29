@@ -38,7 +38,6 @@
 <!ENTITY Comment "Yorum:">
 <!ENTITY Instructions "Talimatlar:">
 <!ENTITY NoData "Üstveri bulunamadı">
-<!---->
 <!ENTITY OptionsDialogTitle "FxIF Tercihleri">
 <!ENTITY GPSFormat "Kullanılan Koordinat formatı:">
 <!ENTITY DD.label "Ondalık derece">

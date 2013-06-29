@@ -38,7 +38,6 @@
 <!ENTITY Comment "Opmerking:">
 <!ENTITY Instructions "Instructies:">
 <!ENTITY NoData "Geen metagegevens gevonden">
-<!---->
 <!ENTITY OptionsDialogTitle "FxIF-voorkeuren">
 <!ENTITY GPSFormat "Te gebruiken opmaak voor coördinaten:">
 <!ENTITY DD.label "Decimale graden">

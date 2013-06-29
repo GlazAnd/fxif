@@ -30,6 +30,7 @@
 function exifClass(stringBundle)
 {
   var fxifUtils = new fxifUtilsClass();
+  var loopDetectorArray = new Array();
 
 
   // data formats
@@ -105,61 +106,80 @@ function exifClass(stringBundle)
   var BytesPerFormat = [0,1,1,2,4,8,1,1,2,4,8,4,8];
 
 
+  // Checks if the loopDetectorArray already contains an entry
+  // which would mean we did already jump there once.
+  function checkForLoop(val)
+  {
+    for (var i = 0; i < loopDetectorArray.length; i++)
+    {
+      if (loopDetectorArray[i] == val)
+        return true;
+    }
+    
+    return false;
+  }
+
   function dir_entry_addr(start, entry)
   {
     return start + 2 + 12*entry;
   }
 
-  function ConvertAnyFormat(data, format, offset, components, numbytes, swapbytes)
+  function ConvertAnyFormat(data, format, offset, components, numbytes, swapbytes, charWidth)
   {
     var value = 0;
 
-    switch(format) {
-    case FMT_STRING:
-    case FMT_UNDEFINED: // treat as string
-      value = fxifUtils.bytesToString(data, offset, numbytes);
-      // strip trailing whitespace
-      value = value.replace(/\s+$/, '');
-      break;
+    switch (format) {
+      case FMT_STRING:
+        value = fxifUtils.bytesToString(data, offset, numbytes);
+        // strip trailing whitespace
+        value = value.replace(/\s+$/, '');
+        break;
 
-    case FMT_SBYTE:   value = data[offset];  break;
-    case FMT_BYTE:    value = data[offset];  break;
+      case FMT_UNDEFINED: // treat as string
+        value = fxifUtils.bytesToStringWithNull(data, offset, numbytes, swapbytes, charWidth);
+        // strip trailing whitespace
+        value = value.replace(/\s+$/, '');
+        break;
 
-    case FMT_USHORT:  value = fxifUtils.read16(data, offset, swapbytes);  break;
-    case FMT_ULONG:   value = fxifUtils.read32(data, offset, swapbytes);  break;
+      case FMT_SBYTE:   value = data[offset];  break;
+      case FMT_BYTE:    value = data[offset];  break;
 
-    case FMT_URATIONAL:
-    case FMT_SRATIONAL:
-    {
-      // It sometimes happens that there are multiple rational contained.
-      // So go for multiple here and convert back later.
-      var values = new Array();
+      case FMT_USHORT:  value = fxifUtils.read16(data, offset, swapbytes);  break;
+      case FMT_ULONG:   value = fxifUtils.read32(data, offset, swapbytes);  break;
 
-      for (var i = 0; i < components; i++) {
-        var Num, Den;
-        Num = fxifUtils.read32(data, offset+i*8, swapbytes);
-        Den = fxifUtils.read32(data, offset+i*8+4, swapbytes);
-        if (Den == 0){
-          values[i] = 0;
-        }else{
-          values[i] = Num/Den;
+      case FMT_URATIONAL:
+      case FMT_SRATIONAL:
+      {
+        // It sometimes happens that there are multiple rational contained.
+        // So go for multiple here and convert back later.
+        var values = new Array();
+
+        for (var i = 0; i < components; i++) {
+          var Num, Den;
+          Num = fxifUtils.read32(data, offset+i*8, swapbytes);
+          Den = fxifUtils.read32(data, offset+i*8+4, swapbytes);
+          if (Den == 0){
+            values[i] = 0;
+          }else{
+            values[i] = Num/Den;
+          }
         }
+
+        if (components == 1)
+          value = values[0];
+        else
+          value = values;
+        break;
       }
 
-      if (components == 1)
-        value = values[0];
-      else
-        value = values;
-      break;
-    }
-
-    case FMT_SSHORT:  value = fxifUtils.read16(data, offset, swapbytes); break;
-    case FMT_SLONG:   value = fxifUtils.read32(data, offset, swapbytes); break;
+      case FMT_SSHORT:  value = fxifUtils.read16(data, offset, swapbytes); break;
+      case FMT_SLONG:   value = fxifUtils.read32(data, offset, swapbytes); break;
 
       // ignore, probably never used
-    case FMT_SINGLE:    value = 0; break;
-    case FMT_DOUBLE:    value = 0; break;
+      case FMT_SINGLE:    value = 0; break;
+      case FMT_DOUBLE:    value = 0; break;
     }
+
     return value;
   }
 
@@ -187,7 +207,7 @@ function exifClass(stringBundle)
       else
         valueoffset = fxifUtils.read32(data, entry + 8, swapbytes);
 
-      var val = ConvertAnyFormat(data, format, valueoffset, components, nbytes, swapbytes);
+      var val = ConvertAnyFormat(data, format, valueoffset, components, nbytes, swapbytes, 1);
 
       switch(tag) {
       case TAG_GPS_LAT_REF:
@@ -264,7 +284,7 @@ function exifClass(stringBundle)
     if (vals[TAG_GPS_ALT] != undefined) {
       dataObj.GPSAlt = stringBundle.getFormattedString("meters", [vals[TAG_GPS_ALT] * (gpsAltReference ? -1.0 : 1.0)]);
     }
-    if (vals[TAG_GPS_IMG_DIR] != undefined) {
+    if (vals[TAG_GPS_IMG_DIR] != undefined && (gpsImgDirReference == 'M' || gpsImgDirReference == 'T')) {
       dataObj.GPSImgDir = stringBundle.getFormattedString("dir"+gpsImgDirReference, [vals[TAG_GPS_IMG_DIR]]);
     }
     // Get the straight decimal values without rounding.
@@ -308,13 +328,13 @@ Real MN-Offset: 0x038e
       var format = fxifUtils.read16(data, entry+2, swapbytes);
       var components = fxifUtils.read32(data, entry+4, swapbytes);
 
-      if(format >= BytesPerFormat.length)
+      if (format >= BytesPerFormat.length)
         continue;
 
       var nbytes = components * BytesPerFormat[format];
       var valueoffset;
 
-      if(nbytes <= 4) {
+      if (nbytes <= 4) {
         // stored in the entry
         valueoffset = entry + 8;
       }
@@ -323,7 +343,7 @@ Real MN-Offset: 0x038e
         valueoffset = fxifUtils.read32(data, entry + 8, swapbytes) + entryOffset;
       }
 
-      var val = ConvertAnyFormat(data, format, valueoffset, components, nbytes, swapbytes);
+      var val = ConvertAnyFormat(data, format, valueoffset, components, nbytes, swapbytes, 1);
 
       ntags++;
       switch(tag) {
@@ -380,11 +400,11 @@ Real MN-Offset: 0x038e
     if (makerNotesLen > 8)
     {
       var footerPtr = dirStart + makerNotesLen - 8;
-      var footer = fxifUtils.bytesToStringWithNull(data, footerPtr, 8);
+      var footer = fxifUtils.bytesToStringWithNull(data, footerPtr, 8, swapbytes, 1);
       if (footer.search(/^(II\x2a\0|MM\0\x2a)/) != -1)  // check for TIFF footer
 //          footer.substr(0, 2) == GetByteOrder()) # validate byte ordering
       {
-        var offsetFromFooter = ConvertAnyFormat(data, FMT_ULONG, footerPtr + 4, 0, 0, swapbytes);
+        var offsetFromFooter = ConvertAnyFormat(data, FMT_ULONG, footerPtr + 4, 0, 0, swapbytes, 1);
         fix = dirStart - offsetFromFooter;
         if (fix == 0)
           return 0;
@@ -431,7 +451,7 @@ Real MN-Offset: 0x0356
   function readNikonExifDir (dataObj, data, dirStart, swapbytes)
   {
     // Is it really Nikon?
-    if(header == 'Nikon\0') {
+    if (header == 'Nikon\0') {
       // step over next four bytes denoting the version (e.g. 0x02100000)
       // 8 byte TIFF header
       var exifData = bis.readByteArray(len - 6);
@@ -462,6 +482,8 @@ Real MN-Offset: 0x0356
   */
   this.readExifDir = function (dataObj, data, dirStart, swapbytes)
   {
+    loopDetectorArray.push(dirStart);
+
     var ntags = 0;
     var numEntries = fxifUtils.read16(data, dirStart, swapbytes);
     var interopIndex = "";
@@ -476,7 +498,7 @@ Real MN-Offset: 0x0356
       var format = fxifUtils.read16(data, entry+2, swapbytes);
       var components = fxifUtils.read32(data, entry+4, swapbytes);
 
-      if(format >= BytesPerFormat.length)
+      if (format >= BytesPerFormat.length)
         continue;
 
       var nbytes = components * BytesPerFormat[format];
@@ -492,7 +514,7 @@ Real MN-Offset: 0x0356
         valueoffset = fxifUtils.read32(data, entry + 8, swapbytes);
       }
 
-      var val = ConvertAnyFormat(data, format, valueoffset, components, nbytes, swapbytes);
+      var val = ConvertAnyFormat(data, format, valueoffset, components, nbytes, swapbytes, 1);
 
       ntags++;
       switch(tag)
@@ -519,19 +541,33 @@ Real MN-Offset: 0x0356
         break;
 
       case TAG_USERCOMMENT:
-        // strip leading ASCII string
-        dataObj.UserComment = val.replace(/^ASCII\s*/, '');
+        var charWidth = 1;
+        if (val.search(/^UNICODE\s*/) >= 0) {
+          charWidth = 2;
+        }
+        // strip leading character code string
+        var ccStringLen = 0;
+        if (nbytes > 8) {
+          ccStringLen = 8;
+        }
+        dataObj.UserComment = ConvertAnyFormat(data, format, valueoffset + ccStringLen, components, nbytes - ccStringLen, swapbytes, charWidth);
         break;
 
       case TAG_FNUMBER:
         dataObj.ApertureFNumber = "f/" + parseFloat(val).toFixed(1);
         break;
 
-        // only use these if we don't have the previous
+      // only use these if we don't have the previous
       case TAG_APERTURE:
+        if (!dataObj.ApertureFNumber) {
+          dataObj.ApertureFNumber = "f/" + Math.exp((parseFloat(val) * Math.LN2 * 0.5)).toFixed(1);
+        }
+        break;
+
+        // only use these if we don't have the previous
       case TAG_MAXAPERTURE:
-        if(!dataObj.ApertureFNumber) {
-          dataObj.ApertureFNumber = "f/" + (parseFloat(val) * Math.log(2) * 0.5).toFixed(1);
+        if (!dataObj.ApertureFNumber) {
+          dataObj.ApertureFNumber = "f/" + Math.exp((parseFloat(val) * Math.LN2 * 0.5)).toFixed(1);
         }
         break;
 
@@ -540,7 +576,7 @@ Real MN-Offset: 0x0356
         break;
 
       case TAG_SUBJECT_DISTANCE:
-        if(val < 0) {
+        if (val < 0) {
           dataObj.Distance = stringBundle.getString("infinite");
         }
         else {
@@ -563,7 +599,7 @@ Real MN-Offset: 0x0356
         break;
 
       case TAG_SHUTTERSPEED:
-        if(!dataObj.ExposureTime) {
+        if (!dataObj.ExposureTime) {
           dataObj.ExposureTime = stringBundle.getFormattedString("seconds", [(1.0 / Math.exp(parseFloat(val) * Math.log(2))).toFixed(4)]);
         }
         break;
@@ -574,33 +610,33 @@ Real MN-Offset: 0x0356
         // bits 3 and 4 indicate the flash mode,
         // bit 5 indicates whether the flash function is present,
         // bit 6 indicates "red eye" mode.
-        if(val >= 0) {
+        if (val >= 0) {
           var fu;
           var addfunc = new Array();
-          if(val & 0x01) {
+          if (val & 0x01) {
             fu = stringBundle.getString("yes");
 
-            if(val & 0x18 == 0x18)
+            if (val & 0x18 == 0x18)
               addfunc.push(stringBundle.getString("auto"));
-            else if(val & 0x8)
+            else if (val & 0x8)
               addfunc.push(stringBundle.getString("enforced"));
 
-            if(val & 0x40)
+            if (val & 0x40)
               addfunc.push(stringBundle.getString("redeye"));
 
-            if(val & 0x06 == 0x06)
+            if (val & 0x06 == 0x06)
               addfunc.push(stringBundle.getString("returnlight"));
-            else if(val & 0x04)
+            else if (val & 0x04)
               addfunc.push(stringBundle.getString("noreturnlight"));
           }
           else {
             fu = stringBundle.getString("no");
 
-            if(val & 0x20)
+            if (val & 0x20)
               addfunc.push(stringBundle.getString("noflash"));
-            else if(val & 0x18 == 0x18)
+            else if (val & 0x18 == 0x18)
               addfunc.push(stringBundle.getString("auto"));
-            else if(val & 0x10)
+            else if (val & 0x10)
               addfunc.push(stringBundle.getString("enforced"));
           }
 
@@ -612,8 +648,8 @@ Real MN-Offset: 0x0356
         break;
 
       case TAG_ORIENTATION:
-        if(!dataObj.Orientation && val > 0) {
-          if(val <= 8)
+        if (!dataObj.Orientation && val > 0) {
+          if (val <= 8)
             dataObj.Orientation = stringBundle.getString("orientation" + val);
           else
             dataObj.Orientation = stringBundle.getString("unknown") + " (" + val + ")";
@@ -650,7 +686,7 @@ Real MN-Offset: 0x0356
 
       case TAG_EXPOSURE_BIAS:
         val = parseFloat(val);
-        if(val == 0)
+        if (val == 0)
           dataObj.ExposureBias = stringBundle.getString("none");
         else
           // add a + sign before positive values
@@ -773,8 +809,20 @@ Real MN-Offset: 0x0356
         break;
 
       case TAG_EXPOSURE_INDEX:
-        if (!dataObj.ExposureIndex) {
-          dataObj.ExposureIndex = val.toFixed(0);
+        if (!dataObj.ExposureIndex)
+        {
+          try
+          {
+            // I know of at least one image where this information
+            // is present as string instead of number.
+            dataObj.ExposureIndex = val.toFixed(0);
+          }
+          catch(e)
+          {
+            var tmp = parseInt(val);
+            if (!isNaN(tmp))
+              dataObj.ExposureIndex = tmp;
+          }
         }
         break;
 
@@ -792,7 +840,18 @@ Real MN-Offset: 0x0356
         break;
 
       case TAG_ISO_EQUIVALENT:
-        dataObj.ISOequivalent = val.toFixed(0);
+        try
+        {
+          // I know of at least one image where this information
+          // is present as string instead of number.
+          dataObj.ISOequivalent = val.toFixed(0);
+        }
+        catch(e)
+        {
+          var tmp = parseInt(val);
+          if (!isNaN(tmp))
+            dataObj.ISOequivalent = tmp;
+        }
 
         if (dataObj.ISOequivalent < 50 ){
           // Fixes strange encoding on some older digicams.
@@ -801,7 +860,7 @@ Real MN-Offset: 0x0356
         break;
 
       case TAG_DIGITALZOOMRATIO:
-        if(val > 1) {
+        if (val > 1) {
           dataObj.DigitalZoomRatio = val.toFixed(3) + "x";
         }
         break;
@@ -830,11 +889,13 @@ Real MN-Offset: 0x0356
 
       case TAG_EXIF_OFFSET:
       case TAG_INTEROP_OFFSET:
-        // Prevent simple loops, it has happened that readExifDir()
-        // has been recursed hundreds of time because this tag pointed
-        // to its own start.
-        if (val != dirStart)
+        // Prevent loops, where we directly or indirectly point to an EXIF directory where
+        // we've already been. It has happened that we recursed thousands of times because
+        // this tag pointed to its own start.
+        if (!checkForLoop(val))
+        {
           ntags += this.readExifDir(dataObj, data, val, swapbytes);
+        }
         break;
 
       case TAG_GPSINFO:
@@ -842,24 +903,24 @@ Real MN-Offset: 0x0356
         break;
 
       case TAG_ARTIST:
-        if(!dataObj.Photographer)
-          dataObj.Photographer = val;
+        if (!dataObj.Creator)
+          dataObj.Creator = val;
         break;
 
       case TAG_COPYRIGHT:
-        if(!dataObj.Copyright)
+        if (!dataObj.Copyright)
           dataObj.Copyright = val;
         break;
 
       case TAG_DESCRIPTION:
-        if(!dataObj.Caption)
+        if (!dataObj.Caption)
           dataObj.Caption = val;
         break;
 
       case TAG_COLORSPACE:
-        if(!dataObj.ColorSpace)
+        if (!dataObj.ColorSpace)
         {
-          if(val == 1)
+          if (val == 1)
             dataObj.ColorSpace = "sRGB";
           else
             colorSpace = val;
@@ -876,8 +937,8 @@ Real MN-Offset: 0x0356
             // code before this switch to generate strange offsets.
             // Therefore use use value at entry + 8 directly.
             // This should work in any case and does in the available test images.
-            var val = ConvertAnyFormat(data, FMT_ULONG, entry + 8, 0, 0, swapbytes);
-            var dirLen = ConvertAnyFormat(data, FMT_ULONG, entry + 4, 0, 0, swapbytes);
+            var val = ConvertAnyFormat(data, FMT_ULONG, entry + 8, 0, 0, swapbytes, 1);
+            var dirLen = ConvertAnyFormat(data, FMT_ULONG, entry + 4, 0, 0, swapbytes, 1);
 
             ntags += readCanonExifDir(dataObj, data, val, dirLen);
           }
@@ -897,28 +958,28 @@ Real MN-Offset: 0x0356
     // some properties which depend on more than one field
     // or a field by various fields ordered by priority.
 
-    if(!dataObj.Date)
+    if (!dataObj.Date)
     {
-      if(exifDateTimeOrig)
+      if (exifDateTimeOrig)
         dataObj.Date = exifDateTimeOrig;
-      else if(exifDateTime)
+      else if (exifDateTime)
         dataObj.Date = exifDateTime;
 
       if (dataObj.Date)
         dataObj.Date = dataObj.Date.replace(/:(\d{2}):/, "-$1-") + " " + stringBundle.getString("noTZ");
     }
 
-    if(colorSpace != 0)
+    if (colorSpace != 0)
     {
-      if(dataObj.ColorSpace == 2 ||
+      if (dataObj.ColorSpace == 2 ||
          dataObj.ColorSpace == 65535 && interopIndex.search(/^R03$/))
         dataObj.ColorSpace = "Adobe RGB";
     }
 
-    if(dataObj.FocalLength) {
+    if (dataObj.FocalLength) {
       dataObj.FocalLength = parseFloat(dataObj.FocalLength);
       var fl = stringBundle.getFormattedString("millimeters", [dataObj.FocalLength.toFixed(1)]);
-      if(dataObj.FocalLength35mmEquiv) {
+      if (dataObj.FocalLength35mmEquiv) {
         dataObj.FocalLength35mmEquiv = parseFloat(dataObj.FocalLength35mmEquiv);
         fl += " " + stringBundle.getFormattedString("35mmequiv", [dataObj.FocalLength35mmEquiv.toFixed(0)]);
       }
@@ -926,13 +987,13 @@ Real MN-Offset: 0x0356
       dataObj.FocalLengthText = fl;
     }
 
-    if(dataObj.LensMake) {
+    if (dataObj.LensMake) {
       dataObj.Lens = dataObj.LensMake;
     }
 
     if (!dataObj.Lens)
     {
-      if(dataObj.LensModel) {
+      if (dataObj.LensModel) {
         if (dataObj.Lens)
           dataObj.Lens += " ";
         else

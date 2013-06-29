@@ -38,7 +38,6 @@
 <!ENTITY Comment "Комментарий:">
 <!ENTITY Instructions "Инструкции:">
 <!ENTITY NoData "Данные не найдены">
-<!---->
 <!ENTITY OptionsDialogTitle "Настройки FxIF">
 <!ENTITY GPSFormat "Формат координат GPS:">
 <!ENTITY DD.label "Десятичные градусы">

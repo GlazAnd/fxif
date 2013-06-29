@@ -5,7 +5,7 @@
     <em:id>{11483926-db67-4190-91b1-ef20fcec5f33}</em:id>
     <em:type>2</em:type>
     <em:name>FxIF</em:name>
-    <em:version>0.4.6</em:version>
+    <em:version>0.4.7</em:version>
     <em:description>View EXIF data in image properties</em:description>
 
     <em:creator>Ted Mielczarek</em:creator>
@@ -18,6 +18,7 @@
     <em:translator>Oliverl - Estonian (et-EE)</em:translator>
     <em:translator>Ilari Oras – Finnish (fi)</em:translator>
     <em:translator>Cédric Corazza and Goofy – French (fr)</em:translator>
+    <em:translator>Szilárd Andai – Hungarian (hu)</em:translator>
     <em:translator>MatrixIsAllOver – Italian (it)</em:translator>
     <em:translator>Takanori - initial Japanese (ja)</em:translator>
     <em:translator>Hisateru Tanaka - new Japanese (ja)</em:translator>
@@ -63,6 +64,13 @@
     <em:localized>
       <Description>
         <em:locale>fr</em:locale>
+        <em:name>FxIF</em:name>
+        <em:description>Afficher les données EXIF dans les propriétés de l'image</em:description>
+      </Description>
+    </em:localized>
+    <em:localized>
+      <Description>
+        <em:locale>hu</em:locale>
         <em:name>FxIF</em:name>
         <em:description>Afficher les données EXIF dans les propriétés de l'image</em:description>
       </Description>

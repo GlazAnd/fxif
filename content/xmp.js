@@ -46,17 +46,17 @@ function xmpClass(stringBundle)
     // The parser doesn't like this, so shorten the length by one byte of the last one is null.
     var doclength = xml.length;
     if (xml.length > 1 && xml[xml.length - 1] == 0)
-			doclength--;
+      doclength--;
     var dom = parser.parseFromBuffer(xml, doclength, 'text/xml');
 
     if (dom.documentElement.nodeName == 'parsererror') {
       // parsererror might have been caused by incorrect encoding of characters.
-      // XMP documents in JPEG files have been reported with characters as ISO-8859-1 ()
-      // while containing an UTF-8 BOM) or even illegal not UTF-8 encoded "BOM" like
-      // xpacket begin="i»?" which.
+      // XMP documents in JPEG files have been reported with characters as ISO-8859-1
+      // (while containing an UTF-8 BOM) or even illegal not UTF-8 encoded "BOM" like
+      // xpacket begin="iÂ»?" which.
       // So just go on and try to save the situation converting from a single byte encoding to Unicode.
       // I used iso-8859-1 here which will give wrong characters if the source is encoded differently,
-      // but getting correct characters isn’t the objective here, just to be able reading the document
+      // but getting correct characters isnâ€™t the objective here, just to be able reading the document
       // somehow. The document is corrupt anyway.
       var converter = Components.classes["@mozilla.org/intl/scriptableunicodeconverter"].createInstance(Components.interfaces.nsIScriptableUnicodeConverter);
       converter.charset = 'iso-8859-1';
@@ -65,7 +65,9 @@ function xmpClass(stringBundle)
 
       if (dom.documentElement.nodeName == 'parsererror') {
 //        alert("Error parsing XML");
-        throw ("Error parsing XML");
+//        throw ("Error parsing XML");
+        // no known remedy, so donâ€™t throw this problem
+        return ;
       }
     }
 
@@ -74,8 +76,8 @@ function xmpClass(stringBundle)
     // Creators come in an ordered list. Get them all.
 //    val = getXMPOrderedArray(dom, "dc:creator");
     val = getXMPOrderedArray(dom, "http://purl.org/dc/elements/1.1/", "creator", "");
-    if(val && val.length) {
-      dataObj.Photographer = val.join(", ");
+    if (val && val.length) {
+      dataObj.Creator = val.join(", ");
     }
 
     val = getXMPValue(dom, "http://ns.adobe.com/photoshop/1.0/", "City");
@@ -578,7 +580,7 @@ function xmpClass(stringBundle)
     if (gpsAlt != undefined) {
       dataObj.GPSAlt = stringBundle.getFormattedString("meters", [gpsAlt * (gpsAltRef ? -1.0 : 1.0)]);
     }
-    if (gpsImgDir != undefined) {
+    if (gpsImgDir != undefined && (gpsImgDirRef == 'M' || gpsImgDirRef == 'T')) {
       dataObj.GPSImgDir = stringBundle.getFormattedString("dir"+gpsImgDirRef, [gpsImgDir]);
     }
 

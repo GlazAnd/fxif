@@ -26,7 +26,8 @@
 <!ENTITY GPSCoord "GPS Coordinate:">
 <!ENTITY MapLink "Map Link">
 <!ENTITY GPSAlt "GPS Altitude:">
-<!ENTITY Photographer "Photographer:">
+<!ENTITY GPSImgDir "Viewing Direction:">
+<!ENTITY Creator "Creator:">
 <!ENTITY City "City:">
 <!ENTITY Sublocation "Sublocation:">
 <!ENTITY ProvinceState "Province/State:">
