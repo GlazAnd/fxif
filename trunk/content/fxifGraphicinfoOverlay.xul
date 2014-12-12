@@ -1,0 +1,275 @@
+<?xml version="1.0"?>
+<!--***** BEGIN LICENSE BLOCK *****
+ * Version: MPL 1.1/GPL 2.0/LGPL 2.1
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Original Code is FxIF for Firefox.
+ *
+ * The Initial Developer of the Original Code is Ted Mielczarek
+ * Portions created by the Initial Developer are Copyright (C) 2004
+ * the Initial Developer. All Rights Reserved.
+ *
+ * Contributor(s):
+ *   Christian Eyrich <ch.ey@gmx.net>
+ *  
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 2 or later (the "GPL"), or
+ * the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+ * in which case the provisions of the GPL or the LGPL are applicable instead
+ * of those above. If you wish to allow use of your version of this file only
+ * under the terms of either the GPL or the LGPL, and not to allow others to
+ * use your version of this file under the terms of the MPL, indicate your
+ * decision by deleting the provisions above and replace them with the notice
+ * and other provisions required by the GPL or the LGPL. If you do not delete
+ * the provisions above, a recipient may use your version of this file under
+ * the terms of any one of the MPL, the GPL or the LGPL.
+ *
+ * ***** END LICENSE BLOCK *****-->
+
+<!DOCTYPE overlay SYSTEM "chrome://fxif/locale/fxif.dtd">
+<overlay
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    id="fxifGraphicinfoOverlay">
+
+  <vbox id="mediaPanel">
+    <script type="application/x-javascript" src="chrome://fxif/content/metadataUtils.js"/>
+    <script type="application/x-javascript" src="chrome://fxif/content/fxifUtils.js"/>
+    <script type="application/x-javascript" src="chrome://fxif/content/binExif.js"/>
+    <script type="application/x-javascript" src="chrome://fxif/content/binIptc.js"/>
+    <script type="application/x-javascript" src="chrome://fxif/content/xmp.js"/>
+    <script type="application/x-javascript" src="chrome://fxif/content/fxif.js"/>
+    <script type="application/x-javascript">
+      window.addEventListener("load", fxifObj.onGraphicinfoOverlayLoad, false);
+    </script>
+
+    <grid id="data-list1" insertafter="mediaGrid" insertbefore="imageSaveBox">
+        <columns>
+          <column/>
+          <column/>
+          <column flex="1"/>
+        </columns>
+        <rows>
+          <row id="camera-make1">
+            <separator orient="vertical"/>
+            <label value="&CameraMake;"/>
+            <textbox id="camera-make-text1" readonly="true"/>
+          </row>
+        </rows>
+    </grid>
+    
+    <stringbundle src="chrome://fxif/locale/fxif.properties" id="bundle_fxif"/>
+    <vbox id="exif-sec" insertafter="mediaGrid" insertbefore="imageSaveBox">
+      <hbox align="end">
+        <label value="&FxIFData;:"/>
+        <separator flex="1"/>
+        <button id="copy-button" label="&Copy;" onclick="fxifObj.copyDataToClipboard()"/>
+        <keyset>
+          <key id="copy-key" modifiers="alt" key="C" oncommand="fxifObj.copyDataToClipboard();"/>
+        </keyset>
+      </hbox>
+      <separator class="groove"/>
+      <hbox id="error">
+        <spacer width="20"/>
+        <label id="error-label" value="" style="color:red !important;"/>
+      </hbox>
+      <grid id="data-list">
+        <columns>
+          <column/>
+          <column/>
+          <column flex="1"/>
+        </columns>
+        <rows>
+          <row id="camera-make">
+            <separator orient="vertical"/>
+            <label value="&CameraMake;"/>
+            <textbox id="camera-make-text" readonly="true"/>
+          </row>
+          <row id="camera-model">
+            <separator orient="vertical"/>
+            <label value="&CameraModel;"/>
+            <textbox id="camera-model-text" readonly="true"/>
+          </row>
+          <row id="camera-lens">
+            <separator orient="vertical"/>
+            <label value="&CameraLens;"/>
+            <textbox id="camera-lens-text" readonly="true"/>
+          </row>
+          <row id="image-date">
+            <separator orient="vertical"/>
+            <label value="&ImageDate;"/>
+            <textbox id="image-date-text" readonly="true"/>
+          </row>
+          <row id="image-focallen">
+            <separator orient="vertical"/>
+            <label value="&FocalLength;"/>
+            <textbox id="image-focallen-text" readonly="true"/>
+          </row>
+          <row id="image-digitalzoom">
+            <separator orient="vertical"/>
+            <label value="&DigitalZoom;"/>
+            <textbox id="image-digitalzoom-text" readonly="true"/>
+          </row>
+          <row id="image-focusdist">
+            <separator orient="vertical"/>
+            <label value="&FocusDist;"/>
+            <textbox id="image-focusdist-text" readonly="true"/>
+          </row>
+          <row id="image-aperture">
+            <separator orient="vertical"/>
+            <label value="&Aperture;"/>
+            <textbox id="image-aperture-text" readonly="true"/>
+          </row>
+          <row id="image-exposuretime">
+            <separator orient="vertical"/>
+            <label value="&ExposureTime;"/>
+            <textbox id="image-exposuretime-text" readonly="true"/>
+          </row>
+          <row id="image-isoequiv">
+            <separator orient="vertical"/>
+            <label value="&ISOequiv;"/>
+            <textbox id="image-isoequiv-text" readonly="true"/>
+          </row>
+          <row id="image-exposurebias">
+            <separator orient="vertical"/>
+            <label value="&ExposureBias;"/>
+            <textbox id="image-exposurebias-text" readonly="true"/>
+          </row>
+          <row id="image-meteringmode">
+            <separator orient="vertical"/>
+            <label value="&MeteringMode;"/>
+            <textbox id="image-meteringmode-text" readonly="true"/>
+          </row>
+          <row id="image-exposureprogram">
+            <separator orient="vertical"/>
+            <label value="&ExposureProgram;"/>
+            <textbox id="image-exposureprogram-text" readonly="true"/>
+          </row>
+          <row id="image-exposuremode">
+            <separator orient="vertical"/>
+            <label value="&ExposureMode;"/>
+            <textbox id="image-exposuremode-text" readonly="true"/>
+          </row>
+          <row id="image-whitebalance">
+            <separator orient="vertical"/>
+            <label value="&WhiteBalance;"/>
+            <textbox id="image-whitebalance-text" readonly="true"/>
+          </row>
+          <row id="image-lightsource">
+            <separator orient="vertical"/>
+            <label value="&LightSource;"/>
+            <textbox id="image-lightsource-text" readonly="true"/>
+          </row>
+          <row id="image-flash">
+            <separator orient="vertical"/>
+            <label value="&FlashUsed;"/>
+            <textbox id="image-flash-text" readonly="true"/>
+          </row>
+          <row id="image-orientation"> 
+            <separator orient="vertical"/>
+            <label value="&ImageOrientation;"/>
+            <textbox id="image-orientation-text" readonly="true"/>
+          </row>
+          <row id="image-colorspace">
+            <separator orient="vertical"/>
+            <label value="&ImageColorSpace;"/>
+            <textbox id="image-colorspace-text" readonly="true"/>
+          </row>
+          <row id="image-bw">
+            <separator orient="vertical"/>
+            <label value="&ImageBW;"/>
+            <textbox id="image-bw-text" readonly="true"/>
+          </row>
+          <row id="image-gpscoord">
+            <separator orient="vertical"/>
+            <label value="&GPSCoord;"/>
+            <hbox>
+              <textbox id="image-gpscoord-text" readonly="true" style="min-width:29ex;" flex="1"/>
+              <!-- Don't just use plain HTML here because of bug 263433 -->
+              <hbox><html:a id="maplink-href" onclick="fxifObj.loadInBrowser(this.getAttribute('href'), event); return false;" style="text-decoration:underline; cursor:pointer;">&MapLink;</html:a></hbox>
+            </hbox>
+          </row>
+          <row id="image-gpsalt">
+            <separator orient="vertical"/>
+            <label value="&GPSAlt;"/>
+            <textbox id="image-gpsalt-text" readonly="true"/>
+          </row>
+          <row id="image-gpsimgdir">
+            <separator orient="vertical"/>
+            <label value="&GPSImgDir;"/>
+            <textbox id="image-gpsimgdir-text" readonly="true"/>
+          </row>
+          <row id="image-creator">
+            <separator orient="vertical"/>
+            <label value="&Creator;"/>
+            <textbox id="image-creator-text" readonly="true"/>
+          </row>
+          <row id="image-city">
+            <separator orient="vertical"/>
+            <label value="&City;"/>
+            <textbox id="image-city-text" readonly="true"/>
+          </row>
+          <row id="image-sublocation">
+            <separator orient="vertical"/>
+            <label value="&Sublocation;"/>
+            <textbox id="image-sublocation-text" readonly="true"/>
+          </row>
+          <row id="image-provincestate">
+            <separator orient="vertical"/>
+            <label value="&ProvinceState;"/>
+            <textbox id="image-provincestate-text" readonly="true"/>
+          </row>
+          <row id="image-countryname">
+            <separator orient="vertical"/>
+            <label value="&CountryName;"/>
+            <textbox id="image-countryname-text" readonly="true"/>
+          </row>
+          <row id="image-copyright">
+            <separator orient="vertical"/>
+            <label value="&Copyright;"/>
+            <textbox id="image-copyright-text" multiline="true" readonly="true"/>
+          </row>
+          <row id="image-title">
+            <separator orient="vertical"/>
+            <label value="&Title;"/>
+            <textbox id="image-title-text" readonly="true"/>
+          </row>
+          <row id="image-caption">
+            <separator orient="vertical"/>
+            <label value="&Caption;"/>
+            <textbox id="image-caption-text" multiline="true" readonly="true"/>
+          </row>
+          <row id="image-comment">
+            <separator orient="vertical"/>
+            <label value="&Comment;"/>
+            <textbox id="image-comment-text" multiline="true" readonly="true"/>
+          </row>
+          <row id="image-instructions">
+            <separator orient="vertical"/>
+            <label value="&Instructions;"/>
+            <textbox id="image-instructions-text" multiline="true" readonly="true"/>
+          </row>
+          <row id="image-software">
+            <separator orient="vertical"/>
+            <label value="&Software;"/>
+            <textbox id="image-software-text" readonly="true"/>
+          </row>
+        </rows>
+      </grid>
+      <hbox id="no-data">
+        <spacer width="20"/>
+        <label value="&NoData;"/>
+      </hbox>
+    </vbox>
+  </vbox>
+</overlay>

@@ -11,8 +11,8 @@
 <p>FxIF is written in JavaScript and XUL, and as such should be portable to all platforms that Mozilla runs on.</p>
 
 <h1>Usage</h1>
-<p>After installing FxIF, simply right click on an image, then click <code>Properties</code>. The meta data will be displayed in the properties window. This integration into the existing dialog keeps the interface simple.<br />
-Since this window has been removed with Firefox 3.6 I’ve added my own one accessible through the <code>EXIF data</code> entry for those versions. Note: in the event of the <a href="https://addons.mozilla.org/de/firefox/addon/14228" target="_blank">Element-properties</a> extension being installed, FxIF integrates itself there.</p>
+<p>After installing FxIF, simply right click on an image, then click <code>FxIF Data</code>. The meta data will be displayed in its own window.<br/>
+Note: In the event of the <a href="https://addons.mozilla.org/de/firefox/addon/14228" target="_blank">Element-properties</a> extension—which retrofitts the properties dialogue which was there up to Firefox 3.6—being installed, FxIF integrates itself there.</p>
 
 <h1>Doesn’t work?</h1>
 <p>I’d like my extension to work on your system as much as you do. Though sometimes it doesn’t work for you and for changing this I definitely need your help.</p>
@@ -23,7 +23,7 @@ Since this window has been removed with Firefox 3.6 I’ve added my own one acce
 <p>Meta data that’s contained in JPEG image files in three forms:</p>
 <ul>
 	<li>binary EXIF data. This is added by most cameras automatically and contains technical informations on the camera model and manufacturer, date and time the image was taken, aperture and shutter speed used, focal length and much much more.</li>
-	<li>IPTC-NAA data in a binary structure (IIM). IPTC-NAA comprises a standardized set of fields focusing on informations as the name of the photographer, caption and title for the image, copyright informations, keywords a.s.o.</li>
+	<li>IPTC-NAA data in a binary structure (IIM). IPTC-NAA comprises a standardized set of fields focusing on informations like the name of the photographer, caption and title for the image, copyright informations, keywords a.s.o.</li>
 	<li>XMP (Extensible Metadata Platform). In contrast to aforementioned this data isn’t stored binary but as an XML document within the image and isn’t restricted to only camera or image informations but can hold both and even more. It’s developed by Adobe and pushed by their applications including Photoshop. As said, XMP can hold various informations as all the EXIF data mentioned above and also those from IPTC-NAA as well as application specific.<br/>
   Its advantage is the use of UTF-8 encoding&mdash;so data can be added in every language available&mdash;and also the possibility to hold an information in more than one language simultaneously.</li>
 </ul>
@@ -144,7 +144,7 @@ Since this window has been removed with Firefox 3.6 I’ve added my own one acce
   <li>FxIF’s own window now behaves like when the data is shown in the browsers own property window (resp. that of the <a href="https://addons.mozilla.org/de/firefox/addon/14228" target="_blank">Element-properties</a> extension). I.e. it’s now possible to have multiple FxIF windows open in parallel instead reusing one.</li>
   <li>Improved IPTC date handling: If IPTC only contains either date or time, only use it if there’s no date already set.</li>
   <li>JFIF comments are now displayed</li>
-	<li>Added new translation for Turkish thanks to contributor omrakin on <a href="http://www.babelzilla.org" target="_blank">BabelZilla</a> and polish translation is included again.</li>
+  <li>Added new translation for Turkish thanks to contributor omrakin on <a href="http://www.babelzilla.org" target="_blank">BabelZilla</a> and polish translation is included again.</li>
 </ul>
 <h2>What’s new in 0.4.5</h2>
 <ul>
@@ -152,8 +152,7 @@ Since this window has been removed with Firefox 3.6 I’ve added my own one acce
   <li>Fixed a bug which displayed a FxIF Data window with all fields but without any data. It was triggered by images using a <map>. Thanks to Joop Nijenhuis for notifying.</li>
   <li>If the mapProvider pref isn’t set, a default is used but wasn’t filled in the corresponding input field in the options. This is now done.</li>
   <li>Among the fields evaluated for the designation of the software used for creating the photo is the XMP field CreatorTool. When present it overwrote the value in the EXIF field Software. But CreatorTool only contains (at least following the specification) the software used for originally creating the photo, not the last version (like it should in the EXIF field Software).<br />
-So now also the field softwareAgent (in the History list) is evaluated and its last list entry is used for displaying the software. Also the field CreatorTool is only used if the EXIF field Software isn’t present.
-</li>
+So now also the field softwareAgent (in the History list) is evaluated and its last list entry is used for displaying the software. Also the field CreatorTool is only used if the EXIF field Software isn’t present.</li>
   <li>More lens information are read from Canon Maker Notes.</li>
 </ul>
 <h2>What’s new in 0.4.6</h2>
@@ -173,7 +172,29 @@ So now also the field softwareAgent (in the History list) is evaluated and its l
   <li>Fixed a bug that had the effect that the creator data (formerly photograph) wasn't shown anymore. I renamed a variable in one place instead all occurences. Many thanks to Oliver Theobald for finding the bug.</li>
   <li>In at least one image the ISO value isn’t contained as integer, as it's specified, but as string. FxIF nevertheless handled it as integer, bailed out and so the rest of the data wasn't evaluated. So for this and another field where this might happen too I added a workaround. Many thanks to Aaron Gullison for finding the bug.</li>
   <li>Evaluating the EXIF fields Aperture and MaxAperture was wrong – and that at least since version 0.2.3. I assume an error in porting the relevant code from Jhead (which is written in C). Different from the field FNumber the value isn’t used directly but computed using a formula which I don’t pretend to understand, neither the reason for using it, but ported correctly the result is the expected one. Many thanks to Babar de Saint Cyr for finding the bug.</li>
-  <li>According to the EXIF 2 specification the EXIF field UserComment offers the posibility to encode the string in ASCI, JIS, UNICODE and self defined coding. Until now FxIF just interpreted everything as ASCII and only displayed the character code in case of other codings. Now FxIF understands ASCII and UNICODE for this field. In case of other codings the content will be displayed as ASCII string. Many thanks to Babar de Saint Cyr for finding the bug. That bug was also reported as <a href="http://code.google.com/p/fxif/issues/detail?id=19" target="_blank">Issue 20</a>.</li>
+  <li>According to the EXIF 2 specification the EXIF field UserComment offers the posibility to encode the string in ASCI, JIS, UNICODE and self defined coding. Until now FxIF just interpreted everything as ASCII and only displayed the character code in case of other codings. Now FxIF understands ASCII and UNICODE for this field. In case of other codings the content will be displayed as ASCII string. Many thanks to Babar de Saint Cyr for finding the bug. That bug was also reported as <a href="http://code.google.com/p/fxif/issues/detail?id=20" target="_blank">Issue 20</a>.</li>
+  <li>Added new translation for Hungarian thanks to contributor Szilárd Andai.</li>
+</ul>
+<h2>What’s new in 0.4.7.1</h2>
+<ul>
+  <li>Code from the next in-development-version slipped in, sizing up the page info dialogue in an unfashionable manner. This code has been removed. That bug was also reported as <a href="http://code.google.com/p/fxif/issues/detail?id=21" target="_blank">Issue 21</a></li>
+</ul>
+<h2>What’s new in 0.4.8</h2>
+<ul>
+  <li>Some piece of software unfortunately leaves out the pascal string from the 8BIM header of binary IPTC data. By this the IPTC properties is shifted and confuses decoders (also the phantastic exiftool). FxIF now has an additional plausibility check and a mechanism to recover from the problem. Many thanks to Oleg V. Samsonov for reporting.</li>
+  <li>There are images containing invalid offsets for branches to EXIF sub directories. In the case at hand it’s offset 0, but others are possible. Therefore I now added various checks in different places against something like that. Many thanks to Alice Cheung for reporting.</li>
+  <li>Some images contain EXIF UserComments consisting purely of null bytes. And these comments have been displayed as such. Hm, I changed the handling of null bytes in strings for version 0.4.6. But for an other fix I implemented a similar function and accidentally used the new instead of the old in one place. Now the right function is used. Thanks again to Dennis van den Broek for reporting.</li>
+  <li>At least one piece of software doesn’t write EXIF attributes in XMP format as specified but in full human readable form. E.g. for exif:FNumber not „35/10“ but „f/3,5“, for  exif:ExposureProgram even „Zeitautomatik“ instead of „4“ . FxIF now checks the format the value is in. If it isn’t, the value won’t be interpreted but used 1:1 — but only if the property hasn’t been filed, e.g. from binary EXIF property. Many Thanks to Heino Tiedemann for reporting and the test image.</li>
+  <li>The EXIF value DigitalZoomRation was never displayed when contained as XMP value although it should have been. It’s now displayed if > 1.</li>
+  <li>A test to protect against reading an array does indeed work, but led to canceling the whole evaluation and reported a heavy error to the user. For there’s no sensible workaround, I lowered the severity of this error and it now simply ignore the value which would lead to reading outside the array. Many Thanks to Heino Tiedemann for reporting and the test image.</li>
+  <li>Removed a workaround in the codebase which (as stated) “Fixes strange encoding on some older digicams.” and multiplies every ISO value below 50 by 200. This came from the jhead tool which FxIF was based on. The workaround was removed there with version 2.97. That bug was also reported as <a href="http://code.google.com/p/fxif/issues/detail?id=22" target="_blank">Issue 22</a>.</li>
+  <li>Fixed <a href="http://code.google.com/p/fxif/issues/detail?id=23" target="_blank">Issue 23</a>: For Images in which the time of creation (field TimeCreated in the binary IPTC data) contains no time zone information no time information was output at all. This comes from tightly following the specification in which time zone information is mandatory. In the new version this information is optional. If it isn’t contained, the output contains a note. The same case has been fixed for time informations in the XMP data.</li>
+</ul>
+<h2>What’s new in 0.5</h2>
+<ul>
+  <li>Fixed a bug in interpreting Canon Maker Notes. FxIF used the byte order of the EXIF fields for it but it seems Canon Maker Notes are always in Intel byte order (Little-Endian).</li>
+	<li>Support for Maker Notes. Maker Notes are a pain to implement and the format in the binary Exif is dead ugly because the formats of the informations do not only vary between manufacturers but also between models. The now supported Lens Type informations for Canon, Nikon, Pentax and Sony have x variations. Also those type informations aren’t written into the file as text but coded as some number. Decoders like FxIF rely on work of volunteer with these lenses to provide test images because these numbers aren’t documented officially. Also not all camera models provide e.g. lens informations.</li>
+	<li>Added new translations for Ukranian thanks to contributor Yaroslav Krytsun on <a href="http://www.babelzilla.org" target="_blank">BabelZilla</a> and traditional Chinese thanks to Rock Yang.</li>
 </ul>
 </body>
 </html>

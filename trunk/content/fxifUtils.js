@@ -53,41 +53,49 @@ function fxifUtilsClass ()
     return data[offset] | (data[offset+1] << 8) | (data[offset+2] << 16) | (data[offset+3] << 24);
   }
 
-  this.bytesToString = function (data, offset, num)
-  {
-    var s = "";
-
-    for (var i=offset; i<offset+num; i++) {
-      if(data[i] == 0)
-//        continue;
-        break;
-
-      s += String.fromCharCode(data[i]);
-    }
-
-    return s;
-  }
-
-  // charWidth should normally be 1 and this function thus read
-  // the bytes one by one. But reading Unicode needs reading
-  // 16 Bit values.
-  this.bytesToStringWithNull = function (data, offset, num, swapbytes, charWidth)
+  /* charWidth should normally be 1 and this function thus reads
+   * the bytes one by one. But reading Unicode needs reading
+   * 16 Bit values.
+   * Stops at the first null byte.
+   */
+  this.bytesToString = function (data, offset, num, swapbytes, charWidth)
   {
     var s = "";
 
     if (charWidth == 1)
     {
-      for (var i=offset; i<offset+num; i++)
-        s += String.fromCharCode(data[i]);
+      for (var i = offset; i < offset + num; i++)
+      {
+        var charval = data[i];
+        if (charval == 0)
+          break;
+
+        s += String.fromCharCode(charval);
+      }
     }
     else
     {
-      for (var i=offset; i<offset+num; i += charWidth)
+      for (var i = offset; i < offset + num; i += 2)
       {
-        var ix = this.read16(data, i, swapbytes);
-        s += String.fromCharCode(ix);
+        var charval = this.read16(data, i, swapbytes);
+        if (charval == 0)
+          break;
+
+        s += String.fromCharCode(charval);
       }
     }
+
+    return s;
+  }
+
+
+  /* Doesn’t stop at null bytes. */
+  this.bytesToStringWithNull = function (data, offset, num)
+  {
+    var s = "";
+
+    for (var i = offset; i < offset + num; i++)
+      s += String.fromCharCode(data[i]);
 
     return s;
   }
@@ -148,7 +156,7 @@ function fxifUtilsClass ()
       var prefService = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService);
       lang = prefService.getBranch("intl.").getComplexValue("accept_languages", Components.interfaces.nsIPrefLocalizedString).data;
     } catch (e) {}
-    if(!lang || !lang.length)  // maybe the pref was empty
+    if (!lang || !lang.length)  // maybe the pref was empty
     {
       // Get the browsers language as default, only use the primary part of the string.
       // That's a bit laborious since defLang must be a string, no array.

@@ -26,7 +26,7 @@
  *  Interpreter for binary IPTC-NAA data.
  */
 
-function iptcClass()
+function iptcClass(stringBundle)
 {
   var fxifUtils = new fxifUtilsClass();
 
@@ -112,7 +112,7 @@ function iptcClass()
 
     // Don't read outside the array, take the 5 bytes into account
     // since they are mandatory for a proper entry.
-    while(pos + 5 <= data.length) {
+    while (pos + 5 <= data.length) {
       var entryMarker = data[pos];
       var entryRecord = data[pos + 1];
       var tag = data[pos + 2];
@@ -120,38 +120,38 @@ function iptcClass()
       // There are signs, that the highest bit of this int
       // indicates an extended tag. Be aware of this.
       var dataLen = fxifUtils.read16(data, pos + 3, false);
-      if(entryMarker == 0x1C) {
-        if(entryRecord == 0x01) {
+      if (entryMarker == 0x1C) {
+        if (entryRecord == 0x01) {
           // Only use tags with length > 0, tags without actual data are common.
-          if(dataLen > 0) {
-            if(pos + 5 + dataLen > data.length) {   // Don't read outside the array.
+          if (dataLen > 0) {
+            if (pos + 5 + dataLen > data.length) {   // Don't read outside the array.
               var read = pos + 5 + dataLen;
               alert("Read outside of array, read to: " + read + ", array length: " + data.length);
               break;
             }
-            if(tag == TAG_IPTC_CODEDCHARSET) {
-              var val = fxifUtils.bytesToString(data, pos + 5, dataLen);
+            if (tag == TAG_IPTC_CODEDCHARSET) {
+              var val = fxifUtils.bytesToString(data, pos + 5, dataLen, false, 1);
               // ESC %G
-              if(val == UTF8_INDICATOR) {
+              if (val == UTF8_INDICATOR) {
                   utf8Strings = true;
               }
             }
           }
         }
         else
-        if(entryRecord == 0x02) {
+        if (entryRecord == 0x02) {
           // Only use tags with length > 0, tags without actual data are common.
-          if(dataLen > 0) {
-            if(pos + 5 + dataLen > data.length) {   // Don't read outside the array.
+          if (dataLen > 0) {
+            if (pos + 5 + dataLen > data.length) {   // Don't read outside the array.
               var read = pos + 5 + dataLen;
               alert("Read outside of array, read to: " + read + ", array length: " + data.length);
               break;
             }
-            if(utf8Strings) {
+            if (utf8Strings) {
               var val = utf8BytesToString(data, pos + 5, dataLen);
             }
             else {
-              var val = fxifUtils.bytesToString(data, pos + 5, dataLen);
+              var val = fxifUtils.bytesToString(data, pos + 5, dataLen, false, 1);
             }
             switch(tag) {
               case TAG_IPTC_DATECREATED:
@@ -163,42 +163,42 @@ function iptcClass()
                 break;
 
               case TAG_IPTC_BYLINE:
-                if(!dataObj.Creator || !fxifUtils.xmpDone)
+                if (!dataObj.Creator || !fxifUtils.xmpDone)
                   dataObj.Creator = val;
                 break;
 
               case TAG_IPTC_CITY:
-                if(!dataObj.City || !fxifUtils.xmpDone)
+                if (!dataObj.City || !fxifUtils.xmpDone)
                   dataObj.City = val;
                 break;
 
               case TAG_IPTC_SUBLOCATION:
-                if(!dataObj.Sublocation || !fxifUtils.xmpDone)
+                if (!dataObj.Sublocation || !fxifUtils.xmpDone)
                   dataObj.Sublocation = val;
                 break;
 
               case TAG_IPTC_PROVINCESTATE:
-                if(!dataObj.ProvinceState || !fxifUtils.xmpDone)
+                if (!dataObj.ProvinceState || !fxifUtils.xmpDone)
                   dataObj.ProvinceState = val;
                 break;
 
               case TAG_IPTC_COUNTRYNAME:
-                if(!dataObj.CountryName || !fxifUtils.xmpDone)
+                if (!dataObj.CountryName || !fxifUtils.xmpDone)
                   dataObj.CountryName = val;
                 break;
 
               case TAG_IPTC_CAPTION:
-                if(!dataObj.Caption || !fxifUtils.xmpDone)
+                if (!dataObj.Caption || !fxifUtils.xmpDone)
                   dataObj.Caption = val;
                 break;
 
               case TAG_IPTC_HEADLINE:
-                if(!dataObj.Headline || !fxifUtils.xmpDone)
+                if (!dataObj.Headline || !fxifUtils.xmpDone)
                   dataObj.Headline = val;
                 break;
 
               case TAG_IPTC_COPYRIGHT:
-                if(!dataObj.Copyright || !fxifUtils.xmpDone)
+                if (!dataObj.Copyright || !fxifUtils.xmpDone)
                   dataObj.Copyright = val;
                 break;
 
@@ -214,7 +214,7 @@ function iptcClass()
         }
       }
       else {
-        alert("Wrong entryMarker (" + entryMarker + ")");
+//        alert("Wrong entryMarker (" + entryMarker + ")");
         break;
       }
 
@@ -222,7 +222,7 @@ function iptcClass()
     }
 
     // only overwrite existing date if XMP data not already parsed
-    if((!dataObj.Date || !fxifUtils.xmpDone) && (iptcDate || iptcTime))
+    if ((!dataObj.Date || !fxifUtils.xmpDone) && (iptcDate || iptcTime))
     {
       // if IPTC only contains either date or time, only use it if there’s
       // no date already set
@@ -238,12 +238,16 @@ function iptcClass()
         }
         if (iptcTime)
         {
-          matches = iptcTime.match(/^(\d{2})(\d{2})(\d{2})([+-]\d{4})$/);
+          matches = iptcTime.match(/^(\d{2})(\d{2})(\d{2})([+-]\d{4})?$/);
           if (matches)
           {
             if (date)
               date += ' ';
-            date += matches[1] + ':' + matches[2] + ':' + matches[3] + ' ' + matches[4];
+            date += matches[1] + ':' + matches[2] + ':' + matches[3];
+            if (matches[4])
+              date += ' ' + matches[4];
+            else
+              date += ' ' + stringBundle.getString("noTZ");
           }
         }
 
@@ -263,23 +267,58 @@ function iptcClass()
 
     var segmentMarker = fxifUtils.read32(psData, pointer, false);
     pointer += 4;
-    while(segmentMarker == BIM_MARKER &&
-          pointer < psData.length) {
+    while (segmentMarker == BIM_MARKER &&
+           pointer < psData.length) {
       var segmentType = fxifUtils.read16(psData, pointer, false);
       pointer += 2;
       // Step over 8BIM header.
       // It's an even length pascal string, i.e. one byte length information
       // plus string. The whole thing is padded to have an even length.
       var headerLen = psData[pointer];
-      pointer += 1 + headerLen + ((headerLen + 1) % 2);
+      headerLen = 1 + headerLen + ((headerLen + 1) % 2);
+      pointer += headerLen;
 
-      // read dir length excluding length field
-      var segmentLen = fxifUtils.read32(psData, pointer, false);
-      pointer += 4;
+      var segmentLen = 0;
+      if (pointer + 4 <= psData.length) {
+        // read dir length excluding length field
+        segmentLen = fxifUtils.read32(psData, pointer, false);
+        pointer += 4;
+      }
+
       // IPTC-NAA record as IIM
-      if(segmentType == 0x0404) {
-        readIptcDir(dataObj, psData.slice(pointer, pointer + segmentLen));
-        break;
+      if (segmentType == 0x0404 && segmentLen > 0) {
+        // Check if the next bytes are what we expect.
+        // I’ve seen files where the segment length field is just missing
+        // and so we’re bytes to far.
+        if (pointer + 2 <= psData.length) {
+          var entryMarker = psData[pointer];
+          var entryRecord = psData[pointer + 1];
+          if (entryMarker != 0x1C || entryRecord >= 0x0F) {
+            // Go back 4 bytes since we can’t be sure this header is ok.
+            pointer -= 4;
+
+            // Something’s wrong. Try to recover by searching
+            // the last bytes for the expect markers.
+            var i = 0;
+            while (i < 4) {	// find first tag
+              if (psData[pointer + i] == 0x1C && psData[pointer + i + 1] < 0x0F)
+                break;
+              else
+                i++;
+            }
+            if (i < 4) // found
+            {
+              // calculate segmentLen since that’s the field missing
+              segmentLen = psData.length - (4 + 2 + headerLen + i);
+              pointer += i;
+            }
+            else
+              throw "No entry marker found.";
+          }
+
+          readIptcDir(dataObj, psData.slice(pointer, pointer + segmentLen));
+          break;
+        }
       }
 
       // Dir data, variable length padded to even length.
