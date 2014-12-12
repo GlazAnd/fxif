@@ -5,7 +5,7 @@
     <em:id>{11483926-db67-4190-91b1-ef20fcec5f33}</em:id>
     <em:type>2</em:type>
     <em:name>FxIF</em:name>
-    <em:version>0.4.7</em:version>
+    <em:version>0.4.8</em:version>
     <em:description>View EXIF data in image properties</em:description>
 
     <em:creator>Ted Mielczarek</em:creator>
@@ -72,7 +72,7 @@
       <Description>
         <em:locale>hu</em:locale>
         <em:name>FxIF</em:name>
-        <em:description>Afficher les données EXIF dans les propriétés de l'image</em:description>
+        <em:description>EXIF adatok megtekintése a képekben.</em:description>
       </Description>
     </em:localized>
     <em:localized>
@@ -169,7 +169,7 @@
       <Description>
         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
         <em:minVersion>3.0</em:minVersion>
-        <em:maxVersion>22.*</em:maxVersion>
+        <em:maxVersion>35.*</em:maxVersion>
       </Description>
     </em:targetApplication>
 
@@ -178,7 +178,7 @@
       <Description>
         <em:id>{92650c4d-4b8e-4d2a-b7eb-24ecf4f6b63a}</em:id>
         <em:minVersion>2.0</em:minVersion>
-        <em:maxVersion>2.19.*</em:maxVersion>
+        <em:maxVersion>2.31.*</em:maxVersion>
       </Description>
     </em:targetApplication>
   </Description>

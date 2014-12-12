@@ -12,8 +12,8 @@
 <p>FxIF ist in JavaScript und XUL geschrieben und sollte als solches portabel sein und auf jeder Plattform laufen auf der Mozilla läuft.</p>
 
 <h1>Nutzung</h1>
-<p>Machen Sie nach der Installation von FxIF einfach einen Rechtsklick auf ein Bild und wählen Sie dann <code>Eigenschaften</code>. Die Metadaten werden im Eigenschaften-Fenster eingeblendet. Diese Integration in den vorhandenen Dialog hält die Oberfläche einfach.<br />
-Da dieses Fenster mit Firefox 3.6 entfernt wurde, wird ab dieser Version ein eigener Menüeintrag <code>EXIF-Daten</code> eingefügt der ein eigenes Fenster öffnet. Sollte jedoch die <a href="https://addons.mozilla.org/de/firefox/addon/14228" target="_blank">Element-properties</a>-Erweiterung installiert sein, integriert sich FxIF dort.</p>
+<p>Machen Sie nach der Installation von FxIF einfach einen Rechtsklick auf ein Bild und wählen Sie dann <code>FxIF-Daten</code>. Die Metadaten werden in einem eigenen Fenster eingeblendet.<br/>
+Sollte  die <a href="https://addons.mozilla.org/de/firefox/addon/14228" target="_blank">Element-properties</a>-Erweiterung installiert sein, die den bis Firefox-Version 3.6 vorhandenen Eigenschaften-Dialog nachrüstet, integriert sich FxIF dort.</p>
 
 <h1>Geht was nicht?</h1>
 <p>Ich möchte meine Erweiterung genauso gerne auf Ihrem System laufen lassen wie Sie. Aber manchmal funktioniert FxIF nicht bei Ihnen und um dies zu ändern benötige ich Ihre Hilfe.</p>
@@ -145,7 +145,7 @@ Da dieses Fenster mit Firefox 3.6 entfernt wurde, wird ab dieser Version ein eig
   <li>Das FxIF-eigene Fenster verhält sich jetzt genauso wie wenn die Daten in das Browser-eigene Eigenschaften-Fenster (bzw. das der <a href="https://addons.mozilla.org/de/firefox/addon/14228" target="_blank">Element-properties</a>-Erweiterung) eingeblendet werden. Das heißt es ist nun möglich mehrere parallel zu öffnen statt daß eines immer wiederverwendet wird.</li>
   <li>Verbessertes handling von IPTC-Datum: Wenn IPTC nur entweder Datum oder Zeit enthält wird es nur benutzt wenn nicht schon ein Datum gesetzt ist.</li>
   <li>Jetzt werden auch JFIF-Kommentare angezeigt.</li>
-	<li>Neue Übersetzung ins Türkische, Danke an omrakin auf <a href="http://www.babelzilla.org" target="_blank">BabelZilla</a>, und die polnische Übersetzung ist wieder enthalten.</li>
+  <li>Neue Übersetzung ins Türkische, Danke an omrakin auf <a href="http://www.babelzilla.org" target="_blank">BabelZilla</a>, und die polnische Übersetzung ist wieder enthalten.</li>
 </ul>
 <h2>Was ist neu in 0.4.5</h2>
 <ul>
@@ -160,7 +160,7 @@ Deshalb wird nun auch das Feld softwareAgent (in der History-Liste) ausgewertet 
 <ul>
   <li>Einen Fehler beim Interpretieren von Canon Maker Notes behoben. FxIF hatte dabei das Byteordering der EXIF-Felder verwendet, Canon Maker Notes sind jedoch unabhängig davon anscheinend immer in Intel Byte Order (Little Endian).</li>
   <li>Einen weiteren Fehler beim Interpretieren von Canon Maker Notes behoben. Es gibt anscheinend Software die die Maker Notes innerhalb der Datei verschiebt, die Zeiger dorthin auch anpasst, aber die Offsets innerhalb der Maker Notes nicht. Deshalb wird nun ein Korrekturoffset aus dem Maker-Notes-Footer errechnet. Danke an Phil Harveys Image-Exif-Tools für diese Einsicht.</li>
-  <li>Von FxIF genutzte EInstellungen stehen nun auf der Sync-Whitelist. Das bedeutet, dass FxIF-Options nun per <a href="https://support.mozilla.org/de/kb/was-ist-firefox-sync" target="_blank">Firefox-Sync</a> synchronisiert werden.</li>
+  <li>Von FxIF genutzte Einstellungen stehen nun auf der Sync-Whitelist. Das bedeutet, dass FxIF-Options nun per <a href="https://support.mozilla.org/de/kb/was-ist-firefox-sync" target="_blank">Firefox-Sync</a> synchronisiert werden.</li>
   <li>FxIF stoppt nun beim Lesen von Strings wenn es ein Nullbyte erreicht. Bisher wurden sie einfach übergangen wenn mehr Bytes für ein Feld angegeben waren. Danke an Dennis van den Broek für das Testbild um den Bug aufzudecken.</li>
   <li>FxIF nterpretiert nun die Angabe der Richtung in die die Kamera während der Aufnahme zeigte wenn diese Information aufgezeichnet wurde. Danke an Dennis van den Broek für die Testbilder.</li>
   <li><a href="http://code.google.com/p/fxif/issues/detail?id=18" target="_blank">Issue 18</a> behoben: Eine schlechte Regex umgeschrieben die in zu vielen Fällen zutraf.</li>
@@ -169,11 +169,32 @@ Deshalb wird nun auch das Feld softwareAgent (in der History-Liste) ausgewertet 
 <ul>
   <li><a href="http://code.google.com/p/fxif/issues/detail?id=19" target="_blank">Issue 19</a> "behoben": Warnung an den Benutzer bei Parserfehlern des XMP-Dokumentes deaktiviert. Es gibt keinen mir bekannten Workaround für solche Fehler solange FxIF den Mozillas DOM Parser verwendet. Und ich habe nicht vor einen eigenen mitzubringen.</li>
   <li>Eine Exception trat auf wenn das Feld GpsImgRef in EXIF oder XMP leer war oder etwas anderes als M oder T darin stand.</li>
-  <li><a href="http://code.google.com/p/fxif/issues/detail?id=17" target="_blank">Issue 17</a> behoben: Endlose Rekursionen wenn der Exif Interoperability Offset oder Exif Offset auf ein Verzeichnis zeigt das bereits verarbeitet wurde. Dies ist ähnlich, jedoch komplexer dem  Issue 10 der in FxIF 0.4.3 behoben wurde.</li>
+  <li><a href="http://code.google.com/p/fxif/issues/detail?id=17" target="_blank">Issue 17</a> behoben: Endlose Rekursionen wenn der Exif Interoperability Offset oder Exif Offset auf ein Verzeichnis zeigt das bereits verarbeitet wurde. Dies ist ähnlich dem, jedoch komplexer als der  Issue 10 der in FxIF 0.4.3 behoben wurde.</li>
   <li>Einen Fehler behoben der bewirkte dass die Daten zum Urheber (bisher Photograph) nicht mehr ausgegeben wurden. Hier hatte ich die zuständige Variable nur an einer statt allen Stellen umbenannt. Vielen Dank an Oliver Theobald fürs Finden.</li>
   <li>In mindestens einem Bild wurde der ISO-Wert nicht wie spezifiziert als Integer sondern als String abgelegt. FxIF ging deshalb von Integer aus, fiel auf die Nase und die restlichen Daten wurden nicht ausgelesen. Für dieses und ein weiteres Feld für das sich dieser Fehler auch auswirken könnte habe ich deshalb einen Workaround eingebaut. Vielen Dank an Aaron Gullison fürs Finden.</li>
   <li>Die Auswertung der EXIF-Felder Aperture und MaxAperture war fehlerhaft – und zwar mindestens seit Version 0.2.3. Ich vermute einen Fehler bei der Portierung des Codes vom (in C geschriebenen) Jhead. Anders als beim Feld FNumber wird der Wert nicht direkt übernommen sondern einer Formel unterworfen – ich kann nicht behaupten diese bzw. deren Grund zu verstehen, aber richtig portiert kommt nun jedenfalls das erwartete Ergebnis heraus. Vielen Dank an Babar de Saint Cyr fürs Finden.</li>
-  <li>Das EXIF-Feld UserComment bietet laut Spezifikation die Möglichkeit den String in ASCI, JIS, UNICODE und selbstdefinierter Kodierung abzulegen. Bisher hatte FxIF einfach alles als ASCII interpretiert und bei anderer Kodierung nur den Kodierungsnamen angezeigt. Nun wird ASCII und UNICODE verstanden. Bei anderen Kodierungen wird der Inhalt als ASCII-String angezeigt. Vielen Dank an Babar de Saint Cyr fürs Finden. Dieser Fehler wurde auch als <a href="http://code.google.com/p/fxif/issues/detail?id=19" target="_blank">Issue 20</a> gemeldet.</li>
+  <li>Das EXIF-Feld UserComment bietet laut Spezifikation die Möglichkeit den String in ASCI, JIS, UNICODE und selbstdefinierter Kodierung abzulegen. Bisher hatte FxIF einfach alles als ASCII interpretiert und bei anderer Kodierung nur den Kodierungsnamen angezeigt. Nun wird ASCII und UNICODE verstanden. Bei anderen Kodierungen wird der Inhalt als ASCII-String angezeigt. Vielen Dank an Babar de Saint Cyr fürs Finden. Dieser Fehler wurde auch als <a href="http://code.google.com/p/fxif/issues/detail?id=20" target="_blank">Issue 20</a> gemeldet.</li>
+  <li>Neue Übersetzung ins Ungarische, Danke an Szilárd Andai.</li>
+</ul>
+<h2>Was ist neu in 0.4.7.1</h2>
+<ul>
+  <li>Code von der nächsten noch in der Entwicklung befindlichen Version rutschte leider in den Build hinein und blies den Seiteninformationen-Dialog auf. Dieser Code wurde wieder entfernt. Dieser Fehler wurde auch als <a href="http://code.google.com/p/fxif/issues/detail?id=21" target="_blank">Issue 21</a> gemeldet.</li>
+</ul>
+<h2>Was ist neu in 0.4.8</h2>
+<ul>
+  <li>Manches Stück Software lässt leider einfach den Pascal-String aus dem 8BIM-Header der binären IPTC-Daten weg. Dadurch verschieben sich alle IPTC-Daten und bringt manchen Decoder durcheinander (auch das phantastische exiftool). FxIF verfügt nun um eine zusätzliche Plausibilitätsprüfung und einen Mechanismus um den Fehler zu umgehen. Vielen Dank an Oleg V. Samsonov fürs Melden.</li>
+  <li>Es gibt Bilder die für Verzweigungen zu EXIF-Unterverzeichnissen ungültige Offsets enthalten. Im mir vorliegenden Fall nur zu Offset 0, aber andere sind auch möglich. Ich habe deshalb nun an mehreren Stellen verschiedene Prüfungen gegen so etwas eingefügt. Vielen Dank an Alice Cheung fürs Melden.</li>
+  <li>Manche Bilder enthalten EXIF-Kommentare die nur aus Nullbytes bestehen. Diese wurden leider auch als solche angezeigt. Dabei hatte ich doch in Version 0.4.6 die Vorgehensweise beim Umgang mit Nullbytes in Strings geändert. Nur hatte ich für einen anderen Fix in der gleichen Version eine zusätzliche Dekodierfunktion mit dem alten Verhalten einbauen müssen und an einer Stelle fälschlicherweise diese statt der alten verwendet. Jetzt wird auch dort die richtige Version verwendet. Danke wieder an Dennis van den Broek für den Report.</li>
+  <li>Zumindest ein Programm schreibt in die EXIF-Angaben im XMP-Format nicht wie spezifiziert, sondern ausgeschrieben. So beispielsweise für exif:FNumber nicht „35/10“ sondern „f/3,5“, für  exif:ExposureProgram gar „Zeitautomatik“ statt „4“. FxIF überprüft nun ob der Wert im richtigen Format ist. Falls nicht, wird der Wert nicht interpretiert, sondern 1:1 übernommen. Das aber nur, wenn die Eigenschaft nicht bereits befüllt wurde, beispielsweise über binäre EXIF-Eigenschaften. Vielen Dank an Heino Tiedemann fürs Melden und das Testbild.</li>
+  <li>Obwohl das nicht so vorgesehen war, wurde der EXIF-Wert DigitalZoomRation nie angezeigt wenn er als XMP-Wert enthalten war. Nun wird er angezeigt sofern er größer als 1 ist.</li>
+  <li>Eine Prüfung auf eine Arrayüberschreitung funktioniert zwar, brach jedoch das ganze Datenauslesen ab und meldete einen schweren Fehler. Da es keinen vernünftigen Workaround gibt, habe ich die Auswirkung nun abgemildert und der Wert der zur Überschreitung führen würde wird nun einfach überlesen. Vielen Dank an Heino Tiedemann fürs Melden und das Testbild.</li>
+  <li>Ich habe einen Workaround entfernt der eine “Seltsame Codierung in einigen älteren Kameras behebt.” und der ISO-Werte unter 50 mit 200 multipliziert. Dieses Verhalten kommt aus dem Programm jhead auf dem FxIF basierte. Dieser Workaround wurde dort mit der Version 2.97 entfernt. Dieser Fehler wurde auch als <a href="http://code.google.com/p/fxif/issues/detail?id=22" target="_blank">Issue 22</a> gemeldet.</li>
+  <li><a href="http://code.google.com/p/fxif/issues/detail?id=23" target="_blank">Issue 23</a> behoben: Für Bilder deren Erstellungszeit (Feld TimeCreated in den binären IPTC-Daten) keine Zeitzoneninformation enthält wurde überhaupt keine Zeit ausgegeben. Dies rührt daher, dass FxIF der Spezifikation genau folgte in der die Zeitzone als Pflichtangabe beschrieben ist. In der neuen Version ist diese Angabe nun optional. Ist sie nicht vorhanden, wird in der Ausgabe entsprechend darauf hingewiesen. Der gleiche Fall wurde auch bei den Zeitangaben in den XMP-Daten behoben.</li>
+</ul>
+<h2>Was ist neu in 0.5</h2>
+<ul>
+	<li>Unterstützung für Maker Notes. Maker Notes sind einfach umständlich und das Format im binären Exif einfach hässlich zu implementieren da die Formate der einzelnen Information nicht nur zwischen Herstellern sondern auch Kameramodellen variieren. So benötigen die nun unterstützen Objektivkennungen für Canon, Nikon, Pentax and Sony x Variationen. Ebenfalls werden diese Objektivbezeichnungen nicht einfach in die Bilddatei geschrieben, sondern es wird nur eine Zahl hinterlegt. Programme wie FxIF müssen sich auf die Arbeit vieler Freiwilliger stützen die Testbilder zur Verfügung stellen da die Zahlencodes nirgends offiziell dokumentiert sind. Es ist auch zu beachten, dass nicht jedes Kameramodel diese Informationen hinterlegen.</li>
+	<li>Neue Übersetzungen ins Ukrainische, Danke an Yaroslav Krytsun auf <a href="http://www.babelzilla.org" target="_blank">BabelZilla</a> und traditionelles Chinesisch, Danke an Rock Yang.</li>
 </ul>
 </body>
 </html>

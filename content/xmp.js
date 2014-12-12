@@ -64,10 +64,10 @@ function xmpClass(stringBundle)
       dom = parser.parseFromString(xmlString, 'text/xml');
 
       if (dom.documentElement.nodeName == 'parsererror') {
-//        alert("Error parsing XML");
+        console.error("Error parsing XML");
 //        throw ("Error parsing XML");
         // no known remedy, so don’t throw this problem
-        return ;
+        return;
       }
     }
 
@@ -168,13 +168,6 @@ function xmpClass(stringBundle)
     if (val)
       dataObj.Lens = val;
 
-    val = getXMPValue(dom, "http://ns.adobe.com/exif/1.0/", "DateTimeOriginal");
-    if (val) {
-      var date = readAndFormatISODate(val);
-      if (date)
-        dataObj.Date = date;
-    }
-
     if(!dataObj.Date)
     {
       val = getXMPValue(dom, "http://ns.adobe.com/exif/1.0/", "DateTimeDigitized");
@@ -185,26 +178,58 @@ function xmpClass(stringBundle)
       }
     }
 
-    val = getXMPValue(dom, "http://ns.adobe.com/exif/1.0/", "FNumber");
-    if (!val)
-      val = getXMPValue(dom, "http://ns.adobe.com/exif/1.0/", "ApertureValue");
-    if (val)
-      dataObj.ApertureFNumber = "f/" + parseRational(val).toFixed(1);
+    val = getXMPValue(dom, "http://ns.adobe.com/photoshop/1.0/", "CreateDate");
+    if (val) {
+      var date = readAndFormatISODate(val);
+      if (date)
+        dataObj.Date = date;
+    }
 
-    val = getXMPValue(dom, "http://ns.adobe.com/exif/1.0/", "FocalLength");
+    val = getXMPValue(dom, "http://ns.adobe.com/exif/1.0/", "DateTimeOriginal");
+    if (val) {
+      var date = readAndFormatISODate(val);
+      if (date)
+        dataObj.Date = date;
+    }
+
+    val = getXMPValue(dom, "http://ns.adobe.com/exif/1.0/", "FNumber");  // expects a rational (eg. "5/1")
+    if (!val)
+      val = getXMPValue(dom, "http://ns.adobe.com/exif/1.0/", "ApertureValue");  // expects a rational (eg. "4643856/1000000")
     if (val)
-      dataObj.FocalLength = parseRational(val).toFixed(1);
+    {
+      try
+      {
+        dataObj.ApertureFNumber = "ƒ/" + parseRational(val).toFixed(1);
+      }
+      catch (ex)
+      {
+        if (!dataObj.ApertureFNumber)
+          dataObj.ApertureFNumber = val;
+      }
+    }
+
+    val = getXMPValue(dom, "http://ns.adobe.com/exif/1.0/", "FocalLength"); // expects a rational (eg. "2000/10")
+    if (val)
+      try
+      {
+        dataObj.FocalLength = parseRational(val).toFixed(1);
+      }
+      catch (ex)
+      {
+        if (!dataObj.FocalLength)
+          dataObj.FocalLength = val;
+      }
 
     val = getXMPValue(dom, "http://ns.adobe.com/exif/1.0/", "FocalLengthIn35mmFilm");
     if (!val)
-      // this name is no official but written by some applications
+      // this name is no official one, but written by some applications
       val = getXMPValue(dom, "http://ns.adobe.com/exif/1.0/", "FocalLengthIn35mmFormat");
     if (val)
       dataObj.FocalLength35mmEquiv = val;
 
-    if(dataObj.FocalLength) {
+    if (dataObj.FocalLength) {
       var fl = stringBundle.getFormattedString("millimeters", [dataObj.FocalLength]);
-      if(dataObj.FocalLength35mmEquiv) {
+      if (dataObj.FocalLength35mmEquiv) {
         dataObj.FocalLength35mmEquiv = parseFloat(dataObj.FocalLength35mmEquiv);
         fl += " " + stringBundle.getFormattedString("35mmequiv", [dataObj.FocalLength35mmEquiv.toFixed(0)]);
       }
@@ -215,25 +240,41 @@ function xmpClass(stringBundle)
     val = getXMPValue(dom, "http://ns.adobe.com/exif/1.0/", "SubjectDistance");
     if (val)
     {
-      var distance = parseRational(val).toFixed(2);
-      if(distance < 0)
-        dataObj.Distance = stringBundle.getString("infinite");
-      else
-        dataObj.Distance = stringBundle.getFormattedString("meters", [distance]);
+      try
+      {
+        var distance = parseRational(val).toFixed(2);
+        if (distance < 0)
+          dataObj.Distance = stringBundle.getString("infinite");
+        else
+          dataObj.Distance = stringBundle.getFormattedString("meters", [distance]);
+      }
+      catch (ex)
+      {
+        if (!dataObj.Distance)
+          dataObj.Distance = val;
+      }
     }
 
     val = getXMPValue(dom, "http://ns.adobe.com/exif/1.0/", "ExposureTime");
     if (val)
     {
-      var et = "";
-      val = parseRational(val);
-      if (val < 0.010)
-        et = stringBundle.getFormattedString("seconds", [val.toFixed(4)]);
-      else
-        et = stringBundle.getFormattedString("seconds", [val.toFixed(3)]);
-      if (val <= 0.5)
-        et += " (1/" + Math.floor(0.5 + 1/val).toFixed(0) + ")";
-      dataObj.ExposureTime = et;
+      try
+      {
+        var et = "";
+        val = parseRational(val);
+        if (val < 0.010)
+          et = stringBundle.getFormattedString("seconds", [val.toFixed(4)]);
+        else
+          et = stringBundle.getFormattedString("seconds", [val.toFixed(3)]);
+        if (val <= 0.5)
+          et += " (1/" + Math.floor(0.5 + 1/val).toFixed(0) + ")";
+        dataObj.ExposureTime = et;
+      }
+      catch (ex)
+      {
+        if (!dataObj.ExposureTime)
+          dataObj.ExposureTime = val;
+      }
     }
 
     var el = dom.getElementsByTagNameNS("http://ns.adobe.com/exif/1.0/", "Flash");
@@ -242,7 +283,7 @@ function xmpClass(stringBundle)
     var flashMode = 0;
     var redEyeMode = 0;
     var flashReturn = 0;
-    if(el.length) {
+    if (el.length) {
       // Flash values can occur in two ways, as attribute values of flash
       // like <Flash Fired="True"/>
       // and as child values, e.g. <Flash><Fired>True</Fired></Flash>
@@ -265,33 +306,33 @@ function xmpClass(stringBundle)
 
       var fu;
       var addfunc = new Array();
-      if(flashFired && flashFired.match(/^true$/i)) {
+      if (flashFired && flashFired.match(/^true$/i)) {
         fu = stringBundle.getString("yes");
 
-        if(flashMode == 3)
+        if (flashMode == 3)
           addfunc.push(stringBundle.getString("auto"));
         else
-          if(flashMode == 1)
+          if (flashMode == 1)
             addfunc.push(stringBundle.getString("enforced"));
 
-        if(redEyeMode && redEyeMode.match(/^true$/i))
+        if (redEyeMode && redEyeMode.match(/^true$/i))
           addfunc.push(stringBundle.getString("redeye"));
 
-        if(flashReturn == 3)
+        if (flashReturn == 3)
           addfunc.push(stringBundle.getString("returnlight"));
         else
-          if(flashReturn == 2)
+          if (flashReturn == 2)
             addfunc.push(stringBundle.getString("noreturnlight"));
       }
       else {
         fu = stringBundle.getString("no");
-        if(flashFunction && flashFunction.match(/^true$/i))
+        if (flashFunction && flashFunction.match(/^true$/i))
             addfunc.push(stringBundle.getString("noflash"));
         else
-          if(flashMode == 2)
+          if (flashMode == 2)
             addfunc.push(stringBundle.getString("enforced"));
           else
-            if(flashMode == 3)
+            if (flashMode == 3)
               addfunc.push(stringBundle.getString("auto"));
       }
 
@@ -302,191 +343,242 @@ function xmpClass(stringBundle)
     }
 
     val = getXMPValue(dom, "http://ns.adobe.com/tiff/1.0/", "Orientation");
-    if(!dataObj.Orientation && val && val > 0) {
-        if(val <= 8)
+    if (!dataObj.Orientation && val && val > 0) {
+        if (val <= 8)
           dataObj.Orientation = stringBundle.getString("orientation" + val);
         else
           dataObj.Orientation = stringBundle.getString("unknown") + " (" + val + ")";
     }
 
     val = getXMPValue(dom, "http://ns.adobe.com/tiff/1.0/", "ImageHeight");
-    if(val)
+    if (val)
       dataObj.Length = val;
 
     val = getXMPValue(dom, "http://ns.adobe.com/tiff/1.0/", "ImageWidth");
-    if(val)
+    if (val)
       dataObj.Width = val;
 
     val = getXMPValue(dom, "http://ns.adobe.com/exif/1.0/", "FocalPlaneXResolution");
-    if(val)
+    if (val)
       dataObj.FocalPlaneXRes = val;
 
     val = getXMPValue(dom, "http://ns.adobe.com/exif/1.0/", "FocalPlaneResolutionUnit");
-    if(val) {
-      switch(Number(val)) {
-        case 1: dataObj.FocalPlaneUnits = 25.4; break; // inches
-        case 2:
-          // According to the information I was using, 2 means meters.
-          // But looking at the Cannon powershot's files, inches is the only
-          // sensible value.
-          dataObj.FocalPlaneUnits = 25.4;
-          break;
-        case 3: dataObj.FocalPlaneUnits = 10;   break;  // centimeter
-        case 4: dataObj.FocalPlaneUnits = 1;    break;  // millimeter
-        case 5: dataObj.FocalPlaneUnits = .001; break;  // micrometer
+    if (val) {
+      if (val.search(/^\d+$/) != -1) // Unfortunately there are applications which write non-number values
+      {
+        switch(Number(val)) {
+          case 1: dataObj.FocalPlaneUnits = 25.4; break; // inches
+          case 2:
+            // According to the information I was using, 2 means meters.
+            // But looking at the Canon powershot's files, inches is the only
+            // sensible value.
+            dataObj.FocalPlaneUnits = 25.4;
+            break;
+          case 3: dataObj.FocalPlaneUnits = 10;   break;  // centimeter
+          case 4: dataObj.FocalPlaneUnits = 1;    break;  // millimeter
+          case 5: dataObj.FocalPlaneUnits = .001; break;  // micrometer
+        }
       }
+      else
+        if (!dataObj.FocalPlaneUnits)
+            dataObj.FocalPlaneUnits = val;
     }
 
     val = getXMPValue(dom, "http://ns.adobe.com/exif/1.0/", "ExposureBiasValue");
-    if(val) {
-      val = parseRational(val).toFixed(2);
-      if(val == 0)
-        dataObj.ExposureBias = stringBundle.getString("none");
-      else
-        // add a + sign before positive values
-        dataObj.ExposureBias = (val > 0 ? '+' : '') + stringBundle.getFormattedString("ev", [val]);
+    if (val) {
+      try
+      {
+        val = parseRational(val).toFixed(2);
+        if (val == 0)
+          dataObj.ExposureBias = stringBundle.getString("none");
+        else
+          // add a + sign before positive values
+          dataObj.ExposureBias = (val > 0 ? '+' : '') + stringBundle.getFormattedString("ev", [val]);
+      }
+      catch (ex)
+      {
+        if (!dataObj.ExposureBias)
+          dataObj.ExposureBias = val;
+      }
     }
 
     val = getXMPValue(dom, "http://ns.adobe.com/exif/1.0/", "WhiteBalance");
-    if(val) {
-      switch(Number(val)) {
-        case 0:
-          dataObj.WhiteBalance = stringBundle.getString("auto");
-          break;
-        case 1:
-          dataObj.WhiteBalance = stringBundle.getString("manual");
-          break;
+    if (val) {
+      if (val.search(/^\d+$/) != -1) // Unfortunately there are applications which write non-number values
+      {
+        switch(Number(val)) {
+          case 0:
+            dataObj.WhiteBalance = stringBundle.getString("auto");
+            break;
+          case 1:
+            dataObj.WhiteBalance = stringBundle.getString("manual");
+            break;
+        }
       }
+      else
+        if (!dataObj.WhiteBalance)
+            dataObj.WhiteBalance = val;
     }
 
     val = getXMPValue(dom, "http://ns.adobe.com/exif/1.0/", "LightSource");
-    if(val) {
-      switch(Number(val)) {
-        case 0:
-          dataObj.LightSource = stringBundle.getString("unknown");
-          break;
-        case 1:
-          dataObj.LightSource = stringBundle.getString("daylight");
-          break;
-        case 2:
-          dataObj.LightSource = stringBundle.getString("fluorescent");
-          break;
-        case 3:
-          dataObj.LightSource = stringBundle.getString("incandescent");
-          break;
-        case 4:
-          dataObj.LightSource = stringBundle.getString("flash");
-          break;
-        case 9:
-          dataObj.LightSource = stringBundle.getString("fineweather");
-          break;
-        case 10:
-          dataObj.LightSource = stringBundle.getString("cloudy");
-          break;
-        case 11:
-          dataObj.LightSource = stringBundle.getString("shade");
-          break;
-        case 12:
-          dataObj.LightSource = stringBundle.getString("daylightfluorescent");
-          break;
-        case 13:
-          dataObj.LightSource = stringBundle.getString("daywhitefluorescent");
-          break;
-        case 14:
-          dataObj.LightSource = stringBundle.getString("coolwhitefluorescent");
-          break;
-        case 15:
-          dataObj.LightSource = stringBundle.getString("whitefluorescent");
-          break;
-        case 24:
-          dataObj.LightSource = stringBundle.getString("studiotungsten");
-          break;
-        default:; //Quercus: 17-1-2004 There are many more modes for this, check Exif2.2 specs
-        // If it just says 'unknown' or we don't know it, then
-        // don't bother showing it - it doesn't add any useful information.
+    if (val) {
+      if (val.search(/^\d+$/) != -1) // Unfortunately there are applications which write non-number values
+      {
+        switch(Number(val)) {
+          case 0:
+            dataObj.LightSource = stringBundle.getString("unknown");
+            break;
+          case 1:
+            dataObj.LightSource = stringBundle.getString("daylight");
+            break;
+          case 2:
+            dataObj.LightSource = stringBundle.getString("fluorescent");
+            break;
+          case 3:
+            dataObj.LightSource = stringBundle.getString("incandescent");
+            break;
+          case 4:
+            dataObj.LightSource = stringBundle.getString("flash");
+            break;
+          case 9:
+            dataObj.LightSource = stringBundle.getString("fineweather");
+            break;
+          case 10:
+            dataObj.LightSource = stringBundle.getString("cloudy");
+            break;
+          case 11:
+            dataObj.LightSource = stringBundle.getString("shade");
+            break;
+          case 12:
+            dataObj.LightSource = stringBundle.getString("daylightfluorescent");
+            break;
+          case 13:
+            dataObj.LightSource = stringBundle.getString("daywhitefluorescent");
+            break;
+          case 14:
+            dataObj.LightSource = stringBundle.getString("coolwhitefluorescent");
+            break;
+          case 15:
+            dataObj.LightSource = stringBundle.getString("whitefluorescent");
+            break;
+          case 24:
+            dataObj.LightSource = stringBundle.getString("studiotungsten");
+            break;
+          default:; //Quercus: 17-1-2004 There are many more modes for this, check Exif2.2 specs
+          // If it just says 'unknown' or we don't know it, then
+          // don't bother showing it - it doesn't add any useful information.
+        }
       }
+      else
+        if (!dataObj.LightSource)
+            dataObj.LightSource = val;
     }
 
     val = getXMPValue(dom, "http://ns.adobe.com/exif/1.0/", "MeteringMode");
-    if(val) {
-      switch(Number(val)) {
-        case 0:
-          dataObj.MeteringMode = stringBundle.getString("unknown");
-          break;
-        case 1:
-          dataObj.MeteringMode = stringBundle.getString("average");
-          break;
-        case 2:
-          dataObj.MeteringMode = stringBundle.getString("centerweight");
-          break;
-        case 3:
-          dataObj.MeteringMode = stringBundle.getString("spot");
-          break;
-        case 3:
-          dataObj.MeteringMode = stringBundle.getString("multispot");
-          break;
-        case 5:
-          dataObj.MeteringMode = stringBundle.getString("matrix");
-          break;
-        case 6:
-          dataObj.MeteringMode = stringBundle.getString("partial");
-          break;
+    if (val) {
+      if (val.search(/^\d+$/) != -1) // Unfortunately there are applications which write non-number values
+      {
+        switch(Number(val)) {
+          case 0:
+            dataObj.MeteringMode = stringBundle.getString("unknown");
+            break;
+          case 1:
+            dataObj.MeteringMode = stringBundle.getString("average");
+            break;
+          case 2:
+            dataObj.MeteringMode = stringBundle.getString("centerweight");
+            break;
+          case 3:
+            dataObj.MeteringMode = stringBundle.getString("spot");
+            break;
+          case 3:
+            dataObj.MeteringMode = stringBundle.getString("multispot");
+            break;
+          case 5:
+            dataObj.MeteringMode = stringBundle.getString("matrix");
+            break;
+          case 6:
+            dataObj.MeteringMode = stringBundle.getString("partial");
+            break;
+        }
       }
+      else
+        if (!dataObj.MeteringMode)
+            dataObj.MeteringMode = val;
     }
 
     val = getXMPValue(dom, "http://ns.adobe.com/exif/1.0/", "ExposureProgram");
-    if(val) {
-      switch(Number(val)) {
-        case 1:
-          dataObj.ExposureProgram = stringBundle.getString("manual");
+    if (val) {
+      if (val.search(/^\d+$/) != -1) // Unfortunately there are applications which write non-number values
+      {
+        switch(Number(val)) {
+          case 1:
+            dataObj.ExposureProgram = stringBundle.getString("manual");
+            break;
+          case 2:
+            dataObj.ExposureProgram = stringBundle.getString("program") + " ("
+              + stringBundle.getString("auto") + ")";
+            break;
+          case 3:
+            dataObj.ExposureProgram = stringBundle.getString("apriority")
+              + " (" + stringBundle.getString("semiauto") + ")";
+            break;
+          case 4:
+            dataObj.ExposureProgram = stringBundle.getString("spriority")
+              + " (" + stringBundle.getString("semiauto") +")";
+            break;
+          case 5:
+            dataObj.ExposureProgram = stringBundle.getString("creative");
+            break;
+          case 6:
+            dataObj.ExposureProgram = stringBundle.getString("action");
+            break;
+          case 7:
+            dataObj.ExposureProgram = stringBundle.getString("portrait");
+            break;
+          case 8:
+            dataObj.ExposureProgram = stringBundle.getString("landscape");
+            break;
+          default:
           break;
-        case 2:
-          dataObj.ExposureProgram = stringBundle.getString("program") + " ("
-            + stringBundle.getString("auto") + ")";
-          break;
-        case 3:
-          dataObj.ExposureProgram = stringBundle.getString("apriority")
-            + " (" + stringBundle.getString("semiauto") + ")";
-          break;
-        case 4:
-          dataObj.ExposureProgram = stringBundle.getString("spriority")
-            + " (" + stringBundle.getString("semiauto") +")";
-          break;
-        case 5:
-          dataObj.ExposureProgram = stringBundle.getString("creative");
-          break;
-        case 6:
-          dataObj.ExposureProgram = stringBundle.getString("action");
-          break;
-        case 7:
-          dataObj.ExposureProgram = stringBundle.getString("portrait");
-          break;
-        case 8:
-          dataObj.ExposureProgram = stringBundle.getString("landscape");
-          break;
-        default:
-        break;
+        }
       }
+      else
+        if (!dataObj.ExposureProgram)
+            dataObj.ExposureProgram = val;
     }
 
     val = getXMPValue(dom, "http://ns.adobe.com/exif/1.0/", "ExposureIndex");
-    if(val) {
+    if (val) {
       if (!dataObj.ExposureIndex)
-        dataObj.ExposureIndex = parseRational(val).toFixed(0);
+        try
+        {
+          dataObj.ExposureIndex = parseRational(val).toFixed(0);
+        }
+        catch (ex)
+        {
+          dataObj.ExposureIndex = val;
+        }
     }
 
     val = getXMPValue(dom, "http://ns.adobe.com/exif/1.0/", "ExposureMode");
-    if(val) {
-      switch(Number(val)) {
-        case 0: //Automatic
-          break;
-        case 1:
-          dataObj.ExposureMode = stringBundle.getString("manual");
-          break;
-        case 2:
-          dataObj.ExposureMode = stringBundle.getString("autobracketing");
-          break;
+    if (val) {
+      if (val.search(/^\d+$/) != -1) // Unfortunately there are applications which write non-number values
+      {
+        switch(Number(val)) {
+          case 0: // Automatic
+            break;
+          case 1:
+            dataObj.ExposureMode = stringBundle.getString("manual");
+            break;
+          case 2:
+            dataObj.ExposureMode = stringBundle.getString("autobracketing");
+            break;
+        }
       }
+      else
+        if (!dataObj.ExposureProgram)
+            dataObj.ExposureProgram = val;
     }
 
     val = getXMPOrderedArray(dom, "http://ns.adobe.com/exif/1.0/", "ISOSpeedRatings");
@@ -494,8 +586,18 @@ function xmpClass(stringBundle)
       dataObj.ISOequivalent = val.join(", ");
 
     val = getXMPValue(dom, "http://ns.adobe.com/exif/1.0/", "DigitalZoomRatio");
-    if (val && val > 1)
-      dataObj.DigitalZoomRatio = parseRational(val).toFixed(3) + "x";
+    if (val)
+      try
+      {
+        var floatVal = parseRational(val);
+        if (floatVal > 1)
+          dataObj.DigitalZoomRatio = floatVal.toFixed(3) + "x";
+      }
+      catch (ex)
+      {
+        if (!dataObj.DigitalZoomRatio)
+          dataObj.DigitalZoomRatio = val;
+      }
 
     val = getXMPValue(dom, "http://ns.adobe.com/exif/1.0/", "ColorSpace");
     if (val)
@@ -609,6 +711,8 @@ function xmpClass(stringBundle)
 
   // Parse rational numbers. They consist of two
   // integers separated by a "/".
+  // Throws an exception if ratstring contains to rational
+  // (yes, this happens, e.g. GIMP 2.8.10 writes "f/3,5" for FNumber)?
   function parseRational(ratstring)
   {
     var matches = ratstring.match(/^([+-]?\d+)\/(\d+)$/);
@@ -618,25 +722,39 @@ function xmpClass(stringBundle)
       return val;
     }
     else
-      return 0;
+      throw ("ratstring contains no rational");
   }
 
   // Since JS can't really parse dates and keep timezone informations,
   // I only break the string up and reformat it without any JS functions.
-  // Input format is YYYY:MM:DDTHH:MM:SS[.SS][+/-HH:MM] and
-  // Outputformat is YYYY:MM:DD HH:MM:SS [+/-HH:MM]
+  // Input format is YYYY-MM-DD[THH:MM[:SS[.SS]][+/-HH:MM|Z]] and
+  // Output format is YYYY-MM-DD HH:MM:SS [+/-HH:MM]
+  // It’s a bit more relaxted than the specification in that
+  // the time zone information is optional
   function readAndFormatISODate(datestring)
   {
-    var exploded_date = datestring.match(/^(\d{4}-\d{2}-\d{2})[T ](\d{2}:\d{2}:\d{2})(?:.\d{2})?(?:([+-])(\d{2}):(\d{2}))?$/);
+    var exploded_date = datestring.match(/^(\d{4}-\d{2}-\d{2})(?:[T ](\d{2}:\d{2})(?:(:\d{2})(?:\.\d+)?)?([+-]\d{2}:\d{2}|Z)?)?$/);
     if (exploded_date)
     {
-      date = exploded_date[1] + ' ' + exploded_date[2];
-      if (typeof exploded_date[3] != "undefined" && exploded_date[3].length > 0)
-        date += ' ' + exploded_date[3] + exploded_date[4] + exploded_date[5];
+      date = exploded_date[1];
+      if (typeof exploded_date[2] != 'undefined' && exploded_date[2].length > 0)
+      {
+        date += ' ' + exploded_date[2];
+        if (typeof exploded_date[3] != 'undefined' && exploded_date[3].length > 0)
+          date += exploded_date[3];
+        if (typeof exploded_date[4] != 'undefined' && exploded_date[4].length > 0)
+        {
+          if (exploded_date[4] == 'Z')
+            date += ' UTC';
+          else
+            date += ' ' + exploded_date[4];
+        }
+        else
+          date += ' ' + stringBundle.getString("noTZ");
+      }
       return date;
     }
   }
-
 
 
   // Retrieves a property stored somewhere in the XMP data.

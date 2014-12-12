@@ -56,13 +56,20 @@ function fxifClass()
     disabling this for now since it delivers compressed content
     if the server sends it compressed
     try {
-      var cs = Components.classes["@mozilla.org/network/cache-service;1"].getService(Components.interfaces.nsICacheService);
-      var httpCacheSession = cs.createSession("HTTP", 0, true);
-      // also return expired cache entries, to work around poorly written sites
-      httpCacheSession.doomEntriesIfExpired = false;
-      var nsICache = Components.interfaces.nsICache;
-      // use false so we don't block!
-      var cdesc = httpCacheSession.openCacheEntry(imgUrl, nsICache.ACCESS_READ, false);
+      let {LoadContextInfo} = Components.utils.import("resource://gre/modules/LoadContextInfo.jsm", {});
+      var cs = Components.classes["@mozilla.org/network/cache-storage-service;1"].getService(Components.interfaces.nsICacheStorageService);
+      var storage = cacheService.diskCacheStorage(LoadContextInfo.default, false);
+      var cdesc = storage.openCacheEntry(imgUrl, "", OPEN_READONLY, 
+        Components.interfaces.nsICacheStorage.OPEN_NORMALLY,
+        {
+          onCacheEntryCheck: function (entry, appcache) {
+            return Ci.nsICacheEntryOpenCallback.ENTRY_WANTED;
+          },
+          onCacheEntryAvailable: function (entry, isnew, appcache, status) {
+            // And here is the cache v2 entry
+          }
+        }
+      );
       istream = cdesc.openInputStream(0);
     }
     catch(ex) {}
@@ -123,6 +130,7 @@ function fxifClass()
         var swapbytes = false;
         var marker = bis.read16();
         var len;
+
         if (marker == SOI_MARKER) {
           marker = bis.read16();
           // reading SOS marker indicates start of image stream
@@ -150,7 +158,7 @@ function fxifClass()
                   exifReader.readExifDir(dataObj, exifData, ifd_ofs, swapbytes);
                 }
                 catch(ex) {
-                  pushError(dataObj, "EXIF");
+                  pushError(dataObj, "EXIF", ex);
                 }
                 fxifUtils.exifDone = true;
               }
@@ -177,7 +185,7 @@ function fxifClass()
                         xmpReader.parseXML(dataObj, xmpData);
                       }
                       catch(ex) {
-                        pushError(dataObj, "XMP");
+                        pushError(dataObj, "XMP", ex);
                       }
                       fxifUtils.xmpDone = true;
                     }
@@ -200,12 +208,12 @@ function fxifClass()
                 var psString = bis.readBytes(14);
                 var psData = bis.readByteArray(len - 14);
                 if (psString == 'Photoshop 3.0\0') {
-                  var iptcReader = new iptcClass();
+                  var iptcReader = new iptcClass(stringBundle);
                   try {
                     iptcReader.readPsSection(dataObj, psData);
                   }
                   catch(ex) {
-                    pushError(dataObj, "IPTC");
+                    pushError(dataObj, "IPTC", ex);
                   }
                   fxifUtils.iptcDone = true;
                 }
@@ -213,7 +221,7 @@ function fxifClass()
               else
                 // Or perhaps a JFIF comment?
                 if (marker == COM_MARKER && len >= 1) {
-                  dataObj.UserComment = fxifUtils.bytesToString(bis.readByteArray(len), 0, len);
+                  dataObj.UserComment = fxifUtils.bytesToString(bis.readByteArray(len), 0, len, false, 1);
                 }
                 else {
                   // read and discard data ...
@@ -235,13 +243,13 @@ function fxifClass()
     return dataObj;
   }
 
-  function pushError(dataObj, type)
+  function pushError(dataObj, type, message)
   {
     if (dataObj.error)
       dataObj.error += '\n';
     else
       dataObj.error = '';
-    dataObj.error += stringBundle.getFormattedString("specialError", [type, type]);
+    dataObj.error += stringBundle.getFormattedString("specialError", [type, type]) + ' ' + message;
   }
 
   // Returns true if imgUrl is a JPEG image, false otherwise.
@@ -252,10 +260,10 @@ function fxifClass()
   function isJPEG(imgUrl)
   {
     var istream = getDataStream(imgUrl);
-    if(istream) {
+    if (istream) {
         var bis = Components.classes["@mozilla.org/binaryinputstream;1"].createInstance(Components.interfaces.nsIBinaryInputStream);
         bis.setInputStream(istream);
-        if(bis.read16() == SOI_MARKER)
+        if (bis.read16() == SOI_MARKER)
           return true;
     }
 
@@ -413,6 +421,19 @@ function fxifClass()
     }
   }
 
+  this.onGraphicinfoOverlayLoad = function ()
+  {
+    originalLoad();
+/*
+    stringBundle = document.getElementById("bundle_fxif");
+    if(onImage) {
+      showEXIFDataFor(document.getElementById("image-url-text").value);
+    }
+    else {
+      document.getElementById("exif-sec").style.display = "none";
+    }
+*/
+  }
 
   this.onFxIFDataDialogLoad = function ()
   {
@@ -452,7 +473,7 @@ function fxifClass()
         // matching url endings of .jpeg, .jpe and .jpg each with
         // optional HTTP GET parameters after a following ?
         var reg_jpg = new RegExp(/\.jp(eg|e|g)(\?.*)?$/i);
-        if (reg_jpg.test(imgURL) || isJPEG(imgURL)) {
+        if (reg_jpg.test(imgURL)/* || isJPEG(imgURL)*/) {
           item1.disabled = false;
           item2.disabled = false;
         }

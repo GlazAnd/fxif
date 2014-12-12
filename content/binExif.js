@@ -121,22 +121,30 @@ function exifClass(stringBundle)
 
   function dir_entry_addr(start, entry)
   {
-    return start + 2 + 12*entry;
+    return start + 2 + entry * 12;
   }
 
   function ConvertAnyFormat(data, format, offset, components, numbytes, swapbytes, charWidth)
   {
+    // centralised check if the data lays within the data array
+    if (offset + numbytes > data.length)
+    {
+      console.error("Data outside array");
+      // throw "Data outside array.";
+      return;
+    }
+
     var value = 0;
 
     switch (format) {
       case FMT_STRING:
-        value = fxifUtils.bytesToString(data, offset, numbytes);
+        value = fxifUtils.bytesToString(data, offset, numbytes, swapbytes, charWidth);
         // strip trailing whitespace
         value = value.replace(/\s+$/, '');
         break;
 
       case FMT_UNDEFINED: // treat as string
-        value = fxifUtils.bytesToStringWithNull(data, offset, numbytes, swapbytes, charWidth);
+        value = fxifUtils.bytesToString(data, offset, numbytes, swapbytes, charWidth);
         // strip trailing whitespace
         value = value.replace(/\s+$/, '');
         break;
@@ -150,7 +158,7 @@ function exifClass(stringBundle)
       case FMT_URATIONAL:
       case FMT_SRATIONAL:
       {
-        // It sometimes happens that there are multiple rational contained.
+        // It sometimes happens that there are multiple rationals contained.
         // So go for multiple here and convert back later.
         var values = new Array();
 
@@ -158,10 +166,10 @@ function exifClass(stringBundle)
           var Num, Den;
           Num = fxifUtils.read32(data, offset+i*8, swapbytes);
           Den = fxifUtils.read32(data, offset+i*8+4, swapbytes);
-          if (Den == 0){
+          if (Den == 0) {
             values[i] = 0;
-          }else{
-            values[i] = Num/Den;
+          } else {
+            values[i] = Num / Den;
           }
         }
 
@@ -186,6 +194,11 @@ function exifClass(stringBundle)
   function readGPSDir(dataObj, data, dirStart, swapbytes)
   {
     var numEntries = fxifUtils.read16(data, dirStart, swapbytes);
+    // check if all entries lay within the data array
+    if (dirStart + 2 + numEntries * 12 > data.length)
+      // so something is wrong – limit numEntries or bail out?
+      // let’s try with limiting it
+      numEntries = Math.floor((data.length - (dirStart + 2)) / (numEntries * 12));
     var gpsLatHemisphere = 'N', gpsLonHemisphere = 'E', gpsAltReference = 0, gpsImgDirReference = 'M';
     var gpsLat, gpsLon, gpsAlt;
     var vals = new Array();
@@ -207,49 +220,60 @@ function exifClass(stringBundle)
       else
         valueoffset = fxifUtils.read32(data, entry + 8, swapbytes);
 
-      var val = ConvertAnyFormat(data, format, valueoffset, components, nbytes, swapbytes, 1);
+//      try
+//      {
+        var val = ConvertAnyFormat(data, format, valueoffset, components, nbytes, swapbytes, 1);
+        // If ConvertAnyFormat() encounters that data lies
+        // outside of the data array, it returns undefined.
+        // We don’t want to assign this but to try again with
+        // the next tag.
+        if (val === undefined)
+          continue;
 
-      switch(tag) {
-      case TAG_GPS_LAT_REF:
-        gpsLatHemisphere = val;
-        break;
+        switch(tag) {
+        case TAG_GPS_LAT_REF:
+          gpsLatHemisphere = val;
+          break;
 
-      case TAG_GPS_LON_REF:
-        gpsLonHemisphere = val;
-        break;
+        case TAG_GPS_LON_REF:
+          gpsLonHemisphere = val;
+          break;
 
-      case TAG_GPS_ALT_REF:
-        gpsAltReference = val;
-        break;
+        case TAG_GPS_ALT_REF:
+          gpsAltReference = val;
+          break;
 
-      case TAG_GPS_IMG_DIR_REF:
-        gpsImgDirReference = val;
-        break;
+        case TAG_GPS_IMG_DIR_REF:
+          gpsImgDirReference = val;
+          break;
 
-      case TAG_GPS_LAT:
-      case TAG_GPS_LON:
-        // data is saved as three 64bit rationals -> 24 bytes
-        // so we've to do another two ConvertAnyFormat() ourself
-        // e.g. 0x0b / 0x01, 0x07 / 0x01, 0x011c4d / 0x0c92
-        // but can also be only 0x31 / 0x01, 0x3d8ba / 0x2710, 0x0 / 0x01
-        var gpsval = val[0] * 3600 + val[1] * 60 + val[2];
-//        var gpsval = val * 3600;
-//        gpsval += ConvertAnyFormat(data, format, valueoffset+8, nbytes, swapbytes) * 60;
-//        gpsval += ConvertAnyFormat(data, format, valueoffset+16, nbytes, swapbytes);
-        vals[tag] = gpsval;
-        break;
+        case TAG_GPS_LAT:
+        case TAG_GPS_LON:
+          // data is saved as three 64bit rationals -> 24 bytes
+          // so we've to do another two ConvertAnyFormat() ourself
+          // e.g. 0x0b / 0x01, 0x07 / 0x01, 0x011c4d / 0x0c92
+          // but can also be only 0x31 / 0x01, 0x3d8ba / 0x2710, 0x0 / 0x01
+          var gpsval = val[0] * 3600 + val[1] * 60 + val[2];
+  //        var gpsval = val * 3600;
+  //        gpsval += ConvertAnyFormat(data, format, valueoffset+8, nbytes, swapbytes) * 60;
+  //        gpsval += ConvertAnyFormat(data, format, valueoffset+16, nbytes, swapbytes);
+          vals[tag] = gpsval;
+          break;
 
-      case TAG_GPS_ALT:
-        vals[tag] = val;
-        break;
+        case TAG_GPS_ALT:
+          vals[tag] = val;
+          break;
 
-      case TAG_GPS_IMG_DIR:
-        vals[tag] = val;
-        break;
+        case TAG_GPS_IMG_DIR:
+          vals[tag] = val;
+          break;
 
-      default:
-        break;
-      }
+        default:
+          break;
+        }
+//      } catch(e){}
+      // so something is wrong – bail out or step over this value?
+      // let’s try with just stepping over this value
     }
 
     // use dms format by default
@@ -319,6 +343,11 @@ Real MN-Offset: 0x038e
     // Canon MakerNotes are always in Intel (little endian) byte order
     var swapbytes = true;
     var numEntries = fxifUtils.read16(data, dirStart, swapbytes);
+    // check if all entries lay within the data array
+    if (dirStart + 2 + numEntries * 12 > data.length)
+      // so something is wrong – limit numEntries or bail out?
+      // let’s try with limiting it
+      numEntries = Math.floor((data.length - (dirStart + 2)) / (numEntries * 12));
 
     var entryOffset = FixCanonMakerNotesBase(data, dirStart, makerNotesLen);
 
@@ -333,7 +362,6 @@ Real MN-Offset: 0x038e
 
       var nbytes = components * BytesPerFormat[format];
       var valueoffset;
-
       if (nbytes <= 4) {
         // stored in the entry
         valueoffset = entry + 8;
@@ -344,6 +372,12 @@ Real MN-Offset: 0x038e
       }
 
       var val = ConvertAnyFormat(data, format, valueoffset, components, nbytes, swapbytes, 1);
+      // If ConvertAnyFormat() encounters that data lies
+      // outside of the data array, it returns undefined.
+      // We don’t want to assign this but to try again with
+      // the next tag.
+      if (val === undefined)
+        continue;
 
       ntags++;
       switch(tag) {
@@ -400,7 +434,7 @@ Real MN-Offset: 0x038e
     if (makerNotesLen > 8)
     {
       var footerPtr = dirStart + makerNotesLen - 8;
-      var footer = fxifUtils.bytesToStringWithNull(data, footerPtr, 8, swapbytes, 1);
+      var footer = fxifUtils.bytesToStringWithNull(data, footerPtr, 8);
       if (footer.search(/^(II\x2a\0|MM\0\x2a)/) != -1)  // check for TIFF footer
 //          footer.substr(0, 2) == GetByteOrder()) # validate byte ordering
       {
@@ -467,7 +501,7 @@ Real MN-Offset: 0x0356
         exifReader.readExifDir(dataObj, exifData, ifd_ofs, swapbytes);
       }
       catch(ex) {
-        pushError(dataObj, "EXIF");
+        pushError(dataObj, "EXIF", ex);
       }
       fxifUtils.exifDone = true;
     }
@@ -486,6 +520,15 @@ Real MN-Offset: 0x0356
 
     var ntags = 0;
     var numEntries = fxifUtils.read16(data, dirStart, swapbytes);
+    // check if all entries lay within the data array
+    var tst = dirStart + 2 + numEntries * 12;
+    if (dirStart + 2 + numEntries * 12 > data.length)
+    {
+      // so something is wrong – limit numEntries or bail out?
+      // let’s try with limiting it
+      numEntries = Math.floor((data.length - (dirStart + 2)) / (numEntries * 12));
+    }
+
     var interopIndex = "";
     var colorSpace = 0;
     var exifDateTime = 0;
@@ -515,6 +558,12 @@ Real MN-Offset: 0x0356
       }
 
       var val = ConvertAnyFormat(data, format, valueoffset, components, nbytes, swapbytes, 1);
+      // If ConvertAnyFormat() encounters that data lies
+      // outside of the data array, it returns undefined.
+      // We don’t want to assign this but to try again with
+      // the next tag.
+      if (val === undefined)
+        continue;
 
       ntags++;
       switch(tag)
@@ -547,27 +596,27 @@ Real MN-Offset: 0x0356
         }
         // strip leading character code string
         var ccStringLen = 0;
-        if (nbytes > 8) {
+        if (nbytes >= 8) {
           ccStringLen = 8;
         }
         dataObj.UserComment = ConvertAnyFormat(data, format, valueoffset + ccStringLen, components, nbytes - ccStringLen, swapbytes, charWidth);
         break;
 
       case TAG_FNUMBER:
-        dataObj.ApertureFNumber = "f/" + parseFloat(val).toFixed(1);
+        dataObj.ApertureFNumber = "ƒ/" + parseFloat(val).toFixed(1);
         break;
 
       // only use these if we don't have the previous
       case TAG_APERTURE:
         if (!dataObj.ApertureFNumber) {
-          dataObj.ApertureFNumber = "f/" + Math.exp((parseFloat(val) * Math.LN2 * 0.5)).toFixed(1);
+          dataObj.ApertureFNumber = "ƒ/" + Math.exp((parseFloat(val) * Math.LN2 * 0.5)).toFixed(1);
         }
         break;
 
         // only use these if we don't have the previous
       case TAG_MAXAPERTURE:
         if (!dataObj.ApertureFNumber) {
-          dataObj.ApertureFNumber = "f/" + Math.exp((parseFloat(val) * Math.LN2 * 0.5)).toFixed(1);
+          dataObj.ApertureFNumber = "ƒ/" + Math.exp((parseFloat(val) * Math.LN2 * 0.5)).toFixed(1);
         }
         break;
 
@@ -852,11 +901,6 @@ Real MN-Offset: 0x0356
           if (!isNaN(tmp))
             dataObj.ISOequivalent = tmp;
         }
-
-        if (dataObj.ISOequivalent < 50 ){
-          // Fixes strange encoding on some older digicams.
-          dataObj.ISOequivalent *= 200;
-        }
         break;
 
       case TAG_DIGITALZOOMRATIO:
@@ -894,12 +938,20 @@ Real MN-Offset: 0x0356
         // this tag pointed to its own start.
         if (!checkForLoop(val))
         {
-          ntags += this.readExifDir(dataObj, data, val, swapbytes);
+          var ifd_ofs = fxifUtils.read32(data, 4, swapbytes);
+          // check if jumps at least at the beginning of actual data
+          // and at most on the last byte of the array
+          if (val >= ifd_ofs && val < data.length)
+            ntags += this.readExifDir(dataObj, data, val, swapbytes);
         }
         break;
 
       case TAG_GPSINFO:
-        readGPSDir(dataObj, data, val, swapbytes);
+        var ifd_ofs = fxifUtils.read32(data, 4, swapbytes);
+        // check if jumps at least at the beginning of actual data
+        // and at most on the last byte of the array
+        if (val >= ifd_ofs && val < data.length)
+          readGPSDir(dataObj, data, val, swapbytes);
         break;
 
       case TAG_ARTIST:
@@ -935,12 +987,16 @@ Real MN-Offset: 0x0356
 	          // This tags format is often given as undefined or zero with
             // some weird numbers or zeros as components. This makes the
             // code before this switch to generate strange offsets.
-            // Therefore use use value at entry + 8 directly.
-            // This should work in any case and does in the available test images.
+            // Therefore use value at entry + 8 directly.
+            // This should work in any case and really does for the available test images.
             var val = ConvertAnyFormat(data, FMT_ULONG, entry + 8, 0, 0, swapbytes, 1);
             var dirLen = ConvertAnyFormat(data, FMT_ULONG, entry + 4, 0, 0, swapbytes, 1);
+            var ifd_ofs = fxifUtils.read32(data, 4, swapbytes);
 
-            ntags += readCanonExifDir(dataObj, data, val, dirLen);
+            // check if it jumps at least at the beginning of the actual
+            // data and at most on the last byte of the array
+            if (val >= ifd_ofs && val + dirLen < data.length)
+              ntags += readCanonExifDir(dataObj, data, val, dirLen);
           }
         break;
 
@@ -1017,7 +1073,7 @@ Real MN-Offset: 0x0356
 
           if (lensInfo[2] > 0)
           {
-            dataObj.Lens += " f/" + lensInfo[2];
+            dataObj.Lens += " ƒ/" + lensInfo[2];
             if (lensInfo[3] > 0)
               dataObj.Lens += "-" + lensInfo[3];
           }
