@@ -120,7 +120,7 @@ function fxifUtilsClass ()
     var gpsDeg = Math.floor(gpsval / 3600);
     gpsval -= gpsDeg * 3600.0;
     // round to 2 digits after the comma
-    var gpsMin = (gpsval / 60).toFixed(2);
+    var gpsMin = (gpsval / 60).toFixed(4);
     return new Array(gpsDeg, gpsMin);
   }
 

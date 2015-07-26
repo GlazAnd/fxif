@@ -53,31 +53,29 @@ function iptcClass(stringBundle)
   // Decodes arrays carrying UTF-8 sequences into Unicode strings.
   // Filters out illegal bytes with values between 128 and 191,
   // but doesn't validate sequences.
-  // To do this each of the follow up bytes in the three
-  // ifs must be tested for (c>>6) == 2 or equivalent.
   function utf8BytesToString(utf8data, offset, num)
   {
     var s = "";
     var c = c1 = c2 = 0;
 
-    for(var i=offset; i<offset+num;) {
+    for (var i = offset; i < offset + num;) {
       c = utf8data[i];
-      if(c <= 127) {
+      if (c <= 127) {
         s += String.fromCharCode(c);
         i++;
       }
-      else if((c >= 192) && (c <= 223)) {
+      else if ((c >= 192) && (c <= 223)) {
         c2 = utf8data[i+1];
         s += String.fromCharCode(((c&31) << 6) | (c2&63));
         i += 2;
       }
-      else if((c >= 224) && (c <= 239)) {
+      else if ((c >= 224) && (c <= 239)) {
         c2 = utf8data[i+1];
         c3 = utf8data[i+2];
         s += String.fromCharCode(((c&15) << 12) | ((c2&63) << 6) | (c3&63));
         i += 3;
       }
-      else if(c >= 240) {
+      else if (c >= 240) {
         c2 = utf8data[i+1];
         c3 = utf8data[i+2];
         c4 = utf8data[i+3];
