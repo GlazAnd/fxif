@@ -105,6 +105,58 @@ function exifClass(stringBundle)
 
   var BytesPerFormat = [0,1,1,2,4,8,1,1,2,4,8,4,8];
 
+  // Decodes arrays carrying UTF-8 sequences into Unicode strings.
+  // It also validates sequences and throws an error if it encounters
+  // invalid encodings.
+  function utf8BytesToString(utf8data, offset, num)
+  {
+    var s = "";
+    var c = c1 = c2 = 0;
+
+    for (var i = offset; i < offset + num;) {
+      c = utf8data[i];
+      if (c <= 127) {
+        if (c != 0)
+          s += String.fromCharCode(c);
+        i++;
+      }
+      else if ((c >= 194) && (c <= 223)) {
+        c2 = utf8data[i+1];
+        if (c2>>6 != 2)
+          throw "No valid UTF8-Sequence";
+        s += String.fromCharCode(((c&31) << 6) | (c2&63));
+        i += 2;
+      }
+      else if ((c >= 224) && (c <= 239)) {
+        c2 = utf8data[i+1];
+        if (c2>>6 != 2)
+          throw "No valid UTF8-Sequence";
+        c3 = utf8data[i+2];
+        if (c3>>6 != 2)
+          throw "No valid UTF8-Sequence";
+        s += String.fromCharCode(((c&15) << 12) | ((c2&63) << 6) | (c3&63));
+        i += 3;
+      }
+      else if ((c >= 240) && (c <= 244)) {
+        c2 = utf8data[i+1];
+        if (c2>>6 != 2)
+          throw "No valid UTF8-Sequence";
+        c3 = utf8data[i+2];
+        if (c3>>6 != 2)
+          throw "No valid UTF8-Sequence";
+        c4 = utf8data[i+3];
+        if (c4>>6 != 2)
+          throw "No valid UTF8-Sequence";
+        s += String.fromCharCode(((c & 7) << 18) | ((c2&63) << 12) | ((c3&63) << 6) | (c4&63));
+        i += 4;
+      }
+      else {
+        throw "No valid UTF8-Sequence";
+      }
+    }
+
+    return s;
+  }
 
   // Checks if the loopDetectorArray already contains an entry
   // which would mean we did already jump there once.
@@ -129,7 +181,7 @@ function exifClass(stringBundle)
     // centralised check if the data lays within the data array
     if (offset + numbytes > data.length)
     {
-      console.error("Data outside array");
+      console.error("Data outside array.");
       // throw "Data outside array.";
       return;
     }
@@ -138,7 +190,18 @@ function exifClass(stringBundle)
 
     switch (format) {
       case FMT_STRING:
-        value = fxifUtils.bytesToString(data, offset, numbytes, swapbytes, charWidth);
+        // try decoding strings as UTF-8, if it fails, handle them 1:1.
+        try {
+          if (charWidth == 1) // don’t try handling Unicode strings as UTF-8
+            value = utf8BytesToString(data, offset, numbytes);
+          else
+            value = fxifUtils.bytesToString(data, offset, numbytes, swapbytes, charWidth);
+        }
+        catch(e)
+        {
+          console.error("catch");
+          value = fxifUtils.bytesToString(data, offset, numbytes, swapbytes, charWidth);
+        }
         // strip trailing whitespace
         value = value.replace(/\s+$/, '');
         break;
@@ -938,19 +1001,17 @@ Real MN-Offset: 0x0356
         // this tag pointed to its own start.
         if (!checkForLoop(val))
         {
-          var ifd_ofs = fxifUtils.read32(data, 4, swapbytes);
-          // check if jumps at least at the beginning of actual data
+          // check if it jumps at least to the beginning of actual data
           // and at most on the last byte of the array
-          if (val >= ifd_ofs && val < data.length)
+          if (val >= 8 && val < data.length)
             ntags += this.readExifDir(dataObj, data, val, swapbytes);
         }
         break;
 
       case TAG_GPSINFO:
-        var ifd_ofs = fxifUtils.read32(data, 4, swapbytes);
         // check if jumps at least at the beginning of actual data
         // and at most on the last byte of the array
-        if (val >= ifd_ofs && val < data.length)
+        if (val >= 8 && val < data.length)
           readGPSDir(dataObj, data, val, swapbytes);
         break;
 
@@ -991,11 +1052,10 @@ Real MN-Offset: 0x0356
             // This should work in any case and really does for the available test images.
             var val = ConvertAnyFormat(data, FMT_ULONG, entry + 8, 0, 0, swapbytes, 1);
             var dirLen = ConvertAnyFormat(data, FMT_ULONG, entry + 4, 0, 0, swapbytes, 1);
-            var ifd_ofs = fxifUtils.read32(data, 4, swapbytes);
 
             // check if it jumps at least at the beginning of the actual
             // data and at most on the last byte of the array
-            if (val >= ifd_ofs && val + dirLen < data.length)
+            if (val >= 8 && val + dirLen < data.length)
               ntags += readCanonExifDir(dataObj, data, val, dirLen);
           }
         break;
